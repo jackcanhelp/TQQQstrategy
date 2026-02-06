@@ -24,7 +24,7 @@ load_dotenv()
 MODELS = [
     "gemini-2.5-flash-lite",  # 主要模型
     "gemini-2.0-flash",       # 備用模型 1
-    "gemini-1.5-flash",       # 備用模型 2
+    "gemini-2.0-flash-lite",  # 備用模型 2 (1.5-flash 已下架)
 ]
 
 
