@@ -1,0 +1,2 @@
+# TQQQstrategy
+AI strategy evolution
