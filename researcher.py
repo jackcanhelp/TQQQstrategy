@@ -15,6 +15,7 @@ from datetime import datetime
 
 import google.generativeai as genai
 from dotenv import load_dotenv
+from api_manager import get_api_manager
 
 load_dotenv()
 
@@ -28,13 +29,9 @@ class StrategyGenerator:
     HISTORY_FILE = Path("history_of_thoughts.json")
 
     def __init__(self, model_name: str = "gemini-2.5-flash-lite"):
-        """Initialize the Gemini model."""
-        api_key = os.getenv("GOOGLE_API_KEY")
-        if not api_key:
-            raise ValueError("GOOGLE_API_KEY not found in environment variables")
-
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(model_name)
+        """Initialize the Gemini model with API Key Manager."""
+        self.model_name = model_name
+        self.api_manager = get_api_manager()
 
         # Ensure directories exist
         self.GENERATED_DIR.mkdir(exist_ok=True)
@@ -100,8 +97,10 @@ RESPOND WITH:
 
 Keep your response concise and actionable."""
 
-        response = self.model.generate_content(prompt)
-        return response.text
+        result = self.api_manager.generate_with_retry(prompt, self.model_name)
+        if result is None:
+            raise Exception("API 呼叫失敗，所有 Key 都不可用")
+        return result
 
     def generate_strategy_code(self, idea: str, strategy_id: int) -> Tuple[str, str]:
         """
@@ -163,8 +162,10 @@ STRICT REQUIREMENTS:
 OUTPUT ONLY THE PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS.
 Start directly with 'import' or 'from' or 'class'."""
 
-        response = self.model.generate_content(prompt)
-        code = self._clean_code(response.text)
+        result = self.api_manager.generate_with_retry(prompt, self.model_name)
+        if result is None:
+            raise Exception("API 呼叫失敗，所有 Key 都不可用")
+        code = self._clean_code(result)
 
         # Add imports if missing
         if "from strategy_base import BaseStrategy" not in code:
@@ -204,8 +205,10 @@ REQUIREMENTS:
 
 OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
 
-        response = self.model.generate_content(prompt)
-        code = self._clean_code(response.text)
+        result = self.api_manager.generate_with_retry(prompt, self.model_name)
+        if result is None:
+            raise Exception("API 呼叫失敗，所有 Key 都不可用")
+        code = self._clean_code(result)
 
         # Add imports if missing
         if "from strategy_base import BaseStrategy" not in code:

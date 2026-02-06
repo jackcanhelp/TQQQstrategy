@@ -22,6 +22,7 @@ from backtest import BacktestEngine
 from researcher import StrategyGenerator, StrategySandbox
 from validator import StrategyValidator
 from report_generator import ReportGenerator
+from api_manager import get_api_manager
 
 load_dotenv()
 
@@ -224,6 +225,16 @@ class AutoRunner:
             sharpe = f"Sharpe: {s['sharpe']:.2f}" if s.get('success') else f"Error: {s.get('failure_analysis', 'Unknown')[:30]}"
             report += f"""
    {status} {s['name']}: {sharpe}"""
+
+        # API Key 狀態
+        try:
+            api_manager = get_api_manager()
+            api_status = api_manager.get_status()
+            report += f"""
+
+{api_status}"""
+        except:
+            pass
 
         report += """
 
