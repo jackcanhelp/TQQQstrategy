@@ -26,6 +26,7 @@ from dotenv import load_dotenv
 from strategy_base import BaseStrategy, BuyAndHold, SimpleSMA
 from backtest import BacktestEngine, BacktestResult, compare_strategies
 from researcher import StrategyGenerator, StrategySandbox
+from validator import StrategyValidator, LookAheadDetector
 
 load_dotenv()
 
@@ -132,6 +133,26 @@ def run_evolution_loop(
             print(f"❌ Failed to generate code: {e}")
             continue
 
+        # Step 2.5: Validate code for look-ahead bias
+        print("\n🔍 Validating code for look-ahead bias...")
+        is_valid, warnings = StrategyValidator.validate_code(code)
+        for w in warnings:
+            print(f"   {w}")
+        if not is_valid:
+            print("   ❌ Code rejected due to potential look-ahead bias!")
+            generator.record_result(
+                strategy_id=strategy_id,
+                strategy_name=f"Strategy_Gen{strategy_id}",
+                idea=idea,
+                sharpe=0.0,
+                cagr=0.0,
+                max_dd=0.0,
+                failure_analysis="Rejected: Look-ahead bias detected in code",
+                success=False
+            )
+            continue
+        print("   ✅ Code passed static analysis")
+
         # Step 3: Load and test strategy
         class_name = f"Strategy_Gen{strategy_id}"
         strategy = None
@@ -191,6 +212,28 @@ def run_evolution_loop(
             print(f"   Max DD:     {result.max_drawdown:.1%}")
             print(f"   Win Rate:   {result.win_rate:.1%}")
             print(f"   Analysis:   {failure_analysis}")
+
+            # Step 4.5: Validate results for unrealistic performance
+            print("\n🔍 Validating results for suspicious patterns...")
+            results_valid, result_warnings = StrategyValidator.validate_backtest_results(result)
+            for w in result_warnings:
+                print(f"   {w}")
+
+            if not results_valid:
+                print("   ❌ Results rejected - likely look-ahead bias or bug!")
+                generator.record_result(
+                    strategy_id=strategy_id,
+                    strategy_name=class_name,
+                    idea=idea,
+                    sharpe=0.0,
+                    cagr=0.0,
+                    max_dd=0.0,
+                    failure_analysis="Rejected: Unrealistic backtest results suggest look-ahead bias",
+                    success=False
+                )
+                continue
+
+            print("   ✅ Results passed validation")
 
             # Record result
             generator.record_result(

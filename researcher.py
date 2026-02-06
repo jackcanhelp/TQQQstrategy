@@ -27,7 +27,7 @@ class StrategyGenerator:
     GENERATED_DIR = Path("generated_strategies")
     HISTORY_FILE = Path("history_of_thoughts.json")
 
-    def __init__(self, model_name: str = "gemini-2.0-flash-lite"):
+    def __init__(self, model_name: str = "gemini-2.5-flash-lite"):
         """Initialize the Gemini model."""
         api_key = os.getenv("GOOGLE_API_KEY")
         if not api_key:
@@ -78,17 +78,24 @@ CONTEXT:
 YOUR TASK:
 Propose ONE new trading strategy idea for TQQQ (3x leveraged NASDAQ-100 ETF).
 
+CRITICAL RULES - MUST FOLLOW:
+⚠️ NO LOOK-AHEAD BIAS: You can ONLY use data available UP TO the current day.
+   - ❌ FORBIDDEN: Using future prices, future volatility, future returns
+   - ❌ FORBIDDEN: Knowing which days will be bad before they happen
+   - ❌ FORBIDDEN: Any indicator that uses data from day T+1 or later
+   - ✅ ALLOWED: Moving averages, RSI, ATR, historical volatility (all backward-looking)
+
 REQUIREMENTS:
-- The strategy must be DIFFERENT from all previously tried strategies
-- Focus on risk management (TQQQ is extremely volatile)
-- Consider: trend following, volatility targeting, momentum, mean reversion, regime detection
-- Be specific about the logic and indicators to use
+- Strategy must be DIFFERENT from previously tried strategies
+- Focus on RISK MANAGEMENT (TQQQ can drop 80%+ in bear markets)
+- Use ONLY backward-looking indicators: SMA, EMA, RSI, ATR, Bollinger Bands, MACD, historical volatility
+- All decisions on day T must use ONLY data from day T and earlier
 
 RESPOND WITH:
 1. Strategy Name (short, descriptive)
-2. Core Logic (2-3 sentences)
-3. Entry Rules
-4. Exit Rules
+2. Core Logic (2-3 sentences explaining the CAUSAL mechanism - why would this work?)
+3. Entry Rules (using only past data)
+4. Exit Rules (using only past data)
 5. Key Parameters
 
 Keep your response concise and actionable."""
@@ -113,6 +120,21 @@ STRATEGY IDEA:
 TASK:
 Write a complete Python class that implements this strategy.
 
+⚠️⚠️⚠️ CRITICAL - NO LOOK-AHEAD BIAS ⚠️⚠️⚠️
+The signal on day T determines the position on day T+1 (the backtester handles this shift).
+Your generate_signals() must ONLY use data available up to each day.
+
+FORBIDDEN PATTERNS (will cause rejection):
+❌ df.shift(-1) or any negative shift (looks into future)
+❌ df.iloc[i+1] or forward indexing
+❌ Any calculation using future prices/returns
+❌ Rolling windows that somehow peek ahead
+
+CORRECT PATTERNS:
+✅ df['Close'].rolling(20).mean() - backward-looking moving average
+✅ df.shift(1) - yesterday's value (positive shift = backward)
+✅ All indicators calculated from historical data only
+
 STRICT REQUIREMENTS:
 1. The class MUST be named exactly: `{class_name}`
 2. It MUST inherit from `BaseStrategy` (imported from strategy_base)
@@ -135,7 +157,7 @@ STRICT REQUIREMENTS:
    - Values between 0-1 for partial positions
 
 7. Handle edge cases:
-   - Fill NaN values appropriately
+   - Use .fillna(0) or .bfill()/.ffill() for NaN (never forward-fill from future!)
    - Ensure signals align with data index
 
 OUTPUT ONLY THE PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS.
