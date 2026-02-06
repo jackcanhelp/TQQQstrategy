@@ -20,11 +20,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-# 模型優先順序（從最優先到備用）
+# 模型優先順序（從快到慢，用好用滿免費額度）
 MODELS = [
-    "gemini-2.5-flash-lite",  # 主要模型
-    "gemini-2.0-flash",       # 備用模型 1
-    "gemini-2.0-flash-lite",  # 備用模型 2 (1.5-flash 已下架)
+    "gemini-2.5-flash-lite",  # 最快，輕量
+    "gemini-2.0-flash-lite",  # 快，輕量
+    "gemini-2.5-flash",       # 快
+    "gemini-2.0-flash",       # 快
+    "gemini-2.5-pro",         # 較慢但更強
+    "gemini-exp-1206",        # 實驗版
 ]
 
 
