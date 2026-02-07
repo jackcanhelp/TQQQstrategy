@@ -137,6 +137,7 @@ class AutoRunner:
             # Success!
             result['success'] = True
             result['sharpe'] = bt_result.sharpe_ratio
+            result['calmar'] = bt_result.calmar_ratio  # 主要指標
             result['cagr'] = bt_result.cagr
             result['max_dd'] = bt_result.max_drawdown
             result['idea'] = idea[:200]
@@ -146,6 +147,7 @@ class AutoRunner:
                 strategy_name=class_name,
                 idea=idea,
                 sharpe=bt_result.sharpe_ratio,
+                calmar=bt_result.calmar_ratio,
                 cagr=bt_result.cagr,
                 max_dd=bt_result.max_drawdown,
                 failure_analysis=bt_result.get_failure_analysis(),
@@ -211,9 +213,10 @@ class AutoRunner:
 ───────────────────────────────────────────────────────────────"""
 
         for i, s in enumerate(top5, 1):
+            calmar = s.get('calmar', 0)
             report += f"""
    #{i} {s['name']}
-       Sharpe: {s['sharpe']:.2f} | CAGR: {s['cagr']:.1%} | MaxDD: {s['max_dd']:.1%}"""
+       Calmar: {calmar:.2f} | Sharpe: {s['sharpe']:.2f} | CAGR: {s['cagr']:.1%} | MaxDD: {s['max_dd']:.1%}"""
 
         report += f"""
 

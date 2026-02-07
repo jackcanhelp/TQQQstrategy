@@ -25,6 +25,7 @@ class BacktestResult:
     sortino_ratio: float
     max_drawdown: float
     max_drawdown_duration_days: int
+    calmar_ratio: float  # 主要優化目標: CAGR / |MaxDD|
 
     # Additional metrics
     win_rate: float
@@ -38,6 +39,7 @@ class BacktestResult:
 
     # Crisis analysis
     crisis_periods: List[Dict]
+    worst_months: List[Dict]  # 最慘的月份（痛苦回饋）
 
     # Equity curve
     equity_curve: pd.Series
@@ -55,16 +57,22 @@ class BacktestResult:
             'sortino_ratio': round(self.sortino_ratio, 4),
             'max_drawdown': round(self.max_drawdown, 4),
             'max_drawdown_duration_days': self.max_drawdown_duration_days,
+            'calmar_ratio': round(self.calmar_ratio, 4),
             'win_rate': round(self.win_rate, 4),
             'profit_factor': round(self.profit_factor, 4),
             'total_trades': self.total_trades,
             'time_in_market': round(self.time_in_market, 4),
-            'crisis_periods': self.crisis_periods
+            'crisis_periods': self.crisis_periods,
+            'worst_months': self.worst_months
         }
 
     def get_failure_analysis(self) -> str:
         """Generate human-readable failure analysis for AI context."""
         analysis = []
+
+        # 主要指標：Calmar Ratio（生存比獲利重要）
+        if self.calmar_ratio < 0.5:
+            analysis.append(f"LOW CALMAR: {self.calmar_ratio:.2f} (target: >1.0)")
 
         if self.max_drawdown < -0.5:
             analysis.append(f"CRITICAL: Max drawdown of {self.max_drawdown:.1%} is catastrophic")
@@ -82,11 +90,19 @@ class BacktestResult:
         if self.time_in_market < 0.3:
             analysis.append(f"LOW EXPOSURE: Only {self.time_in_market:.1%} time in market")
 
+        # 危機時期分析
         for crisis in self.crisis_periods:
             if crisis['drawdown'] < -0.25:
                 analysis.append(
                     f"CRISIS FAILURE: {crisis['period']} saw {crisis['drawdown']:.1%} drawdown"
                 )
+
+        # 最慘月份分析（痛苦回饋）
+        if self.worst_months:
+            worst = self.worst_months[0]
+            analysis.append(
+                f"WORST MONTH: {worst['month']} lost {worst['return']:.1%}"
+            )
 
         if not analysis:
             analysis.append("Strategy performed reasonably well across all metrics")
@@ -211,8 +227,14 @@ class BacktestEngine:
         # Time in market
         time_in_market = (position > 0).mean()
 
+        # Calmar Ratio: CAGR / |MaxDD| （主要優化目標）
+        calmar = abs(cagr / max_drawdown) if max_drawdown != 0 else 0
+
         # Crisis period analysis
         crisis_periods = self._analyze_crisis_periods(equity_curve, drawdown)
+
+        # 最慘月份分析（痛苦回饋機制）
+        worst_months = self._analyze_worst_months(returns)
 
         return BacktestResult(
             strategy_name=strategy_name,
@@ -224,6 +246,7 @@ class BacktestEngine:
             sortino_ratio=sortino,
             max_drawdown=max_drawdown,
             max_drawdown_duration_days=dd_duration,
+            calmar_ratio=calmar,
             win_rate=win_rate,
             avg_win=avg_win,
             avg_loss=avg_loss,
@@ -231,6 +254,7 @@ class BacktestEngine:
             total_trades=total_trades,
             time_in_market=time_in_market,
             crisis_periods=crisis_periods,
+            worst_months=worst_months,
             equity_curve=equity_curve,
             drawdown_series=drawdown
         )
@@ -278,6 +302,23 @@ class BacktestEngine:
                 continue
 
         return crisis_analysis
+
+    def _analyze_worst_months(self, returns: pd.Series) -> List[Dict]:
+        """分析最慘的月份，用於痛苦回饋機制。"""
+        # 計算月報酬
+        monthly_returns = returns.resample('M').apply(lambda x: (1 + x).prod() - 1)
+
+        # 找出最差的 3 個月
+        worst = monthly_returns.nsmallest(3)
+
+        worst_months = []
+        for date, ret in worst.items():
+            worst_months.append({
+                'month': date.strftime('%Y-%m'),
+                'return': float(ret)
+            })
+
+        return worst_months
 
 
 def compare_strategies(results: List[BacktestResult]) -> pd.DataFrame:

@@ -63,39 +63,77 @@ class StrategyGenerator:
     def generate_strategy_idea(self) -> str:
         """
         Ask Gemini to propose a new strategy idea based on past results.
+        使用模組化思考 + 痛苦回饋機制。
         """
         # Build context from history
         context = self._build_context()
 
-        prompt = f"""You are a Quantitative Research Director at a hedge fund.
+        # 根據迭代次數選擇演化模式
+        iteration = self.history["total_iterations"]
+        evolution_mode = self._get_evolution_mode(iteration)
+
+        prompt = f"""You are a Quantitative Research Director at a hedge fund specializing in leveraged ETFs.
 
 CONTEXT:
 {context}
 
-YOUR TASK:
-Propose ONE new trading strategy idea for TQQQ (3x leveraged NASDAQ-100 ETF).
+{evolution_mode}
 
-CRITICAL RULES - MUST FOLLOW:
-⚠️ NO LOOK-AHEAD BIAS: You can ONLY use data available UP TO the current day.
-   - ❌ FORBIDDEN: Using future prices, future volatility, future returns
-   - ❌ FORBIDDEN: Knowing which days will be bad before they happen
-   - ❌ FORBIDDEN: Any indicator that uses data from day T+1 or later
-   - ✅ ALLOWED: Moving averages, RSI, ATR, historical volatility (all backward-looking)
+═══════════════════════════════════════════════════════════════
+🎯 PRIMARY OBJECTIVE: SURVIVAL > PROFIT
+═══════════════════════════════════════════════════════════════
+Your goal is to MAXIMIZE Calmar Ratio (CAGR / |MaxDrawdown|).
+Target: Calmar > 1.0 (acceptable returns with controlled drawdowns)
 
-REQUIREMENTS:
-- Strategy must be DIFFERENT from previously tried strategies
-- Focus on RISK MANAGEMENT (TQQQ can drop 80%+ in bear markets)
-- Use ONLY backward-looking indicators: SMA, EMA, RSI, ATR, Bollinger Bands, MACD, historical volatility
-- All decisions on day T must use ONLY data from day T and earlier
+TQQQ can drop 80%+ in bear markets. A strategy that avoids catastrophic
+losses is MORE VALUABLE than one with higher returns but deeper drawdowns.
+
+═══════════════════════════════════════════════════════════════
+🧩 MODULAR STRATEGY DESIGN (REQUIRED)
+═══════════════════════════════════════════════════════════════
+Your strategy MUST have these 3 independent modules:
+
+1. 🚦 REGIME FILTER (Market State Detection)
+   - Detect: Uptrend / Downtrend / High Volatility / Sideways
+   - When bearish or high-vol: MUST go to Cash (0% exposure)
+   - Indicators: 200-day SMA slope, VIX level, ATR percentile
+
+2. 🏹 ENTRY SIGNAL (When to Buy)
+   - Only trigger when Regime is favorable
+   - Focus on: buying dips in uptrends, NOT catching falling knives
+   - Indicators: RSI divergence, MACD histogram, Bollinger squeeze
+
+3. 🛡️ EXIT & RISK MANAGEMENT (How to Protect)
+   - MUST have trailing stop or volatility-based exit
+   - Indicators: Chandelier Exit, ATR trailing stop, % stop-loss
+
+═══════════════════════════════════════════════════════════════
+⚠️ CRITICAL RULES - NO LOOK-AHEAD BIAS
+═══════════════════════════════════════════════════════════════
+❌ FORBIDDEN: shift(-1), future prices, forward indexing
+✅ ALLOWED: SMA, EMA, RSI, ATR, Bollinger, MACD (all backward-looking)
+
+═══════════════════════════════════════════════════════════════
+📐 AVOID OVERFITTING
+═══════════════════════════════════════════════════════════════
+- Use INTEGER parameters only (10, 20, 50, 200 - not 13.42)
+- Logic must be explainable in 3 sentences
+- Maximum 4 conditions for entry/exit
+
+═══════════════════════════════════════════════════════════════
+💡 KEY INSIGHT: CASH IS A POSITION
+═══════════════════════════════════════════════════════════════
+For TQQQ, holding Cash (0 exposure) is POWERFUL due to volatility decay.
+Good strategies sit out during sideways/choppy markets.
 
 RESPOND WITH:
-1. Strategy Name (short, descriptive)
-2. Core Logic (2-3 sentences explaining the CAUSAL mechanism - why would this work?)
-3. Entry Rules (using only past data)
-4. Exit Rules (using only past data)
-5. Key Parameters
+1. Strategy Name
+2. Regime Filter Logic (when to be in cash)
+3. Entry Signal Logic (when to buy)
+4. Exit & Risk Logic (when to sell/protect)
+5. Key Parameters (integers only)
 
-Keep your response concise and actionable."""
+Keep response concise and actionable."""
 
         result = self.api_manager.generate_with_retry(prompt, self.model_name)
         if result is None:
@@ -105,6 +143,7 @@ Keep your response concise and actionable."""
     def generate_strategy_code(self, idea: str, strategy_id: int) -> Tuple[str, str]:
         """
         Ask Gemini to write Python code for the strategy.
+        強制模組化設計 + 整數參數。
 
         Returns:
             Tuple of (code_string, file_path)
@@ -117,50 +156,58 @@ STRATEGY IDEA:
 {idea}
 
 TASK:
-Write a complete Python class that implements this strategy.
+Write a complete Python class implementing this strategy with MODULAR DESIGN.
 
-⚠️⚠️⚠️ CRITICAL - NO LOOK-AHEAD BIAS ⚠️⚠️⚠️
-The signal on day T determines the position on day T+1 (the backtester handles this shift).
-Your generate_signals() must ONLY use data available up to each day.
+═══════════════════════════════════════════════════════════════
+🧩 REQUIRED MODULAR STRUCTURE
+═══════════════════════════════════════════════════════════════
+Your code MUST have these 3 separate methods:
 
-FORBIDDEN PATTERNS (will cause rejection):
-❌ df.shift(-1) or any negative shift (looks into future)
-❌ df.iloc[i+1] or forward indexing
-❌ Any calculation using future prices/returns
-❌ Rolling windows that somehow peek ahead
+1. `_get_regime(self) -> pd.Series`
+   Returns: 1 = bullish, 0 = neutral/bearish
+   Use: 200-day SMA slope, volatility percentile, etc.
 
-CORRECT PATTERNS:
-✅ df['Close'].rolling(20).mean() - backward-looking moving average
-✅ df.shift(1) - yesterday's value (positive shift = backward)
-✅ All indicators calculated from historical data only
+2. `_get_entry_signal(self) -> pd.Series`
+   Returns: 1 = buy signal, 0 = no signal
+   Use: RSI, MACD, Bollinger, etc.
 
-STRICT REQUIREMENTS:
-1. The class MUST be named exactly: `{class_name}`
-2. It MUST inherit from `BaseStrategy` (imported from strategy_base)
-3. It MUST implement:
-   - `init(self, data: pd.DataFrame)` - store data and calculate indicators
-   - `generate_signals(self) -> pd.Series` - return position weights 0.0 to 1.0
-   - `get_description(self) -> str` - return strategy description
+3. `_get_exit_signal(self) -> pd.Series`
+   Returns: 1 = exit signal, 0 = hold
+   Use: trailing stop, volatility spike, trend break
 
-4. Available imports (already in scope):
-   - pandas as pd
-   - numpy as np
-   - from strategy_base import BaseStrategy
+Then combine in generate_signals():
+   signal = regime * entry * (1 - exit)
 
-5. The data DataFrame has columns: ['Open', 'High', 'Low', 'Close', 'Volume']
-   with a DatetimeIndex
+═══════════════════════════════════════════════════════════════
+⚠️ NO LOOK-AHEAD BIAS (CRITICAL)
+═══════════════════════════════════════════════════════════════
+❌ FORBIDDEN: df.shift(-1), df.iloc[i+1], future data
+✅ ALLOWED: df.rolling(20).mean(), df.shift(1), backward-looking only
 
-6. Signals should be:
-   - 0.0 = fully in cash (no position)
-   - 1.0 = fully invested in TQQQ
-   - Values between 0-1 for partial positions
+═══════════════════════════════════════════════════════════════
+📐 ANTI-OVERFITTING RULES
+═══════════════════════════════════════════════════════════════
+- Use INTEGER parameters ONLY: 10, 20, 50, 100, 200
+- NO magic numbers like 13.42 or 0.0237
+- Maximum 4 conditions per signal
 
-7. Handle edge cases:
-   - Use .fillna(0) or .bfill()/.ffill() for NaN (never forward-fill from future!)
-   - Ensure signals align with data index
+═══════════════════════════════════════════════════════════════
+📋 CLASS REQUIREMENTS
+═══════════════════════════════════════════════════════════════
+1. Class name: `{class_name}`
+2. Inherit from: `BaseStrategy`
+3. Required methods:
+   - `init(self, data: pd.DataFrame)` - calculate all indicators
+   - `generate_signals(self) -> pd.Series` - return 0.0 to 1.0
+   - `get_description(self) -> str` - explain strategy
 
-OUTPUT ONLY THE PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS.
-Start directly with 'import' or 'from' or 'class'."""
+4. Available: pandas as pd, numpy as np, BaseStrategy
+5. Data columns: ['Open', 'High', 'Low', 'Close', 'Volume']
+6. Signals: 0.0 = cash, 1.0 = fully invested, 0-1 for partial
+
+7. Handle NaN: Use .fillna(0) or .bfill() (never forward-fill from future!)
+
+OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
 
         result = self.api_manager.generate_with_retry(prompt, self.model_name)
         if result is None:
@@ -233,29 +280,102 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
 
         return code
 
+    def _get_evolution_mode(self, iteration: int) -> str:
+        """根據迭代次數決定演化模式。"""
+        if iteration < 20:
+            # 探索期：嘗試各種方向
+            return """
+═══════════════════════════════════════════════════════════════
+🔬 EVOLUTION MODE: EXPLORATION (Iteration {})
+═══════════════════════════════════════════════════════════════
+Try a DIFFERENT approach from previous strategies.
+Explore new indicator combinations and logic patterns.
+""".format(iteration + 1)
+
+        elif iteration < 50:
+            # 優化期：基於最佳策略改進
+            best = self.history.get("best_strategy", "N/A")
+            best_sharpe = self.history.get("best_sharpe", 0)
+            return f"""
+═══════════════════════════════════════════════════════════════
+🎯 EVOLUTION MODE: OPTIMIZATION (Iteration {iteration + 1})
+═══════════════════════════════════════════════════════════════
+Current best: {best} (Sharpe: {best_sharpe:.2f})
+Your task: IMPROVE upon the best strategy.
+- Keep what works, fix what doesn't
+- Focus on reducing MaxDrawdown while maintaining returns
+"""
+        else:
+            # 精煉期：參數微調
+            return f"""
+═══════════════════════════════════════════════════════════════
+🔧 EVOLUTION MODE: REFINEMENT (Iteration {iteration + 1})
+═══════════════════════════════════════════════════════════════
+Fine-tune the best strategies:
+- Adjust parameters (window sizes, thresholds)
+- Add small improvements to risk management
+- Test slight variations
+"""
+
     def _build_context(self) -> str:
         """Build context string from history for the AI."""
         if self.history["total_iterations"] == 0:
             return """This is the FIRST iteration. No previous strategies have been tested.
 Start with a robust baseline strategy that focuses on trend-following and volatility management.
-TQQQ is extremely volatile - the 2022 bear market saw >75% drawdown."""
+TQQQ is extremely volatile - the 2022 bear market saw >75% drawdown.
+
+CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeting
+(adjust position size based on current ATR)."""
 
         # Get last 5 strategies for context
         recent = self.history["strategies"][-5:]
 
+        # 找出成功的策略
+        successful = [s for s in self.history["strategies"] if s.get("success")]
+        best_strategies = sorted(successful, key=lambda x: x.get("sharpe", 0), reverse=True)[:3]
+
         context_lines = [
-            f"Total iterations so far: {self.history['total_iterations']}",
-            f"Best Sharpe Ratio achieved: {self.history['best_sharpe']:.2f}",
+            f"Total iterations: {self.history['total_iterations']}",
+            f"Best Calmar/Sharpe: {self.history['best_sharpe']:.2f}",
             f"Best strategy: {self.history['best_strategy']}",
             "",
-            "RECENT STRATEGIES TRIED:"
+            "🏆 TOP 3 STRATEGIES (learn from these):"
         ]
 
-        for s in recent:
+        for s in best_strategies[:3]:
             context_lines.append(
-                f"- {s['name']}: Sharpe={s['sharpe']:.2f}, MaxDD={s['max_dd']:.1%}, "
-                f"Failure: {s.get('failure_analysis', 'N/A')}"
+                f"  - {s['name']}: Sharpe={s['sharpe']:.2f}, CAGR={s.get('cagr', 0):.1%}, MaxDD={s['max_dd']:.1%}"
             )
+
+        context_lines.append("")
+        context_lines.append("📉 RECENT ATTEMPTS:")
+
+        for s in recent:
+            status = "✅" if s.get("success") else "❌"
+            context_lines.append(
+                f"  {status} {s['name']}: Sharpe={s['sharpe']:.2f}, MaxDD={s['max_dd']:.1%}"
+            )
+            if s.get("failure_analysis"):
+                context_lines.append(f"      → {s['failure_analysis'][:80]}")
+
+        # 痛苦回饋：找出最常失敗的時期
+        context_lines.append("")
+        context_lines.append("⚠️ PAIN POINTS (strategies died here):")
+        context_lines.append("  - 2022-04: Fed rate hikes caused false breakouts")
+        context_lines.append("  - 2020-03: COVID crash - need regime detection")
+        context_lines.append("  - 2018-12: Q4 selloff - volatility spike ignored")
+
+        # 概念注入（隨機選一個）
+        import random
+        concepts = [
+            "Try Volume Analysis (OBV, Volume-Weighted MACD) to confirm trends.",
+            "Explore Volatility Targeting: adjust position size inversely to ATR.",
+            "Consider Dual Momentum: compare TQQQ vs QQQ vs Cash momentum.",
+            "Add Mean Reversion filter: avoid buying when RSI > 70.",
+            "Use Regime Detection: 200-day SMA slope + VIX level combination.",
+        ]
+        context_lines.append("")
+        context_lines.append(f"💡 CONCEPT TO EXPLORE: {random.choice(concepts)}")
 
         return "\n".join(context_lines)
 
@@ -268,7 +388,8 @@ TQQQ is extremely volatile - the 2022 bear market saw >75% drawdown."""
         cagr: float,
         max_dd: float,
         failure_analysis: str,
-        success: bool
+        success: bool,
+        calmar: float = 0.0  # 主要優化指標
     ) -> None:
         """Record strategy result in history."""
         self.history["total_iterations"] += 1
@@ -278,6 +399,7 @@ TQQQ is extremely volatile - the 2022 bear market saw >75% drawdown."""
             "name": strategy_name,
             "idea": idea[:500],  # Truncate long ideas
             "sharpe": sharpe,
+            "calmar": calmar,
             "cagr": cagr,
             "max_dd": max_dd,
             "failure_analysis": failure_analysis,
@@ -287,9 +409,11 @@ TQQQ is extremely volatile - the 2022 bear market saw >75% drawdown."""
 
         self.history["strategies"].append(result)
 
-        # Update best if applicable
-        if sharpe > self.history["best_sharpe"]:
-            self.history["best_sharpe"] = sharpe
+        # Update best if applicable (use Calmar as primary metric)
+        # 如果 calmar 有值就用 calmar，否則用 sharpe 向後兼容
+        metric = calmar if calmar > 0 else sharpe
+        if metric > self.history["best_sharpe"]:
+            self.history["best_sharpe"] = metric
             self.history["best_strategy"] = strategy_name
 
         self._save_history()
