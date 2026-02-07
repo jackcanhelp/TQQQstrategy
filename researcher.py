@@ -12,12 +12,60 @@ import traceback
 from pathlib import Path
 from typing import Optional, Tuple, Dict, List
 from datetime import datetime
+import random
 
 import google.generativeai as genai
 from dotenv import load_dotenv
 from api_manager import get_api_manager
 
 load_dotenv()
+
+
+# ═══════════════════════════════════════════════════════════════
+# 🗂️ INDICATOR LIBRARY - 擴展 TQQQ 指標宇宙
+# ═══════════════════════════════════════════════════════════════
+INDICATOR_LIBRARY = {
+    "A_TREND": {
+        "name": "Trend & Direction (捕捉大波段)",
+        "indicators": [
+            ("HMA", "Hull Moving Average - 比 SMA/EMA 更快響應"),
+            ("Supertrend", "適合強趨勢的追蹤止損"),
+            ("Parabolic_SAR", "嚴格的反轉點識別"),
+            ("Ichimoku", "Kumo Breakout 趨勢確認"),
+            ("TEMA", "Triple EMA - 更平滑的趨勢線"),
+        ]
+    },
+    "B_VOLATILITY": {
+        "name": "Volatility & Regime (TQQQ 救命符)",
+        "indicators": [
+            ("ATR", "Average True Range - 標準化止損"),
+            ("BB_Width", "Bollinger Band Width - 偵測 Squeeze"),
+            ("Keltner", "Keltner Channels - 突破確認"),
+            ("Donchian", "Donchian Channels - 海龜交易法"),
+            ("Simulated_VIX", "N日標準差模擬VIX - 高波動時持現金"),
+        ]
+    },
+    "C_MOMENTUM": {
+        "name": "Momentum & Oscillators (進出場時機)",
+        "indicators": [
+            ("Williams_R", "Williams %R - 比 RSI 更敏感"),
+            ("Stochastic_RSI", "Stochastic RSI - 震盪市場快速信號"),
+            ("CCI", "Commodity Channel Index - 週期轉折"),
+            ("MFI", "Money Flow Index - 帶成交量的 RSI"),
+            ("ROC", "Rate of Change - 動量變化率"),
+        ]
+    },
+    "D_VOLUME": {
+        "name": "Volume & Strength (確認訊號真偽)",
+        "indicators": [
+            ("OBV", "On-Balance Volume - 價量背離"),
+            ("VWMA", "Volume Weighted MA - 成交量加權均線"),
+            ("ADX", "Average Directional Index - ADX<20不交易"),
+            ("CMF", "Chaikin Money Flow - 資金流向"),
+            ("Force_Index", "Force Index - 力量指標"),
+        ]
+    }
+}
 
 
 class StrategyGenerator:
@@ -60,10 +108,64 @@ class StrategyGenerator:
         """Get the next strategy ID number."""
         return self.history["total_iterations"] + 1
 
+    def _get_used_indicators(self) -> set:
+        """取得已使用過的指標。"""
+        used = set()
+        for s in self.history.get("strategies", [])[-10:]:  # 看最近 10 個
+            idea = s.get("idea", "").upper()
+            for cat in INDICATOR_LIBRARY.values():
+                for ind, _ in cat["indicators"]:
+                    if ind.upper() in idea:
+                        used.add(ind)
+        return used
+
+    def _select_exploration_indicators(self) -> str:
+        """
+        從指標庫中選擇指標組合。
+        規則：必須從至少 2 個不同類別選擇。
+        """
+        used = self._get_used_indicators()
+        categories = list(INDICATOR_LIBRARY.keys())
+
+        # 隨機選 2-3 個類別
+        selected_cats = random.sample(categories, min(3, len(categories)))
+
+        selected = []
+        for cat_key in selected_cats:
+            cat = INDICATOR_LIBRARY[cat_key]
+            # 優先選未使用過的指標
+            available = [(ind, desc) for ind, desc in cat["indicators"] if ind not in used]
+            if not available:
+                available = cat["indicators"]
+
+            # 從這個類別選 1 個
+            ind, desc = random.choice(available)
+            selected.append((cat_key, cat["name"], ind, desc))
+
+        # 構建指標選擇說明
+        lines = ["═══════════════════════════════════════════════════════════════",
+                 "🎲 MANDATORY INDICATORS FOR THIS GENERATION",
+                 "═══════════════════════════════════════════════════════════════",
+                 "You MUST use these indicators (from different categories):"]
+
+        for cat_key, cat_name, ind, desc in selected:
+            lines.append(f"  • [{cat_key}] {ind}: {desc}")
+
+        lines.append("")
+        lines.append("Combine them creatively! Example logic:")
+
+        # 給一個組合範例
+        if len(selected) >= 2:
+            ind1 = selected[0][2]
+            ind2 = selected[1][2]
+            lines.append(f"  → Use {ind1} for trend/entry, filter with {ind2} for confirmation")
+
+        return "\n".join(lines)
+
     def generate_strategy_idea(self) -> str:
         """
         Ask Gemini to propose a new strategy idea based on past results.
-        使用模組化思考 + 痛苦回饋機制。
+        使用模組化思考 + 痛苦回饋機制 + 指標探索。
         """
         # Build context from history
         context = self._build_context()
@@ -72,12 +174,17 @@ class StrategyGenerator:
         iteration = self.history["total_iterations"]
         evolution_mode = self._get_evolution_mode(iteration)
 
+        # 從指標庫選擇必用指標
+        indicator_selection = self._select_exploration_indicators()
+
         prompt = f"""You are a Quantitative Research Director at a hedge fund specializing in leveraged ETFs.
 
 CONTEXT:
 {context}
 
 {evolution_mode}
+
+{indicator_selection}
 
 ═══════════════════════════════════════════════════════════════
 🎯 PRIMARY OBJECTIVE: SURVIVAL > PROFIT
@@ -190,6 +297,37 @@ Then combine in generate_signals():
 - Use INTEGER parameters ONLY: 10, 20, 50, 100, 200
 - NO magic numbers like 13.42 or 0.0237
 - Maximum 4 conditions per signal
+
+═══════════════════════════════════════════════════════════════
+📊 INDICATOR IMPLEMENTATION GUIDE
+═══════════════════════════════════════════════════════════════
+Common indicator formulas (copy-paste ready):
+
+# HMA (Hull Moving Average)
+def hma(series, period):
+    half_wma = series.rolling(period//2).mean()
+    full_wma = series.rolling(period).mean()
+    return (2 * half_wma - full_wma).rolling(int(np.sqrt(period))).mean()
+
+# ATR (Average True Range)
+tr = pd.concat([high-low, abs(high-close.shift(1)), abs(low-close.shift(1))], axis=1).max(axis=1)
+atr = tr.rolling(14).mean()
+
+# ADX (for regime filter: ADX < 20 = no trend = cash)
+# Simplified: Use ATR slope as proxy
+
+# Bollinger Band Width (squeeze detection)
+bb_width = (upper_band - lower_band) / middle_band
+
+# Williams %R
+williams_r = (highest_high - close) / (highest_high - lowest_low) * -100
+
+# OBV (On-Balance Volume)
+obv = (np.sign(close.diff()) * volume).cumsum()
+
+# Supertrend (simplified)
+upper = (high + low) / 2 + 2 * atr
+lower = (high + low) / 2 - 2 * atr
 
 ═══════════════════════════════════════════════════════════════
 📋 CLASS REQUIREMENTS
