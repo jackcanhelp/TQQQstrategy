@@ -26,6 +26,7 @@ MODELS = [
     "gemini-2.0-flash-lite",  # 快，輕量
     "gemini-2.5-flash",       # 快
     "gemini-2.0-flash",       # 快
+    "gemini-1.5-flash",       # 快（有就用，沒有就跳過）
     "gemini-2.5-pro",         # 較慢但更強
     "gemini-exp-1206",        # 實驗版
 ]
