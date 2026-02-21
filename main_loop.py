@@ -57,23 +57,31 @@ HOF_MAX_DD_MIN = -0.30  # Max drawdown must be better (less negative) than -30%
 # LLM Client — unified interface
 # ═══════════════════════════════════════════════════════════════
 class LLMClient:
-    """Unified LLM client: GitHub Models → Groq → Gemini failover."""
-
-    # Groq models to try in order (verified available)
-    GROQ_MODELS = [
-        "llama-3.3-70b-versatile",    # Best logic for strategy code
-        "llama-3.1-8b-instant",       # Fast fallback
-        "mixtral-8x7b-32768",         # Alternative with large context
-    ]
+    """Unified LLM client: Groq (5-key pool) → GitHub Models → Gemini failover."""
 
     def __init__(self):
-        self._github = None
         self._groq = None
+        self._github = None
         self._gemini = None
         self.calls = 0
-        self.github_ok = 0
         self.groq_ok = 0
+        self.github_ok = 0
         self.gemini_ok = 0
+
+    def _get_groq(self):
+        if self._groq is not None:
+            return self._groq
+        try:
+            from groq_client import GroqClient
+            self._groq = GroqClient()
+            if not self._groq.keys:
+                self._groq = None
+                return None
+            print(f"   🚀 Groq engine: {len(self._groq.keys)} keys, pool-based allocation")
+            return self._groq
+        except Exception as e:
+            print(f"   ⚠️ Groq init failed: {e}")
+            return None
 
     def _get_github(self):
         if self._github is not None:
@@ -86,62 +94,6 @@ class LLMClient:
             print(f"   ⚠️ GitHub Models init failed: {e}")
             return None
 
-    def _get_groq(self):
-        if self._groq is not None:
-            return self._groq
-        groq_key = os.getenv("GROQ_API_KEY")
-        if not groq_key:
-            return None
-        try:
-            from openai import OpenAI
-            self._groq = OpenAI(
-                base_url="https://api.groq.com/openai/v1",
-                api_key=groq_key,
-            )
-            return self._groq
-        except Exception as e:
-            print(f"   ⚠️ Groq init failed: {e}")
-            return None
-
-    def _call_groq(self, prompt: str) -> Optional[str]:
-        """Call Groq API with model failover and rate limit retry."""
-        client = self._get_groq()
-        if not client:
-            return None
-
-        for model in self.GROQ_MODELS:
-            for attempt in range(2):
-                try:
-                    print(f"   🔄 Groq: {model}...")
-                    response = client.chat.completions.create(
-                        model=model,
-                        messages=[
-                            {"role": "system", "content": (
-                                "You are an expert Python Quantitative Developer. "
-                                "Output ONLY valid Python code or strategy ideas as requested. "
-                                "No markdown, no explanations."
-                            )},
-                            {"role": "user", "content": prompt}
-                        ],
-                        max_tokens=4096,
-                        temperature=0.7,
-                    )
-                    result = response.choices[0].message.content
-                    if result:
-                        print(f"   ✅ Groq ({model}) success")
-                        return result
-                except Exception as e:
-                    error_msg = str(e)
-                    if '429' in error_msg or 'rate_limit' in error_msg.lower():
-                        if attempt == 0:
-                            print(f"   ⚠️ Groq {model} rate limited, waiting 60s...")
-                            time.sleep(60)
-                            continue
-                    print(f"   ⚠️ Groq {model} failed: {error_msg[:60]}")
-                    break  # Try next model
-
-        return None
-
     def _get_gemini(self):
         if self._gemini is not None:
             return self._gemini
@@ -152,11 +104,19 @@ class LLMClient:
         except Exception:
             return None
 
-    def generate(self, prompt: str) -> Optional[str]:
-        """Generate text via LLM with failover: GitHub → Groq → Gemini."""
+    def generate(self, prompt: str, task: str = "idea") -> Optional[str]:
+        """Generate text via LLM with failover: Groq → GitHub → Gemini."""
         self.calls += 1
 
-        # Primary: GitHub Models
+        # Primary: Groq (2 keys × multiple models, highest daily quota)
+        groq = self._get_groq()
+        if groq:
+            result = groq.generate(prompt, task=task)
+            if result:
+                self.groq_ok += 1
+                return result
+
+        # Secondary: GitHub Models (50 RPD)
         gh = self._get_github()
         if gh:
             result = gh._call_model_chain(prompt)
@@ -164,13 +124,7 @@ class LLMClient:
                 self.github_ok += 1
                 return result
 
-        # Secondary: Groq (fast LPU inference)
-        result = self._call_groq(prompt)
-        if result:
-            self.groq_ok += 1
-            return result
-
-        # Tertiary: Gemini (10 keys × 7 models)
+        # Tertiary: Gemini (10 keys, per-project quota)
         gm = self._get_gemini()
         if gm:
             result = gm.generate_with_failover(prompt)
@@ -181,7 +135,10 @@ class LLMClient:
         return None
 
     def get_stats(self) -> str:
-        return f"LLM calls: {self.calls} (GitHub: {self.github_ok}, Groq: {self.groq_ok}, Gemini: {self.gemini_ok})"
+        groq_detail = ""
+        if self._groq:
+            groq_detail = f" [{self._groq.get_stats()}]"
+        return f"LLM calls: {self.calls} (Groq: {self.groq_ok}{groq_detail}, GitHub: {self.github_ok}, Gemini: {self.gemini_ok})"
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -613,7 +570,7 @@ def run_iteration(
     # Step 1: Generate idea
     print("   💡 Generating idea...")
     idea_prompt = build_idea_prompt(history, indicator_menu)
-    idea = llm.generate(idea_prompt)
+    idea = llm.generate(idea_prompt, task="idea")
     if not idea:
         result["error"] = "LLM failed to generate idea"
         return result
@@ -621,7 +578,7 @@ def run_iteration(
     # Step 2: Generate code
     print("   💻 Generating code...")
     code_prompt = build_code_prompt(idea, strategy_id, indicator_menu)
-    raw_code = llm.generate(code_prompt)
+    raw_code = llm.generate(code_prompt, task="code")
     if not raw_code:
         result["error"] = "LLM failed to generate code"
         record_result(history, strategy_id, result["name"], idea,
@@ -659,7 +616,7 @@ def run_iteration(
             if attempt == 0:
                 print(f"   🔧 Fix attempt ({err[:50]})...")
                 fix_prompt = build_fix_prompt(code, err, strategy_id)
-                fixed = llm.generate(fix_prompt)
+                fixed = llm.generate(fix_prompt, task="fix")
                 if fixed:
                     code = clean_code(fixed)
                     if "from strategy_base import BaseStrategy" not in code:
@@ -672,7 +629,7 @@ def run_iteration(
             if attempt == 0:
                 print(f"   🔧 Fix attempt ({err[:50]})...")
                 fix_prompt = build_fix_prompt(code, err, strategy_id)
-                fixed = llm.generate(fix_prompt)
+                fixed = llm.generate(fix_prompt, task="fix")
                 if fixed:
                     code = clean_code(fixed)
                     if "from strategy_base import BaseStrategy" not in code:
@@ -1008,6 +965,7 @@ def main():
     print("=" * 55)
     print("🚀 TQQQ Strategy Discovery Engine v2")
     print(f"   🧬 Champion DNA + State Machine + Crossover")
+    print(f"   🔑 Groq 5-Key Pool: idea=K1,K2 | code=K3,K4 | fix=K5")
     print(f"   Iterations: {args.iterations}")
     print(f"   Target Sharpe: {args.target_sharpe}")
     print(f"   Crossover every: {args.crossover_every} iters")

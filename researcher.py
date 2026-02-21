@@ -97,6 +97,16 @@ class StrategyGenerator:
         self.model_name = model_name
         self.api_manager = get_api_manager()
 
+        # Groq as primary engine (5-key pool allocation)
+        self._groq = None
+        try:
+            from groq_client import GroqClient
+            self._groq = GroqClient()
+            if not self._groq.keys:
+                self._groq = None
+        except Exception as e:
+            print(f"   ⚠️ Groq init failed in researcher: {e}")
+
         # Ensure directories exist
         self.GENERATED_DIR.mkdir(exist_ok=True)
 
@@ -239,17 +249,22 @@ RESPOND WITH:
 
 Keep response concise and actionable."""
 
-        # 主力：GitHub Models (gpt-4.1)，避免 Gemini rate limit 浪費時間
+        # 主力：Groq (2 keys × multiple models, highest quota)
         result = None
-        gh = _get_github_client()
-        if gh:
-            result = gh._call_model_chain(prompt)
+        if self._groq:
+            result = self._groq.generate(prompt, task="idea")
         if result is None:
-            # 備用：Gemini
-            print("   🔄 GitHub Models 不可用，切換到 Gemini...")
+            # 次要：GitHub Models (50 RPD)
+            gh = _get_github_client()
+            if gh:
+                print("   🔄 Groq 不可用，切換到 GitHub Models...")
+                result = gh._call_model_chain(prompt)
+        if result is None:
+            # 最終備援：Gemini
+            print("   🔄 切換到 Gemini...")
             result = self.api_manager.generate_with_retry(prompt, self.model_name)
         if result is None:
-            raise Exception("API 呼叫失敗，GitHub Models 和 Gemini 都不可用")
+            raise Exception("API 呼叫失敗，Groq、GitHub Models 和 Gemini 都不可用")
         return result
 
     def generate_strategy_code(self, idea: str, strategy_id: int) -> Tuple[str, str]:
@@ -352,16 +367,22 @@ lower = (high + low) / 2 - 2 * atr
 
 OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
 
-        # 主力：GitHub Models
+        # 主力：Groq (code task — strong logic models)
         result = None
-        gh = _get_github_client()
-        if gh:
-            result = gh._call_model_chain(prompt)
+        if self._groq:
+            result = self._groq.generate(prompt, task="code")
         if result is None:
-            print("   🔄 GitHub Models 不可用，切換到 Gemini 生成代碼...")
+            # 次要：GitHub Models
+            gh = _get_github_client()
+            if gh:
+                print("   🔄 Groq 不可用，切換到 GitHub Models 生成代碼...")
+                result = gh._call_model_chain(prompt)
+        if result is None:
+            # 最終備援：Gemini
+            print("   🔄 切換到 Gemini 生成代碼...")
             result = self.api_manager.generate_with_retry(prompt, self.model_name)
         if result is None:
-            raise Exception("API 呼叫失敗，GitHub Models 和 Gemini 都不可用")
+            raise Exception("API 呼叫失敗，Groq、GitHub Models 和 Gemini 都不可用")
         code = self._clean_code(result)
 
         # Add imports if missing
@@ -402,16 +423,22 @@ REQUIREMENTS:
 
 OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
 
-        # 主力：GitHub Models
+        # 主力：Groq (fix task — fast models)
         result = None
-        gh = _get_github_client()
-        if gh:
-            result = gh._call_model_chain(prompt)
+        if self._groq:
+            result = self._groq.generate(prompt, task="fix")
         if result is None:
-            print("   🔄 GitHub Models 不可用，切換到 Gemini 修復代碼...")
+            # 次要：GitHub Models
+            gh = _get_github_client()
+            if gh:
+                print("   🔄 Groq 不可用，切換到 GitHub Models 修復代碼...")
+                result = gh._call_model_chain(prompt)
+        if result is None:
+            # 最終備援：Gemini
+            print("   🔄 切換到 Gemini 修復代碼...")
             result = self.api_manager.generate_with_retry(prompt, self.model_name)
         if result is None:
-            raise Exception("API 呼叫失敗，GitHub Models 和 Gemini 都不可用")
+            raise Exception("API 呼叫失敗，Groq、GitHub Models 和 Gemini 都不可用")
         code = self._clean_code(result)
 
         # Add imports if missing
