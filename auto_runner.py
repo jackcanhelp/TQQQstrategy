@@ -189,8 +189,8 @@ class AutoRunner:
         successful = [s for s in history['strategies'] if s.get('success', False)]
         success_rate = len(successful) / total * 100 if total > 0 else 0
 
-        # Top 5 strategies
-        top5 = sorted(successful, key=lambda x: x.get('sharpe', 0), reverse=True)[:5]
+        # Top 5 strategies (ranked by Calmar ratio)
+        top5 = sorted(successful, key=lambda x: x.get('calmar', 0), reverse=True)[:5]
 
         report = f"""
 ═══════════════════════════════════════════════════════════════
@@ -202,7 +202,7 @@ class AutoRunner:
 ───────────────────────────────────────────────────────────────
    總迭代次數: {total}
    成功策略數: {len(successful)} ({success_rate:.1f}%)
-   最佳 Sharpe: {best_sharpe:.2f}
+   最佳 Calmar: {history.get('best_calmar', best_sharpe):.2f}
    最佳策略: {best_strategy}
 
    本次運行: {self.session_iterations} 次迭代
@@ -225,9 +225,12 @@ class AutoRunner:
 
         for s in recent[-10:]:
             status = "✅" if s.get('success') else "❌"
-            sharpe = f"Sharpe: {s['sharpe']:.2f}" if s.get('success') else f"Error: {s.get('failure_analysis', 'Unknown')[:30]}"
+            if s.get('success'):
+                info = f"Calmar:{s.get('calmar',0):.2f} Sharpe:{s['sharpe']:.2f} CAGR:{s['cagr']:.1%} MaxDD:{s['max_dd']:.1%}"
+            else:
+                info = f"Error: {s.get('failure_analysis', 'Unknown')[:30]}"
             report += f"""
-   {status} {s['name']}: {sharpe}"""
+   {status} {s['name']}: {info}"""
 
         # API Key 狀態
         try:
@@ -284,12 +287,14 @@ class AutoRunner:
                 report = report[:4000] + "\n...(truncated)"
 
             url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-            requests.post(url, data={
+            resp = requests.post(url, data={
                 'chat_id': chat_id,
                 'text': report,
-                'parse_mode': 'Markdown'
             })
-            print("📱 Report sent via Telegram")
+            if resp.status_code == 200 and resp.json().get('ok'):
+                print("📱 Report sent via Telegram")
+            else:
+                print(f"⚠️ Telegram API 回應異常: {resp.text[:100]}")
         except Exception as e:
             print(f"⚠️ Telegram send failed: {e}")
 
@@ -349,6 +354,7 @@ class AutoRunner:
 
             if result['success']:
                 print(f"✅ Sharpe: {result['sharpe']:.2f}")
+                consecutive_failures = 0
 
                 # Check target
                 if result['sharpe'] >= self.target_sharpe:
@@ -358,7 +364,19 @@ class AutoRunner:
                     self.send_notification(report)
                     break
             else:
-                print(f"❌ {result['error'][:50] if result['error'] else 'Failed'}")
+                error_msg = result['error'][:50] if result['error'] else 'Failed'
+                print(f"❌ {error_msg}")
+
+                # API 全掛時加長冷卻
+                if result['error'] and '都不可用' in result['error']:
+                    consecutive_failures = getattr(self, '_consec_api_fail', 0) + 1
+                    self._consec_api_fail = consecutive_failures
+                    cooldown = min(60 * consecutive_failures, 300)  # 60s, 120s, ... 最多 300s
+                    print(f"   ⏳ API 全部限流，冷卻 {cooldown} 秒...")
+                    time.sleep(cooldown)
+                    continue
+                else:
+                    self._consec_api_fail = 0
 
             # Periodic report
             if iteration % self.report_every == 0:
@@ -367,8 +385,8 @@ class AutoRunner:
                 print(report)
                 self.send_notification(report)
 
-            # Small delay to avoid API rate limits
-            time.sleep(2)
+            # Delay between iterations to pace API usage
+            time.sleep(5)
 
         # Final report
         print("\n📊 Final Report:")

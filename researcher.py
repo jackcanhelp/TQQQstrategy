@@ -20,6 +20,22 @@ from api_manager import get_api_manager
 
 load_dotenv()
 
+# GitHub Models 作為主力引擎（避免 Gemini rate limit 浪費時間）
+_github_client = None
+
+def _get_github_client():
+    """取得 GitHub Models MultiModelClient（主力引擎）。"""
+    global _github_client
+    if _github_client is not None:
+        return _github_client
+    try:
+        from multi_model_client import MultiModelClient
+        _github_client = MultiModelClient()
+        return _github_client
+    except Exception as e:
+        print(f"   ⚠️ GitHub Models 初始化失敗: {e}")
+        return None
+
 
 # ═══════════════════════════════════════════════════════════════
 # 🗂️ INDICATOR LIBRARY - 擴展 TQQQ 指標宇宙
@@ -187,64 +203,53 @@ CONTEXT:
 {indicator_selection}
 
 ═══════════════════════════════════════════════════════════════
-🎯 PRIMARY OBJECTIVE: SURVIVAL > PROFIT
+🧬 CHAMPION DNA — PROVEN STRATEGY (Sharpe=1.28)
 ═══════════════════════════════════════════════════════════════
-Your goal is to MAXIMIZE Calmar Ratio (CAGR / |MaxDrawdown|).
-Target: Calmar > 1.0 (acceptable returns with controlled drawdowns)
+Our best strategy uses RVI (Relative Volatility Index) with STATE MACHINE:
+- 3 States: Green (RVI>59=bull), Orange (neutral), Red (RVI<42=bear)
+- BUY on state TRANSITION: Orange/Red → Green (momentum building)
+- SELL: RVI > 76 (overbought) or RVI < 42 (breakdown)
+- SHORT: Orange → Red transition, ATR×1.8 take-profit/stop-loss
 
-TQQQ can drop 80%+ in bear markets. A strategy that avoids catastrophic
-losses is MORE VALUABLE than one with higher returns but deeper drawdowns.
-
-═══════════════════════════════════════════════════════════════
-🧩 MODULAR STRATEGY DESIGN (REQUIRED)
-═══════════════════════════════════════════════════════════════
-Your strategy MUST have these 3 independent modules:
-
-1. 🚦 REGIME FILTER (Market State Detection)
-   - Detect: Uptrend / Downtrend / High Volatility / Sideways
-   - When bearish or high-vol: MUST go to Cash (0% exposure)
-   - Indicators: 200-day SMA slope, VIX level, ATR percentile
-
-2. 🏹 ENTRY SIGNAL (When to Buy)
-   - Only trigger when Regime is favorable
-   - Focus on: buying dips in uptrends, NOT catching falling knives
-   - Indicators: RSI divergence, MACD histogram, Bollinger squeeze
-
-3. 🛡️ EXIT & RISK MANAGEMENT (How to Protect)
-   - MUST have trailing stop or volatility-based exit
-   - Indicators: Chandelier Exit, ATR trailing stop, % stop-loss
+WHY IT WORKS: Transitions capture MOMENTUM SHIFTS, not static levels.
+YOUR TASK: MUTATE one module while keeping the winning pattern.
 
 ═══════════════════════════════════════════════════════════════
-⚠️ CRITICAL RULES - NO LOOK-AHEAD BIAS
+🎯 OBJECTIVE: Beat Sharpe=1.28 AND MaxDD > -30%
 ═══════════════════════════════════════════════════════════════
+
+REQUIRED MODULES:
+1. STATE MACHINE — define 2-3 market states using indicators
+2. TRANSITION-BASED ENTRY — buy on state changes, not thresholds
+3. ADAPTIVE EXIT — ATR-based or volatility-adjusted stops
+4. OPTIONAL SHORT — state transition to bearish with TP/SL
+
+RULES:
 ❌ FORBIDDEN: shift(-1), future prices, forward indexing
-✅ ALLOWED: SMA, EMA, RSI, ATR, Bollinger, MACD (all backward-looking)
-
-═══════════════════════════════════════════════════════════════
-📐 AVOID OVERFITTING
-═══════════════════════════════════════════════════════════════
-- Use INTEGER parameters only (10, 20, 50, 200 - not 13.42)
-- Logic must be explainable in 3 sentences
-- Maximum 4 conditions for entry/exit
-
-═══════════════════════════════════════════════════════════════
-💡 KEY INSIGHT: CASH IS A POSITION
-═══════════════════════════════════════════════════════════════
-For TQQQ, holding Cash (0 exposure) is POWERFUL due to volatility decay.
-Good strategies sit out during sideways/choppy markets.
+✅ ALLOWED: SMA, EMA, RSI, ATR, RVI, Bollinger, MACD
+- Use INTEGER parameters only
+- Signals: -1.0 (short) to 1.0 (long), 0.0 = cash
 
 RESPOND WITH:
 1. Strategy Name
-2. Regime Filter Logic (when to be in cash)
-3. Entry Signal Logic (when to buy)
-4. Exit & Risk Logic (when to sell/protect)
+2. State Machine Logic (what states, what indicators define them)
+3. Entry: Which transitions trigger buy/short
+4. Exit & Risk: Adaptive exit conditions
 5. Key Parameters (integers only)
 
 Keep response concise and actionable."""
 
-        result = self.api_manager.generate_with_retry(prompt, self.model_name)
+        # 主力：GitHub Models (gpt-4.1)，避免 Gemini rate limit 浪費時間
+        result = None
+        gh = _get_github_client()
+        if gh:
+            result = gh._call_model_chain(prompt)
         if result is None:
-            raise Exception("API 呼叫失敗，所有 Key 都不可用")
+            # 備用：Gemini
+            print("   🔄 GitHub Models 不可用，切換到 Gemini...")
+            result = self.api_manager.generate_with_retry(prompt, self.model_name)
+        if result is None:
+            raise Exception("API 呼叫失敗，GitHub Models 和 Gemini 都不可用")
         return result
 
     def generate_strategy_code(self, idea: str, strategy_id: int) -> Tuple[str, str]:
@@ -347,9 +352,16 @@ lower = (high + low) / 2 - 2 * atr
 
 OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
 
-        result = self.api_manager.generate_with_retry(prompt, self.model_name)
+        # 主力：GitHub Models
+        result = None
+        gh = _get_github_client()
+        if gh:
+            result = gh._call_model_chain(prompt)
         if result is None:
-            raise Exception("API 呼叫失敗，所有 Key 都不可用")
+            print("   🔄 GitHub Models 不可用，切換到 Gemini 生成代碼...")
+            result = self.api_manager.generate_with_retry(prompt, self.model_name)
+        if result is None:
+            raise Exception("API 呼叫失敗，GitHub Models 和 Gemini 都不可用")
         code = self._clean_code(result)
 
         # Add imports if missing
@@ -390,9 +402,16 @@ REQUIREMENTS:
 
 OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
 
-        result = self.api_manager.generate_with_retry(prompt, self.model_name)
+        # 主力：GitHub Models
+        result = None
+        gh = _get_github_client()
+        if gh:
+            result = gh._call_model_chain(prompt)
         if result is None:
-            raise Exception("API 呼叫失敗，所有 Key 都不可用")
+            print("   🔄 GitHub Models 不可用，切換到 Gemini 修復代碼...")
+            result = self.api_manager.generate_with_retry(prompt, self.model_name)
+        if result is None:
+            raise Exception("API 呼叫失敗，GitHub Models 和 Gemini 都不可用")
         code = self._clean_code(result)
 
         # Add imports if missing
@@ -470,11 +489,11 @@ CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeti
 
         # 找出成功的策略
         successful = [s for s in self.history["strategies"] if s.get("success")]
-        best_strategies = sorted(successful, key=lambda x: x.get("sharpe", 0), reverse=True)[:3]
+        best_strategies = sorted(successful, key=lambda x: x.get("calmar", 0), reverse=True)[:3]
 
         context_lines = [
             f"Total iterations: {self.history['total_iterations']}",
-            f"Best Calmar/Sharpe: {self.history['best_sharpe']:.2f}",
+            f"Best Calmar: {self.history.get('best_calmar', self.history.get('best_sharpe', 0)):.2f}",
             f"Best strategy: {self.history['best_strategy']}",
             "",
             "🏆 TOP 3 STRATEGIES (learn from these):"
@@ -547,11 +566,10 @@ CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeti
 
         self.history["strategies"].append(result)
 
-        # Update best if applicable (use Calmar as primary metric)
-        # 如果 calmar 有值就用 calmar，否則用 sharpe 向後兼容
-        metric = calmar if calmar > 0 else sharpe
-        if metric > self.history["best_sharpe"]:
-            self.history["best_sharpe"] = metric
+        # Update best — use Calmar as primary ranking metric
+        if calmar > self.history.get("best_calmar", self.history.get("best_sharpe", 0)):
+            self.history["best_sharpe"] = calmar  # 向下相容：欄位名保留但存 Calmar
+            self.history["best_calmar"] = calmar
             self.history["best_strategy"] = strategy_name
 
         self._save_history()
