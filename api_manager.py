@@ -2,10 +2,12 @@
 API Key & Model Manager
 ========================
 管理多組 Gemini API Key + 多模型自動切換，最大化免費配額使用。
+當 Gemini 配額用完時，自動切換到 GitHub Models API。
 
 Features:
-- 8 組 API Key 輪換
-- 多模型 failover (gemini-2.5-flash-lite → gemini-2.0-flash → gemini-1.5-flash)
+- 10 組 Gemini API Key 輪換
+- 多模型 failover (gemini-2.5-flash-lite → gemini-2.0-flash → ...)
+- GitHub Models 作為終極備用 (GPT-4o, DeepSeek, Llama)
 - 智能等待與重試
 """
 
@@ -18,6 +20,15 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# GitHub Models 配置
+GITHUB_MODELS_ENDPOINT = "https://models.github.ai/inference"
+GITHUB_MODELS = [
+    "openai/gpt-4.1",
+    "openai/gpt-4o",
+    "deepseek/DeepSeek-V3-0324",
+    "meta/Llama-4-Scout-17B-16E-Instruct",
+]
 
 
 # 模型優先順序（從快到慢，用好用滿免費額度）
@@ -337,7 +348,55 @@ class APIKeyManager:
                     self._mark_combo_failed(key, model, 5)
                     self._rotate_key()
 
-        print(f"   ❌ 所有 {max_retries} 次嘗試都失敗")
+        print(f"   ❌ Gemini 所有 {max_retries} 次嘗試都失敗")
+
+        # 嘗試 GitHub Models 作為終極備用
+        github_result = self._try_github_models(prompt)
+        if github_result:
+            return github_result
+
+        return None
+
+    def _try_github_models(self, prompt: str) -> Optional[str]:
+        """
+        當 Gemini 全部失敗時，嘗試 GitHub Models API。
+        """
+        github_token = os.getenv("GITHUB_TOKEN")
+        if not github_token:
+            print("   ⚠️ GITHUB_TOKEN 未設定，無法使用 GitHub Models")
+            return None
+
+        try:
+            from openai import OpenAI
+        except ImportError:
+            print("   ⚠️ openai 套件未安裝，無法使用 GitHub Models")
+            return None
+
+        client = OpenAI(
+            base_url=GITHUB_MODELS_ENDPOINT,
+            api_key=github_token,
+        )
+
+        for model in GITHUB_MODELS:
+            try:
+                print(f"   🔄 嘗試 GitHub Models: {model}...")
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[{"role": "user", "content": prompt}],
+                    max_tokens=2000,
+                    temperature=0.7,
+                )
+                result = response.choices[0].message.content
+                print(f"   ✅ GitHub Models ({model}) 成功!")
+                self.total_successes += 1
+                return result
+
+            except Exception as e:
+                error_msg = str(e)
+                print(f"   ⚠️ GitHub {model} 失敗: {error_msg[:50]}")
+                continue
+
+        print("   ❌ GitHub Models 也全部失敗")
         return None
 
     def _parse_wait_time(self, error_msg: str) -> int:
@@ -366,6 +425,14 @@ class APIKeyManager:
                 if self._is_combo_available(key, model)
             )
             lines.append(f"   {model}: {available}/{len(self.keys)} Keys 可用")
+
+        # GitHub Models 狀態
+        github_token = os.getenv("GITHUB_TOKEN")
+        lines.append("")
+        if github_token:
+            lines.append(f"   🐙 GitHub Models: ✅ 可用 ({len(GITHUB_MODELS)} 個模型作為備用)")
+        else:
+            lines.append("   🐙 GitHub Models: ❌ GITHUB_TOKEN 未設定")
 
         return "\n".join(lines)
 

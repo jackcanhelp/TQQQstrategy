@@ -23,7 +23,11 @@ class StrategyValidator:
         (r'\.shift\s*\(\s*-', "Negative shift detected - this looks into the future"),
         (r'\.iloc\s*\[\s*\w+\s*\+\s*\d+', "Forward iloc indexing detected"),
         (r'\.loc\s*\[\s*\w+\s*\+', "Forward loc indexing detected"),
-        (r'future|tomorrow|next_day|forward', "Suspicious variable name suggesting future data"),
+        (r'tomorrow|next_day', "Suspicious variable name suggesting future data"),
+        (r'future_(?:price|return|close|value|data)', "Variable accessing future data"),
+        (r'\.rolling\s*\([^)]*center\s*=\s*True', "Rolling with center=True uses future data"),
+        (r'\.expanding\s*\(\s*\)\.(?:max|min|mean)\s*\(\s*\)', "Expanding window may leak if applied to full series then indexed"),
+        (r'data\s*\[\s*[\'"]Close[\'"]\s*\]\s*\.\s*max\s*\(\s*\)|data\s*\[\s*[\'"]Close[\'"]\s*\]\s*\.\s*min\s*\(\s*\)', "Global max/min on price series uses future data"),
     ]
 
     # Patterns that suggest proper implementation
@@ -77,11 +81,14 @@ class StrategyValidator:
         # Check if strategy suspiciously avoids these days
         signals_on_bad_days = signals.shift(1)[bad_days]  # What was signal BEFORE bad day
 
-        # If strategy is almost always out before bad days, suspicious
-        if signals_on_bad_days.mean() < 0.1 and signals.mean() > 0.3:
-            avoidance_rate = 1 - signals_on_bad_days.mean()
-            if avoidance_rate > threshold:
-                return False, f"SUSPICIOUS: Strategy avoids {avoidance_rate:.1%} of worst days - possible look-ahead bias"
+        # Count how often strategy is in cash (0) or short (-1) before bad days
+        # Being short is valid strategy, only "cash right before drops" is suspicious
+        cash_before_bad = (signals_on_bad_days.abs() < 0.01).mean()  # fraction in cash
+        overall_cash = (signals.abs() < 0.01).mean()  # overall cash fraction
+
+        # If strategy is in cash before almost all bad days, but invested most other times
+        if cash_before_bad > threshold and overall_cash < 0.5:
+            return False, f"SUSPICIOUS: Strategy is in cash before {cash_before_bad:.1%} of worst days but only {overall_cash:.1%} overall - possible look-ahead bias"
 
         return True, "Passed look-ahead statistical test"
 

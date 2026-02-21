@@ -36,6 +36,7 @@ class BacktestResult:
 
     # Time-in-market
     time_in_market: float
+    time_short: float  # Time spent in short positions
 
     # Crisis analysis
     crisis_periods: List[Dict]
@@ -62,6 +63,7 @@ class BacktestResult:
             'profit_factor': round(self.profit_factor, 4),
             'total_trades': self.total_trades,
             'time_in_market': round(self.time_in_market, 4),
+            'time_short': round(self.time_short, 4),
             'crisis_periods': self.crisis_periods,
             'worst_months': self.worst_months
         }
@@ -225,7 +227,8 @@ class BacktestEngine:
         total_trades = int((position_changes > 0).sum())
 
         # Time in market
-        time_in_market = (position > 0).mean()
+        time_in_market = (position != 0).mean()
+        time_short = (position < 0).mean()
 
         # Calmar Ratio: CAGR / |MaxDD| （主要優化目標）
         calmar = abs(cagr / max_drawdown) if max_drawdown != 0 else 0
@@ -253,6 +256,7 @@ class BacktestEngine:
             profit_factor=profit_factor,
             total_trades=total_trades,
             time_in_market=time_in_market,
+            time_short=time_short,
             crisis_periods=crisis_periods,
             worst_months=worst_months,
             equity_curve=equity_curve,
@@ -306,7 +310,7 @@ class BacktestEngine:
     def _analyze_worst_months(self, returns: pd.Series) -> List[Dict]:
         """分析最慘的月份，用於痛苦回饋機制。"""
         # 計算月報酬
-        monthly_returns = returns.resample('M').apply(lambda x: (1 + x).prod() - 1)
+        monthly_returns = returns.resample('ME').apply(lambda x: (1 + x).prod() - 1)
 
         # 找出最差的 3 個月
         worst = monthly_returns.nsmallest(3)

@@ -1,0 +1,38 @@
+
+==================================================
+📊 TQQQ Strategy Discovery Report
+   2026-02-17 08:30:04
+==================================================
+
+📈 Overall
+  Total iterations: 229
+  Successful: 174 (76%)
+  Best: Strategy_Gen3 (metric: 0.77)
+  Hall of Fame: 0 strategies
+
+  This session: 50 iters, 49 ok
+  Duration: 3:17:54
+  LLM calls: 102 (GitHub: 0, Gemini: 102)
+
+🏆 Top 5 Strategies
+──────────────────────────────────────────────────
+  #1 Strategy_Gen3: Sharpe=0.77 CAGR=21.2% MaxDD=-48.8%
+  #2 Strategy_Gen4: Sharpe=0.64 CAGR=18.0% MaxDD=-52.8%
+  #3 Strategy_Gen112: Sharpe=0.64 CAGR=15.4% MaxDD=-31.2%
+  #4 Strategy_Gen209: Sharpe=0.62 CAGR=16.5% MaxDD=-41.3%
+  #5 Strategy_Gen193: Sharpe=0.60 CAGR=15.7% MaxDD=-40.6%
+
+📝 Last 10 Iterations
+──────────────────────────────────────────────────
+  ✅ Strategy_Gen220: Sharpe=0.00
+  ✅ Strategy_Gen221: Sharpe=-0.65
+  ✅ Strategy_Gen222: Sharpe=0.00
+  ✅ Strategy_Gen223: Sharpe=0.09
+  ✅ Strategy_Gen224: Sharpe=-0.04
+  ✅ Strategy_Gen225: Sharpe=0.20
+  ✅ Strategy_Gen226: Sharpe=-2.04
+  ✅ Strategy_Gen227: Sharpe=-9.56
+  ✅ Strategy_Gen228: Sharpe=0.00
+  ✅ Strategy_Gen229: Sharpe=-1.24
+
+==================================================

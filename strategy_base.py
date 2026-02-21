@@ -60,12 +60,48 @@ class BaseStrategy(ABC):
 
     def validate_signals(self, signals: pd.Series) -> pd.Series:
         """
-        Validate and clip signals to [0, 1] range.
+        Validate and clip signals to [-1, 1] range.
         Called automatically by the backtester.
+        -1.0 = full short, 0.0 = cash, 1.0 = full long
         """
-        signals = signals.clip(0.0, 1.0)
+        signals = signals.clip(-1.0, 1.0)
         signals = signals.fillna(0.0)
         return signals
+
+    # ─── State Machine Interface (optional, for transition-based strategies) ───
+
+    def _get_state(self) -> pd.Series:
+        """
+        Override to define market states.
+        Return pd.Series with categorical state labels.
+
+        Example using RVI:
+            state = pd.Series('neutral', index=self.data.index)
+            state[self.data['RVI_Refined'] > 59] = 'bull'
+            state[self.data['RVI_Refined'] < 42] = 'bear'
+            return state
+
+        Example using SMA:
+            bull = (self.data['SMA_50'] > self.data['SMA_200'])
+            state = bull.map({True: 'bull', False: 'bear'})
+            return state
+        """
+        return None
+
+    def _get_transitions(self) -> pd.Series:
+        """
+        Detect state transitions. Requires _get_state() to be implemented.
+        Returns pd.Series with transition labels like 'neutral_to_bull'.
+
+        Transitions are powerful because they capture MOMENTUM SHIFTS,
+        not just levels. A market moving from neutral to bull is different
+        from a market that has been bull for weeks.
+        """
+        state = self._get_state()
+        if state is None:
+            return None
+        prev = state.shift(1).fillna('unknown')
+        return prev.astype(str) + '_to_' + state.astype(str)
 
     def get_description(self) -> str:
         """
