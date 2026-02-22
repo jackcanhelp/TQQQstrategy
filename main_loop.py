@@ -56,6 +56,10 @@ HOF_MAX_DD_MIN = -0.30  # Max drawdown must be better (less negative) than -30%
 RANK_MIN_SHARPE = 0.0   # Must beat risk-free rate
 RANK_MIN_CAGR = 0.05    # Must generate at least 5% annual return
 
+# Director (投資總監) review settings
+DIRECTOR_INTERVAL = 50       # Every N iterations, director reviews & gives guidance
+STAGNATION_THRESHOLD = 15    # N consecutive iterations without improvement → early director call
+
 
 def is_rankable(s: Dict) -> bool:
     """Check if a strategy qualifies for ranking (not a 'do nothing' strategy)."""
@@ -231,7 +235,7 @@ def record_result(history: Dict, strategy_id: int, name: str, idea: str,
 # ═══════════════════════════════════════════════════════════════
 # Prompt builders
 # ═══════════════════════════════════════════════════════════════
-def build_idea_prompt(history: Dict, indicator_menu: str) -> str:
+def build_idea_prompt(history: Dict, indicator_menu: str, director_advice: Optional[str] = None) -> str:
     """Build the strategy idea generation prompt with Champion DNA + mutation feedback."""
 
     # Context from history
@@ -308,10 +312,23 @@ Try a COMPLETELY DIFFERENT approach. Explore a new indicator combination."""
     ]
     champion_mutation = random.choice(mutation_modes)
 
+    # Director's strategic guidance (if available)
+    director_section = ""
+    if director_advice:
+        director_section = f"""
+═══════════════════════════════════════════════════════════════
+👔 DIRECTOR'S STRATEGIC GUIDANCE (MUST FOLLOW)
+═══════════════════════════════════════════════════════════════
+{director_advice}
+
+You MUST incorporate the Director's advice into your strategy design.
+"""
+
     return f"""You are a Quantitative Research Director designing TQQQ (3x Leveraged Nasdaq) strategies.
 
 {context}
 {mutation}
+{director_section}
 
 ═══════════════════════════════════════════════════════════════
 🧬 CHAMPION DNA — PROVEN STRATEGY TO BUILD UPON
@@ -565,6 +582,7 @@ def run_iteration(
     history: Dict,
     indicator_menu: str,
     strategy_id: int,
+    director_advice: Optional[str] = None,
 ) -> Dict:
     """Run a single strategy discovery iteration."""
 
@@ -581,7 +599,7 @@ def run_iteration(
 
     # Step 1: Generate idea
     print("   💡 Generating idea...")
-    idea_prompt = build_idea_prompt(history, indicator_menu)
+    idea_prompt = build_idea_prompt(history, indicator_menu, director_advice=director_advice)
     idea = llm.generate(idea_prompt, task="idea")
     if not idea:
         result["error"] = "LLM failed to generate idea"
@@ -795,6 +813,65 @@ def send_telegram(report: str):
 
 
 # ═══════════════════════════════════════════════════════════════
+# Director (投資總監) — Strategic review & guidance
+# ═══════════════════════════════════════════════════════════════
+def get_director_advice(llm: 'LLMClient', history: Dict) -> Optional[str]:
+    """
+    AI Director of Quantitative Research reviews top strategies and recent failures,
+    then provides tactical guidance for the next iterations.
+    """
+    strategies = history.get("strategies", [])
+    rankable = [s for s in strategies if is_rankable(s)]
+    top5 = sorted(rankable, key=lambda x: x.get("calmar", 0), reverse=True)[:5]
+    recent_failures = [s for s in strategies[-20:] if not s.get("success")][-5:]
+    recent_all = strategies[-10:]
+
+    if not top5:
+        return None
+
+    # Build review report for director
+    report = "═══ CURRENT TOP STRATEGIES (ranked by Calmar) ═══\n"
+    for i, s in enumerate(top5, 1):
+        report += (
+            f"\n--- Rank {i}: {s['name']} ---\n"
+            f"Sharpe: {s['sharpe']:.2f} | CAGR: {s.get('cagr', 0):.1%} | "
+            f"MaxDD: {s['max_dd']:.1%} | Calmar: {s.get('calmar', 0):.2f}\n"
+            f"Idea: {s.get('idea', '')[:200]}\n"
+        )
+
+    report += "\n═══ RECENT 10 ITERATIONS ═══\n"
+    for s in recent_all:
+        st = "✅" if s.get("success") else "❌"
+        report += f"  {st} {s['name']}: Sharpe={s['sharpe']:.2f}, MaxDD={s['max_dd']:.1%}\n"
+
+    if recent_failures:
+        report += "\n═══ RECENT FAILURE PATTERNS ═══\n"
+        for s in recent_failures:
+            report += f"  - {s['name']}: {s.get('failure_analysis', '')[:100]}\n"
+
+    report += f"\nTotal iterations: {history['total_iterations']}\n"
+    report += f"Best strategy: {history.get('best_strategy', 'N/A')} (Calmar: {history.get('best_calmar', 0):.2f})\n"
+
+    director_prompt = f"""You are the Director of Quantitative Research, reviewing your team's TQQQ strategy evolution progress.
+
+{report}
+
+Based on the above data, provide a concise strategic directive (2-4 sentences) for the next batch of iterations:
+
+1. What SPECIFIC weakness do you see in the current top strategies? (e.g., high drawdown during crisis, low CAGR, overfitting signs)
+2. What SPECIFIC indicator, risk management technique, or logic pattern should the team explore NEXT?
+3. What approaches should be AVOIDED based on recent failure patterns?
+
+Be specific and actionable. Reference actual indicator names and numbers.
+DO NOT write code. ONLY provide strategic direction."""
+
+    advice = llm.generate(director_prompt, task="idea")
+    if advice:
+        print(f"\n   👔 [投資總監] 戰術指導：{advice[:200]}...")
+    return advice
+
+
+# ═══════════════════════════════════════════════════════════════
 # Main Loop
 # ═══════════════════════════════════════════════════════════════
 def run_champion_baseline(engine: BacktestEngine, data: pd.DataFrame, history: Dict):
@@ -979,6 +1056,7 @@ def main():
     print("🚀 TQQQ Strategy Discovery Engine v2")
     print(f"   🧬 Champion DNA + State Machine + Crossover")
     print(f"   🔑 Groq 5-Key Pool: idea=K1,K2 | code=K3,K4 | fix=K5")
+    print(f"   👔 Director review every {DIRECTOR_INTERVAL} iters (stagnation: {STAGNATION_THRESHOLD})")
     print(f"   Iterations: {args.iterations}")
     print(f"   Target Sharpe: {args.target_sharpe}")
     print(f"   Crossover every: {args.crossover_every} iters")
@@ -999,10 +1077,34 @@ def main():
     session_start = datetime.now()
     session_successes = 0
     consec_api_fail = 0
+    iters_since_improvement = 0
+    best_calmar_at_start = history.get("best_calmar", 0)
+    director_advice = None  # Current director guidance (injected into idea prompt)
 
     for i in range(1, args.iterations + 1):
         strategy_id = history["total_iterations"] + 1
         print(f"\n[{i}/{args.iterations}] Iteration {strategy_id}")
+
+        # ─── Stagnation detection → early director call ───
+        if (iters_since_improvement >= STAGNATION_THRESHOLD
+                and i % DIRECTOR_INTERVAL != 0):
+            print(f"\n   ⚠️ [停滯偵測] 已 {iters_since_improvement} 輪未突破，提前召喚總監")
+            director_advice = get_director_advice(llm, history)
+            if director_advice and args.notify == "telegram":
+                send_telegram(
+                    f"⚠️ 【停滯警報：{iters_since_improvement} 代未突破】\n"
+                    f"👔 總監緊急指導：\n{director_advice[:400]}"
+                )
+            iters_since_improvement = 0
+
+        # ─── Director review (every N iterations) ───
+        if i > 1 and i % DIRECTOR_INTERVAL == 0:
+            print(f"\n   👔 [定期總監審查] 第 {i} 輪")
+            director_advice = get_director_advice(llm, history)
+            if director_advice and args.notify == "telegram":
+                send_telegram(
+                    f"👔 【第 {strategy_id} 代 — 總監戰術指導】\n{director_advice[:500]}"
+                )
 
         # ─── Crossover round (every N iterations) ───
         if i > 1 and i % args.crossover_every == 0:
@@ -1013,7 +1115,8 @@ def main():
             run_param_sweep_round(data, history)
 
         # ─── Normal LLM-generated strategy iteration ───
-        result = run_iteration(llm, engine, data, history, indicator_menu, strategy_id)
+        result = run_iteration(llm, engine, data, history, indicator_menu, strategy_id,
+                               director_advice=director_advice)
 
         if result["success"]:
             calmar = result.get("calmar", 0)
@@ -1021,6 +1124,14 @@ def main():
                   f"MaxDD={result['max_dd']:.1%} Calmar={calmar:.2f}")
             session_successes += 1
             consec_api_fail = 0
+
+            # Track improvement for stagnation detection
+            current_best = history.get("best_calmar", 0)
+            if current_best > best_calmar_at_start:
+                iters_since_improvement = 0
+                best_calmar_at_start = current_best
+            else:
+                iters_since_improvement += 1
 
             if result["sharpe"] >= args.target_sharpe:
                 print(f"\n🎯 TARGET ACHIEVED! Sharpe {result['sharpe']:.2f}")
@@ -1042,6 +1153,7 @@ def main():
                 continue
             else:
                 consec_api_fail = 0
+                iters_since_improvement += 1
 
         # Periodic report
         if i % args.report_every == 0:
