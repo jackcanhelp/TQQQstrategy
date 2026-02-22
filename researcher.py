@@ -518,19 +518,22 @@ CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeti
         successful = [s for s in self.history["strategies"] if s.get("success")]
         # Filter out "do nothing" strategies (Sharpe <= 0 or CAGR <= 5%)
         rankable = [s for s in successful if s.get("sharpe", 0) > 0 and s.get("cagr", 0) > 0.05]
-        best_strategies = sorted(rankable, key=lambda x: x.get("calmar", 0), reverse=True)[:3]
+        best_strategies = sorted(rankable, key=lambda x: x.get("composite", x.get("calmar", 0)), reverse=True)[:3]
 
+        best_composite = self.history.get('best_composite', self.history.get('best_calmar', self.history.get('best_sharpe', 0)))
         context_lines = [
             f"Total iterations: {self.history['total_iterations']}",
-            f"Best Calmar: {self.history.get('best_calmar', self.history.get('best_sharpe', 0)):.2f}",
+            f"Best Composite: {best_composite:.4f}",
             f"Best strategy: {self.history['best_strategy']}",
             "",
             "🏆 TOP 3 STRATEGIES (learn from these):"
         ]
 
         for s in best_strategies[:3]:
+            cs = s.get('composite', 0)
             context_lines.append(
-                f"  - {s['name']}: Sharpe={s['sharpe']:.2f}, CAGR={s.get('cagr', 0):.1%}, MaxDD={s['max_dd']:.1%}"
+                f"  - {s['name']}: Composite={cs:.4f}, Sharpe={s['sharpe']:.2f}, "
+                f"CAGR={s.get('cagr', 0):.1%}, MaxDD={s['max_dd']:.1%}"
             )
 
         context_lines.append("")

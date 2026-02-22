@@ -56,9 +56,27 @@ HOF_MAX_DD_MIN = -0.30  # Max drawdown must be better (less negative) than -30%
 RANK_MIN_SHARPE = 0.0   # Must beat risk-free rate
 RANK_MIN_CAGR = 0.05    # Must generate at least 5% annual return
 
+# Hard filter thresholds — strategies below these are rejected outright
+HARD_FILTER_MAX_DD = -0.50    # MaxDD must be better than -50%
+HARD_FILTER_MIN_TRADES = 10   # Must have at least 10 trades
+HARD_FILTER_MIN_EXPOSURE = 0.05  # Must be in market at least 5% of time
+HARD_FILTER_MIN_SHARPE = 0.3  # Must have Sharpe >= 0.3
+
+# Failure memory size
+FAILURE_MEMORY_SIZE = 15  # Keep last N failure reasons in FIFO queue
+
 # Director (投資總監) review settings
 DIRECTOR_INTERVAL = 50       # Every N iterations, director reviews & gives guidance
 STAGNATION_THRESHOLD = 15    # N consecutive iterations without improvement → early director call
+
+# Composite score weights
+COMPOSITE_WEIGHTS = {
+    "sharpe": 0.30,
+    "calmar": 0.25,
+    "sortino": 0.20,
+    "max_dd": 0.15,
+    "profit_factor": 0.10,
+}
 
 
 def is_rankable(s: Dict) -> bool:
@@ -66,6 +84,49 @@ def is_rankable(s: Dict) -> bool:
     return (s.get("success", False)
             and s.get("sharpe", 0) > RANK_MIN_SHARPE
             and s.get("cagr", 0) > RANK_MIN_CAGR)
+
+
+def calculate_composite_score(sharpe: float, calmar: float, sortino: float,
+                              max_dd: float, profit_factor: float) -> float:
+    """
+    Calculate weighted composite score with 0-1 normalization.
+    Formula: Sharpe*0.30 + Calmar*0.25 + Sortino*0.20 + DD*0.15 + PF*0.10
+    """
+    # Normalize each metric to 0-1 range using sigmoid-like clamping
+    def norm(val, low, high):
+        """Normalize val from [low, high] to [0, 1], clamped."""
+        if high == low:
+            return 0.5
+        return max(0.0, min(1.0, (val - low) / (high - low)))
+
+    n_sharpe = norm(sharpe, -1.0, 3.0)          # Sharpe: -1 to 3
+    n_calmar = norm(calmar, 0.0, 5.0)           # Calmar: 0 to 5
+    n_sortino = norm(sortino, -1.0, 5.0)        # Sortino: -1 to 5
+    n_dd = norm(max_dd, -0.80, 0.0)             # MaxDD: -80% to 0% (higher=better)
+    n_pf = norm(min(profit_factor, 5.0), 0.0, 5.0)  # PF: 0 to 5, cap at 5
+
+    score = (COMPOSITE_WEIGHTS["sharpe"] * n_sharpe
+             + COMPOSITE_WEIGHTS["calmar"] * n_calmar
+             + COMPOSITE_WEIGHTS["sortino"] * n_sortino
+             + COMPOSITE_WEIGHTS["max_dd"] * n_dd
+             + COMPOSITE_WEIGHTS["profit_factor"] * n_pf)
+    return round(score, 4)
+
+
+def hard_filter(bt) -> Optional[str]:
+    """
+    Apply hard rejection filter to a backtest result.
+    Returns None if passed, or a rejection reason string if failed.
+    """
+    if bt.max_drawdown < HARD_FILTER_MAX_DD:
+        return f"MaxDD={bt.max_drawdown:.1%} worse than {HARD_FILTER_MAX_DD:.0%}"
+    if bt.total_trades < HARD_FILTER_MIN_TRADES:
+        return f"Only {bt.total_trades} trades (min={HARD_FILTER_MIN_TRADES})"
+    if bt.time_in_market < HARD_FILTER_MIN_EXPOSURE:
+        return f"Exposure={bt.time_in_market:.1%} below {HARD_FILTER_MIN_EXPOSURE:.0%}"
+    if bt.sharpe_ratio < HARD_FILTER_MIN_SHARPE:
+        return f"Sharpe={bt.sharpe_ratio:.2f} below {HARD_FILTER_MIN_SHARPE}"
+    return None
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -200,7 +261,7 @@ def load_history() -> Dict:
     if HISTORY_FILE.exists():
         with open(HISTORY_FILE) as f:
             return json.load(f)
-    return {"total_iterations": 0, "best_sharpe": 0.0, "best_calmar": 0.0, "best_strategy": None, "strategies": []}
+    return {"total_iterations": 0, "best_sharpe": 0.0, "best_calmar": 0.0, "best_composite": 0.0, "best_strategy": None, "strategies": []}
 
 
 def save_history(history: Dict):
@@ -210,7 +271,10 @@ def save_history(history: Dict):
 
 def record_result(history: Dict, strategy_id: int, name: str, idea: str,
                   sharpe: float, cagr: float, max_dd: float, calmar: float,
-                  analysis: str, success: bool):
+                  analysis: str, success: bool,
+                  composite: float = 0.0,
+                  test_sharpe: float = 0.0, test_cagr: float = 0.0,
+                  test_max_dd: float = 0.0, test_composite: float = 0.0):
     history["total_iterations"] += 1
     history["strategies"].append({
         "id": strategy_id,
@@ -220,14 +284,20 @@ def record_result(history: Dict, strategy_id: int, name: str, idea: str,
         "calmar": calmar,
         "cagr": cagr,
         "max_dd": max_dd,
+        "composite": composite,
+        "test_sharpe": test_sharpe,
+        "test_cagr": test_cagr,
+        "test_max_dd": test_max_dd,
+        "test_composite": test_composite,
         "failure_analysis": analysis,
         "success": success,
         "timestamp": datetime.now().isoformat(),
     })
-    if (calmar > history.get("best_calmar", history.get("best_sharpe", 0))
+    if (composite > history.get("best_composite", 0)
             and sharpe > RANK_MIN_SHARPE and cagr > RANK_MIN_CAGR):
         history["best_sharpe"] = calmar  # 向下相容
         history["best_calmar"] = calmar
+        history["best_composite"] = composite
         history["best_strategy"] = name
     save_history(history)
 
@@ -235,28 +305,35 @@ def record_result(history: Dict, strategy_id: int, name: str, idea: str,
 # ═══════════════════════════════════════════════════════════════
 # Prompt builders
 # ═══════════════════════════════════════════════════════════════
-def build_idea_prompt(history: Dict, indicator_menu: str, director_advice: Optional[str] = None) -> str:
+def build_idea_prompt(history: Dict, indicator_menu: str,
+                      director_advice: Optional[str] = None,
+                      oos_warning: Optional[str] = None) -> str:
     """Build the strategy idea generation prompt with Champion DNA + mutation feedback."""
 
     # Context from history
     total = history["total_iterations"]
     strategies = history["strategies"]
     rankable = [s for s in strategies if is_rankable(s)]
-    top3 = sorted(rankable, key=lambda x: x.get("calmar", 0), reverse=True)[:3]
+    top3 = sorted(rankable, key=lambda x: x.get("composite", x.get("calmar", 0)), reverse=True)[:3]
     recent5 = strategies[-5:] if strategies else []
 
     # Hall of fame
     hof = load_hall_of_fame()
 
-    best_calmar = history.get('best_calmar', history.get('best_sharpe', 0))
+    best_composite = history.get('best_composite', history.get('best_calmar', history.get('best_sharpe', 0)))
     context = f"Total iterations: {total}\n"
-    context += f"Best: {history['best_strategy']} (Calmar: {best_calmar:.2f})\n"
+    context += f"Best: {history['best_strategy']} (Composite: {best_composite:.4f})\n"
     context += f"Hall of Fame entries: {len(hof)}\n\n"
 
     if top3:
-        context += "🏆 TOP 3 STRATEGIES:\n"
+        context += "🏆 TOP 3 STRATEGIES (by composite score):\n"
         for s in top3:
-            context += f"  {s['name']}: Sharpe={s['sharpe']:.2f}, CAGR={s['cagr']:.1%}, MaxDD={s['max_dd']:.1%}\n"
+            cs = s.get('composite', 0)
+            context += (f"  {s['name']}: Composite={cs:.4f}, Sharpe={s['sharpe']:.2f}, "
+                        f"CAGR={s['cagr']:.1%}, MaxDD={s['max_dd']:.1%}")
+            if s.get("test_sharpe"):
+                context += f" | OOS: Sharpe={s['test_sharpe']:.2f}, CAGR={s['test_cagr']:.1%}"
+            context += "\n"
         context += "\n"
 
     if recent5:
@@ -265,6 +342,27 @@ def build_idea_prompt(history: Dict, indicator_menu: str, director_advice: Optio
             st = "✅" if s.get("success") else "❌"
             context += f"  {st} {s['name']}: Sharpe={s['sharpe']:.2f} | {s.get('failure_analysis','')[:60]}\n"
         context += "\n"
+
+    # Failure memory — last N failures with rejection reasons
+    recent_failures = [s for s in strategies[-30:] if not s.get("success")][-FAILURE_MEMORY_SIZE:]
+    if recent_failures:
+        context += f"⚠️ RECENT {len(recent_failures)} FAILURES (AVOID THESE PATTERNS):\n"
+        for s in recent_failures:
+            context += f"  ❌ {s['name']}: {s.get('failure_analysis','')[:80]}\n"
+        context += "\n"
+
+    # OOS overfitting warning
+    oos_section = ""
+    if oos_warning:
+        oos_section = f"""
+═══════════════════════════════════════════════════════════════
+⚠️ OVERFITTING WARNING (MUST HEED)
+═══════════════════════════════════════════════════════════════
+{oos_warning}
+
+You MUST design a SIMPLER strategy with fewer parameters to avoid overfitting.
+Use fewer conditions (max 3), prefer robust indicators, avoid fine-tuned thresholds.
+"""
 
     # Mutation instruction based on latest result
     mutation = ""
@@ -329,6 +427,7 @@ You MUST incorporate the Director's advice into your strategy design.
 {context}
 {mutation}
 {director_section}
+{oos_section}
 
 ═══════════════════════════════════════════════════════════════
 🧬 CHAMPION DNA — PROVEN STRATEGY TO BUILD UPON
@@ -583,6 +682,8 @@ def run_iteration(
     indicator_menu: str,
     strategy_id: int,
     director_advice: Optional[str] = None,
+    oos_warning: Optional[str] = None,
+    notify_method: str = "file",
 ) -> Dict:
     """Run a single strategy discovery iteration."""
 
@@ -594,12 +695,20 @@ def run_iteration(
         "cagr": 0.0,
         "max_dd": 0.0,
         "calmar": 0.0,
+        "composite": 0.0,
+        "test_sharpe": 0.0,
+        "test_cagr": 0.0,
+        "test_max_dd": 0.0,
+        "test_composite": 0.0,
         "error": None,
+        "oos_warning": None,
     }
 
     # Step 1: Generate idea
     print("   💡 Generating idea...")
-    idea_prompt = build_idea_prompt(history, indicator_menu, director_advice=director_advice)
+    idea_prompt = build_idea_prompt(history, indicator_menu,
+                                    director_advice=director_advice,
+                                    oos_warning=oos_warning)
     idea = llm.generate(idea_prompt, task="idea")
     if not idea:
         result["error"] = "LLM failed to generate idea"
@@ -676,7 +785,7 @@ def run_iteration(
                       0, 0, 0, 0, result["error"], False)
         return result
 
-    # Step 5: Backtest
+    # Step 5: Backtest (full + OOS train/test split)
     print("   📊 Backtesting...")
     try:
         bt = engine.run(strategy)
@@ -687,6 +796,15 @@ def run_iteration(
             result["error"] = "Unrealistic results (possible bug)"
             record_result(history, strategy_id, result["name"], idea,
                           0, 0, 0, 0, result["error"], False)
+            return result
+
+        # Hard filter — reject strategies that don't meet minimum thresholds
+        rejection = hard_filter(bt)
+        if rejection:
+            result["error"] = f"Hard filter: {rejection}"
+            record_result(history, strategy_id, result["name"], idea,
+                          bt.sharpe_ratio, bt.cagr, bt.max_drawdown, bt.calmar_ratio,
+                          f"REJECTED: {rejection}", False)
             return result
 
         # Runtime look-ahead detection for promising strategies
@@ -719,21 +837,77 @@ def run_iteration(
             except Exception as e:
                 print(f"   ⚠️ Look-ahead test error (continuing): {str(e)[:60]}")
 
+        # Train/Test OOS split
+        print("   🧪 Running OOS validation...")
+        train_sharpe = test_sharpe = test_cagr = test_max_dd = test_composite = 0.0
+        try:
+            # Reload strategy for OOS (fresh state)
+            strategy_oos = sandbox.load_strategy(str(file_path), class_name)
+            train_bt, test_bt = engine.run_with_oos(strategy_oos, train_ratio=0.8)
+            train_sharpe = train_bt.sharpe_ratio
+            test_sharpe = test_bt.sharpe_ratio
+            test_cagr = test_bt.cagr
+            test_max_dd = test_bt.max_drawdown
+            test_composite = calculate_composite_score(
+                test_bt.sharpe_ratio, test_bt.calmar_ratio,
+                test_bt.sortino_ratio, test_bt.max_drawdown, test_bt.profit_factor
+            )
+            print(f"   🧪 OOS: Train Sharpe={train_sharpe:.2f}, Test Sharpe={test_sharpe:.2f}")
+        except Exception as e:
+            print(f"   ⚠️ OOS validation error (continuing): {str(e)[:60]}")
+
+        # Composite score (on full backtest)
+        composite = calculate_composite_score(
+            bt.sharpe_ratio, bt.calmar_ratio, bt.sortino_ratio,
+            bt.max_drawdown, bt.profit_factor
+        )
+
+        # OOS overfitting detection → set warning for next iteration
+        if train_sharpe > 0 and test_sharpe < train_sharpe * 0.5:
+            result["oos_warning"] = (
+                f"Previous strategy {result['name']} showed OVERFITTING: "
+                f"Train Sharpe={train_sharpe:.2f} but Test Sharpe={test_sharpe:.2f} "
+                f"(test < 50% of train). Simplify your logic and use fewer parameters."
+            )
+            print(f"   ⚠️ OOS overfitting detected: train={train_sharpe:.2f} > test={test_sharpe:.2f}")
+
         result["success"] = True
         result["sharpe"] = bt.sharpe_ratio
         result["cagr"] = bt.cagr
         result["max_dd"] = bt.max_drawdown
         result["calmar"] = bt.calmar_ratio
+        result["composite"] = composite
+        result["test_sharpe"] = test_sharpe
+        result["test_cagr"] = test_cagr
+        result["test_max_dd"] = test_max_dd
+        result["test_composite"] = test_composite
         result["idea"] = idea[:200]
 
         analysis = bt.get_failure_analysis()
         record_result(history, strategy_id, result["name"], idea,
                       bt.sharpe_ratio, bt.cagr, bt.max_drawdown, bt.calmar_ratio,
-                      analysis, True)
+                      analysis, True,
+                      composite=composite,
+                      test_sharpe=test_sharpe, test_cagr=test_cagr,
+                      test_max_dd=test_max_dd, test_composite=test_composite)
 
         # Check hall of fame
         check_hall_of_fame(result["name"], bt.sharpe_ratio, bt.max_drawdown,
                           bt.cagr, bt.calmar_ratio, idea)
+
+        # Instant Telegram on new record (composite score)
+        if (composite > history.get("best_composite", 0)
+                and notify_method == "telegram"):
+            record_msg = (
+                f"🏆 NEW RECORD! {result['name']}\n"
+                f"Composite: {composite:.4f}\n"
+                f"Sharpe={bt.sharpe_ratio:.2f} CAGR={bt.cagr:.1%} MaxDD={bt.max_drawdown:.1%}\n"
+                f"Calmar={bt.calmar_ratio:.2f} Sortino={bt.sortino_ratio:.2f}\n"
+                f"--- OOS Test ---\n"
+                f"Test Sharpe={test_sharpe:.2f} Test CAGR={test_cagr:.1%} Test MaxDD={test_max_dd:.1%}\n"
+                f"Test Composite={test_composite:.4f}"
+            )
+            send_telegram(record_msg)
 
     except Exception as e:
         result["error"] = str(e)[:100]
@@ -751,46 +925,52 @@ def generate_report(history: Dict, session_stats: Dict) -> str:
     strategies = history["strategies"]
     successful = [s for s in strategies if s.get("success")]
     rankable = [s for s in strategies if is_rankable(s)]
-    top5 = sorted(rankable, key=lambda x: x.get("calmar", 0), reverse=True)[:5]
+    top5 = sorted(rankable, key=lambda x: x.get("composite", x.get("calmar", 0)), reverse=True)[:5]
     recent10 = strategies[-10:]
     hof = load_hall_of_fame()
 
+    best_composite = history.get('best_composite', history.get('best_calmar', history.get('best_sharpe', 0)))
     report = f"""
-{'='*50}
+{'='*55}
 📊 TQQQ Strategy Discovery Report
    {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-{'='*50}
+{'='*55}
 
 📈 Overall
   Total iterations: {total}
   Successful: {len(successful)} ({len(successful)/total*100:.0f}%)
-  Best: {history['best_strategy']} (Calmar: {history.get('best_calmar', history.get('best_sharpe', 0)):.2f})
+  Best: {history['best_strategy']} (Composite: {best_composite:.4f})
   Hall of Fame: {len(hof)} strategies
 
   This session: {session_stats['iterations']} iters, {session_stats['successes']} ok
   Duration: {session_stats['duration']}
   {session_stats['llm_stats']}
 
-🏆 Top 5 Strategies
-{'─'*50}"""
+🏆 Top 5 Strategies (by composite score)
+{'─'*55}"""
     for i, s in enumerate(top5, 1):
-        report += f"\n  #{i} {s['name']}: Calmar={s.get('calmar',0):.2f} Sharpe={s['sharpe']:.2f} CAGR={s['cagr']:.1%} MaxDD={s['max_dd']:.1%}"
+        cs = s.get('composite', 0)
+        report += (f"\n  #{i} {s['name']}: Comp={cs:.4f} Sharpe={s['sharpe']:.2f} "
+                   f"CAGR={s['cagr']:.1%} MaxDD={s['max_dd']:.1%}")
+        if s.get("test_sharpe"):
+            report += f" | OOS Sharpe={s['test_sharpe']:.2f}"
 
     if hof:
-        report += f"\n\n🥇 Hall of Fame ({len(hof)})\n{'─'*50}"
+        report += f"\n\n🥇 Hall of Fame ({len(hof)})\n{'─'*55}"
         for h in hof[:5]:
             report += f"\n  {h['name']}: Calmar={h.get('calmar',0):.2f} Sharpe={h['sharpe']:.2f} MaxDD={h['max_dd']:.1%}"
 
-    report += f"\n\n📝 Last 10 Iterations\n{'─'*50}"
+    report += f"\n\n📝 Last 10 Iterations\n{'─'*55}"
     for s in recent10:
         st = "✅" if s.get("success") else "❌"
         if s.get("success"):
-            info = f"Calmar={s.get('calmar',0):.2f} Sharpe={s['sharpe']:.2f} CAGR={s['cagr']:.1%} MaxDD={s['max_dd']:.1%}"
+            cs = s.get('composite', 0)
+            info = f"Comp={cs:.4f} Sharpe={s['sharpe']:.2f} CAGR={s['cagr']:.1%} MaxDD={s['max_dd']:.1%}"
         else:
             info = s.get("failure_analysis", "")[:40]
         report += f"\n  {st} {s['name']}: {info}"
 
-    report += f"\n\n{'='*50}\n"
+    report += f"\n\n{'='*55}\n"
     return report
 
 
@@ -822,7 +1002,7 @@ def get_director_advice(llm: 'LLMClient', history: Dict) -> Optional[str]:
     """
     strategies = history.get("strategies", [])
     rankable = [s for s in strategies if is_rankable(s)]
-    top5 = sorted(rankable, key=lambda x: x.get("calmar", 0), reverse=True)[:5]
+    top5 = sorted(rankable, key=lambda x: x.get("composite", x.get("calmar", 0)), reverse=True)[:5]
     recent_failures = [s for s in strategies[-20:] if not s.get("success")][-5:]
     recent_all = strategies[-10:]
 
@@ -830,14 +1010,17 @@ def get_director_advice(llm: 'LLMClient', history: Dict) -> Optional[str]:
         return None
 
     # Build review report for director
-    report = "═══ CURRENT TOP STRATEGIES (ranked by Calmar) ═══\n"
+    report = "═══ CURRENT TOP STRATEGIES (ranked by composite score) ═══\n"
     for i, s in enumerate(top5, 1):
         report += (
             f"\n--- Rank {i}: {s['name']} ---\n"
-            f"Sharpe: {s['sharpe']:.2f} | CAGR: {s.get('cagr', 0):.1%} | "
-            f"MaxDD: {s['max_dd']:.1%} | Calmar: {s.get('calmar', 0):.2f}\n"
-            f"Idea: {s.get('idea', '')[:200]}\n"
+            f"Composite: {s.get('composite', 0):.4f} | Sharpe: {s['sharpe']:.2f} | "
+            f"CAGR: {s.get('cagr', 0):.1%} | MaxDD: {s['max_dd']:.1%} | "
+            f"Calmar: {s.get('calmar', 0):.2f}\n"
         )
+        if s.get("test_sharpe"):
+            report += f"OOS: Test Sharpe={s['test_sharpe']:.2f}, Test CAGR={s['test_cagr']:.1%}\n"
+        report += f"Idea: {s.get('idea', '')[:200]}\n"
 
     report += "\n═══ RECENT 10 ITERATIONS ═══\n"
     for s in recent_all:
@@ -850,7 +1033,7 @@ def get_director_advice(llm: 'LLMClient', history: Dict) -> Optional[str]:
             report += f"  - {s['name']}: {s.get('failure_analysis', '')[:100]}\n"
 
     report += f"\nTotal iterations: {history['total_iterations']}\n"
-    report += f"Best strategy: {history.get('best_strategy', 'N/A')} (Calmar: {history.get('best_calmar', 0):.2f})\n"
+    report += f"Best strategy: {history.get('best_strategy', 'N/A')} (Composite: {history.get('best_composite', 0):.4f})\n"
 
     director_prompt = f"""You are the Director of Quantitative Research, reviewing your team's TQQQ strategy evolution progress.
 
@@ -1053,10 +1236,12 @@ def main():
     args = parser.parse_args()
 
     print("=" * 55)
-    print("🚀 TQQQ Strategy Discovery Engine v2")
+    print("🚀 TQQQ Strategy Discovery Engine v3")
     print(f"   🧬 Champion DNA + State Machine + Crossover")
     print(f"   🔑 Groq 5-Key Pool: idea=K1,K2 | code=K3,K4 | fix=K5")
     print(f"   👔 Director review every {DIRECTOR_INTERVAL} iters (stagnation: {STAGNATION_THRESHOLD})")
+    print(f"   📊 Composite Score ranking + OOS validation")
+    print(f"   🛡️ Hard Filter: MaxDD>{HARD_FILTER_MAX_DD:.0%}, Trades>={HARD_FILTER_MIN_TRADES}, Sharpe>={HARD_FILTER_MIN_SHARPE}")
     print(f"   Iterations: {args.iterations}")
     print(f"   Target Sharpe: {args.target_sharpe}")
     print(f"   Crossover every: {args.crossover_every} iters")
@@ -1078,8 +1263,9 @@ def main():
     session_successes = 0
     consec_api_fail = 0
     iters_since_improvement = 0
-    best_calmar_at_start = history.get("best_calmar", 0)
+    best_composite_at_start = history.get("best_composite", 0)
     director_advice = None  # Current director guidance (injected into idea prompt)
+    oos_warning = None      # OOS overfitting warning (injected into next idea prompt)
 
     for i in range(1, args.iterations + 1):
         strategy_id = history["total_iterations"] + 1
@@ -1116,20 +1302,32 @@ def main():
 
         # ─── Normal LLM-generated strategy iteration ───
         result = run_iteration(llm, engine, data, history, indicator_menu, strategy_id,
-                               director_advice=director_advice)
+                               director_advice=director_advice,
+                               oos_warning=oos_warning,
+                               notify_method=args.notify)
+
+        # Consume OOS warning (only inject once)
+        oos_warning = None
 
         if result["success"]:
-            calmar = result.get("calmar", 0)
-            print(f"   ✅ Sharpe={result['sharpe']:.2f} CAGR={result['cagr']:.1%} "
-                  f"MaxDD={result['max_dd']:.1%} Calmar={calmar:.2f}")
+            composite = result.get("composite", 0)
+            print(f"   ✅ Composite={composite:.4f} Sharpe={result['sharpe']:.2f} "
+                  f"CAGR={result['cagr']:.1%} MaxDD={result['max_dd']:.1%}")
+            if result.get("test_sharpe"):
+                print(f"      OOS: Test Sharpe={result['test_sharpe']:.2f} "
+                      f"Test CAGR={result['test_cagr']:.1%}")
             session_successes += 1
             consec_api_fail = 0
 
-            # Track improvement for stagnation detection
-            current_best = history.get("best_calmar", 0)
-            if current_best > best_calmar_at_start:
+            # Propagate OOS overfitting warning for next iteration
+            if result.get("oos_warning"):
+                oos_warning = result["oos_warning"]
+
+            # Track improvement for stagnation detection (now using composite)
+            current_best = history.get("best_composite", 0)
+            if current_best > best_composite_at_start:
                 iters_since_improvement = 0
-                best_calmar_at_start = current_best
+                best_composite_at_start = current_best
             else:
                 iters_since_improvement += 1
 

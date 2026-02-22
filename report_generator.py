@@ -58,7 +58,7 @@ class ReportGenerator:
 ├─────────────────────────────────────────────────────────────────┤
 │ Total Iterations:     {total:>6}                                   │
 │ Successful Strategies: {len(successful):>5} ({success_rate:>5.1f}%)                        │
-│ Best Calmar Ratio:    {history.get('best_calmar', best_sharpe):>6.2f}                                   │
+│ Best Composite:       {history.get('best_composite', history.get('best_calmar', best_sharpe)):>6.4f}                                 │
 │ Best Strategy:        {best_strategy:<20}              │
 └─────────────────────────────────────────────────────────────────┘
 
@@ -67,7 +67,7 @@ class ReportGenerator:
         if successful:
             # Top performers (filter out "do nothing" strategies: must have Sharpe > 0, CAGR > 5%)
             rankable = [s for s in successful if s.get('sharpe', 0) > 0 and s.get('cagr', 0) > 0.05]
-            top10 = sorted(rankable, key=lambda x: x.get('calmar', 0), reverse=True)[:10]
+            top10 = sorted(rankable, key=lambda x: x.get('composite', x.get('calmar', 0)), reverse=True)[:10]
 
             report += """┌─────────────────────────────────────────────────────────────────┐
 │ TOP 10 STRATEGIES                                               │
@@ -75,11 +75,11 @@ class ReportGenerator:
 """
             for i, s in enumerate(top10, 1):
                 name = s.get('name', 'Unknown')[:20]
-                calmar = s.get('calmar', 0)
+                cs = s.get('composite', s.get('calmar', 0))
                 sharpe = s.get('sharpe', 0)
                 cagr = s.get('cagr', 0)
                 max_dd = s.get('max_dd', 0)
-                report += f"│ {i:>2}. {name:<20} Calmar: {calmar:>5.2f} Sharpe: {sharpe:>5.2f} CAGR: {cagr:>6.1%} DD: {max_dd:>6.1%} │\n"
+                report += f"│ {i:>2}. {name:<20} Comp: {cs:>6.4f} Sharpe: {sharpe:>5.2f} CAGR: {cagr:>6.1%} DD: {max_dd:>6.1%} │\n"
 
             report += """└─────────────────────────────────────────────────────────────────┘
 

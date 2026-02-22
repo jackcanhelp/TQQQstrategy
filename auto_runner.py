@@ -189,10 +189,11 @@ class AutoRunner:
         successful = [s for s in history['strategies'] if s.get('success', False)]
         success_rate = len(successful) / total * 100 if total > 0 else 0
 
-        # Top 5 strategies (ranked by Calmar ratio, filter out "do nothing" strategies)
+        # Top 5 strategies (ranked by composite score, filter out "do nothing" strategies)
         rankable = [s for s in successful if s.get('sharpe', 0) > 0 and s.get('cagr', 0) > 0.05]
-        top5 = sorted(rankable, key=lambda x: x.get('calmar', 0), reverse=True)[:5]
+        top5 = sorted(rankable, key=lambda x: x.get('composite', x.get('calmar', 0)), reverse=True)[:5]
 
+        best_composite = history.get('best_composite', history.get('best_calmar', best_sharpe))
         report = f"""
 ═══════════════════════════════════════════════════════════════
 📊 TQQQ 策略進化報告
@@ -203,7 +204,7 @@ class AutoRunner:
 ───────────────────────────────────────────────────────────────
    總迭代次數: {total}
    成功策略數: {len(successful)} ({success_rate:.1f}%)
-   最佳 Calmar: {history.get('best_calmar', best_sharpe):.2f}
+   最佳 Composite: {best_composite:.4f}
    最佳策略: {best_strategy}
 
    本次運行: {self.session_iterations} 次迭代
@@ -214,10 +215,12 @@ class AutoRunner:
 ───────────────────────────────────────────────────────────────"""
 
         for i, s in enumerate(top5, 1):
-            calmar = s.get('calmar', 0)
+            cs = s.get('composite', s.get('calmar', 0))
             report += f"""
    #{i} {s['name']}
-       Calmar: {calmar:.2f} | Sharpe: {s['sharpe']:.2f} | CAGR: {s['cagr']:.1%} | MaxDD: {s['max_dd']:.1%}"""
+       Comp: {cs:.4f} | Sharpe: {s['sharpe']:.2f} | CAGR: {s['cagr']:.1%} | MaxDD: {s['max_dd']:.1%}"""
+            if s.get('test_sharpe'):
+                report += f" | OOS Sharpe: {s['test_sharpe']:.2f}"
 
         report += f"""
 

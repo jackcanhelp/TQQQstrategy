@@ -325,6 +325,63 @@ class BacktestEngine:
         return worst_months
 
 
+    def run_with_oos(self, strategy, train_ratio: float = 0.8) -> Tuple[BacktestResult, BacktestResult]:
+        """
+        Run backtest with Out-of-Sample (OOS) train/test split.
+
+        Runs strategy on FULL dataset to preserve state continuity,
+        then splits signals/returns at the train_ratio boundary and
+        computes metrics separately.
+
+        Args:
+            strategy: Instance of BaseStrategy subclass
+            train_ratio: Fraction of data for training (default 0.8)
+
+        Returns:
+            Tuple of (train_result, test_result)
+        """
+        # Initialize strategy and generate signals on full data
+        strategy.init(self.data)
+        raw_signals = strategy.generate_signals()
+        signals = strategy.validate_signals(raw_signals)
+
+        # Align signals (shift by 1 to avoid lookahead)
+        position = signals.shift(1).fillna(0)
+
+        # Strategy returns on full dataset
+        strategy_returns = position * self.data['Return']
+        strategy_returns = strategy_returns.fillna(0)
+
+        # Split boundary
+        split_idx = int(len(self.data) * train_ratio)
+
+        # --- Train split ---
+        train_returns = strategy_returns.iloc[:split_idx]
+        train_position = position.iloc[:split_idx]
+        train_equity = (1 + train_returns).cumprod()
+
+        train_result = self._calculate_metrics(
+            strategy_name=strategy.name + "_train",
+            returns=train_returns,
+            equity_curve=train_equity,
+            position=train_position,
+        )
+
+        # --- Test split (equity starts from 1.0 independently) ---
+        test_returns = strategy_returns.iloc[split_idx:]
+        test_position = position.iloc[split_idx:]
+        test_equity = (1 + test_returns).cumprod()  # starts at 1.0
+
+        test_result = self._calculate_metrics(
+            strategy_name=strategy.name + "_test",
+            returns=test_returns,
+            equity_curve=test_equity,
+            position=test_position,
+        )
+
+        return train_result, test_result
+
+
 def compare_strategies(results: List[BacktestResult]) -> pd.DataFrame:
     """Create comparison table of multiple strategy results."""
     data = []
