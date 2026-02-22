@@ -516,7 +516,9 @@ CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeti
 
         # 找出成功的策略
         successful = [s for s in self.history["strategies"] if s.get("success")]
-        best_strategies = sorted(successful, key=lambda x: x.get("calmar", 0), reverse=True)[:3]
+        # Filter out "do nothing" strategies (Sharpe <= 0 or CAGR <= 5%)
+        rankable = [s for s in successful if s.get("sharpe", 0) > 0 and s.get("cagr", 0) > 0.05]
+        best_strategies = sorted(rankable, key=lambda x: x.get("calmar", 0), reverse=True)[:3]
 
         context_lines = [
             f"Total iterations: {self.history['total_iterations']}",
@@ -594,7 +596,9 @@ CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeti
         self.history["strategies"].append(result)
 
         # Update best — use Calmar as primary ranking metric
-        if calmar > self.history.get("best_calmar", self.history.get("best_sharpe", 0)):
+        # Filter: must have Sharpe > 0 and CAGR > 5% to qualify (no "do nothing" strategies)
+        if (calmar > self.history.get("best_calmar", self.history.get("best_sharpe", 0))
+                and sharpe > 0.0 and cagr > 0.05):
             self.history["best_sharpe"] = calmar  # 向下相容：欄位名保留但存 Calmar
             self.history["best_calmar"] = calmar
             self.history["best_strategy"] = strategy_name

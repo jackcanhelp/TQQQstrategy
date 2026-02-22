@@ -65,8 +65,9 @@ class ReportGenerator:
 """
 
         if successful:
-            # Top performers
-            top10 = sorted(successful, key=lambda x: x.get('calmar', 0), reverse=True)[:10]
+            # Top performers (filter out "do nothing" strategies: must have Sharpe > 0, CAGR > 5%)
+            rankable = [s for s in successful if s.get('sharpe', 0) > 0 and s.get('cagr', 0) > 0.05]
+            top10 = sorted(rankable, key=lambda x: x.get('calmar', 0), reverse=True)[:10]
 
             report += """┌─────────────────────────────────────────────────────────────────┐
 │ TOP 10 STRATEGIES                                               │

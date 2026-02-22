@@ -52,6 +52,17 @@ GENERATED_DIR.mkdir(exist_ok=True)
 HOF_SHARPE_MIN = 1.2
 HOF_MAX_DD_MIN = -0.30  # Max drawdown must be better (less negative) than -30%
 
+# Minimum thresholds for ranking — filter out "do nothing" strategies
+RANK_MIN_SHARPE = 0.0   # Must beat risk-free rate
+RANK_MIN_CAGR = 0.05    # Must generate at least 5% annual return
+
+
+def is_rankable(s: Dict) -> bool:
+    """Check if a strategy qualifies for ranking (not a 'do nothing' strategy)."""
+    return (s.get("success", False)
+            and s.get("sharpe", 0) > RANK_MIN_SHARPE
+            and s.get("cagr", 0) > RANK_MIN_CAGR)
+
 
 # ═══════════════════════════════════════════════════════════════
 # LLM Client — unified interface
@@ -209,7 +220,8 @@ def record_result(history: Dict, strategy_id: int, name: str, idea: str,
         "success": success,
         "timestamp": datetime.now().isoformat(),
     })
-    if calmar > history.get("best_calmar", history.get("best_sharpe", 0)):
+    if (calmar > history.get("best_calmar", history.get("best_sharpe", 0))
+            and sharpe > RANK_MIN_SHARPE and cagr > RANK_MIN_CAGR):
         history["best_sharpe"] = calmar  # 向下相容
         history["best_calmar"] = calmar
         history["best_strategy"] = name
@@ -225,8 +237,8 @@ def build_idea_prompt(history: Dict, indicator_menu: str) -> str:
     # Context from history
     total = history["total_iterations"]
     strategies = history["strategies"]
-    successful = [s for s in strategies if s.get("success")]
-    top3 = sorted(successful, key=lambda x: x.get("calmar", 0), reverse=True)[:3]
+    rankable = [s for s in strategies if is_rankable(s)]
+    top3 = sorted(rankable, key=lambda x: x.get("calmar", 0), reverse=True)[:3]
     recent5 = strategies[-5:] if strategies else []
 
     # Hall of fame
@@ -720,7 +732,8 @@ def generate_report(history: Dict, session_stats: Dict) -> str:
     total = history["total_iterations"]
     strategies = history["strategies"]
     successful = [s for s in strategies if s.get("success")]
-    top5 = sorted(successful, key=lambda x: x.get("calmar", 0), reverse=True)[:5]
+    rankable = [s for s in strategies if is_rankable(s)]
+    top5 = sorted(rankable, key=lambda x: x.get("calmar", 0), reverse=True)[:5]
     recent10 = strategies[-10:]
     hof = load_hall_of_fame()
 

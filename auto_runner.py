@@ -189,8 +189,9 @@ class AutoRunner:
         successful = [s for s in history['strategies'] if s.get('success', False)]
         success_rate = len(successful) / total * 100 if total > 0 else 0
 
-        # Top 5 strategies (ranked by Calmar ratio)
-        top5 = sorted(successful, key=lambda x: x.get('calmar', 0), reverse=True)[:5]
+        # Top 5 strategies (ranked by Calmar ratio, filter out "do nothing" strategies)
+        rankable = [s for s in successful if s.get('sharpe', 0) > 0 and s.get('cagr', 0) > 0.05]
+        top5 = sorted(rankable, key=lambda x: x.get('calmar', 0), reverse=True)[:5]
 
         report = f"""
 ═══════════════════════════════════════════════════════════════
