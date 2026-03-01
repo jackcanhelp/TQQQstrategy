@@ -517,6 +517,20 @@ OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
             code[:MAX_CODE_CHARS] + f"\n...(truncated {len(code)-MAX_CODE_CHARS} chars)..."
         )
 
+        # Detect "never enters market" to add targeted fix guidance
+        is_tim_error = 'time_in_market' in error or 'never enters' in error or 'Signal stats' in error
+        tim_fix_section = ""
+        if is_tim_error:
+            tim_fix_section = """
+7. ⚠️ CRITICAL — SIGNALS ARE ALL ZERO (never enters market):
+   DIAGNOSE: Entry condition is too strict or logically always-False.
+   FIX strategies (choose one or combine):
+   a) RELAX thresholds: RSI>70 → RSI>50, RVI>80 → RVI>55, MA crossover window
+   b) ADD rolling baseline: use close > close.rolling(20).mean() instead of fixed levels
+   c) ADD multiple OR paths: signal = (condition_a | condition_b).astype(float)
+   d) CHECK boolean logic: ensure comparison produces True values on real TQQQ daily data
+   VERIFY mentally: on a trending asset, your entry condition should be True ≥10% of days."""
+
         prompt = f"""You are debugging Python code for a trading strategy.
 
 BROKEN CODE:
@@ -524,7 +538,7 @@ BROKEN CODE:
 {code_for_prompt}
 ```
 
-ERROR: {error[:300]}
+ERROR: {error[:400]}
 
 FIX REQUIREMENTS:
 1. Class name: `{class_name}`, inherits `BaseStrategy`
@@ -535,7 +549,7 @@ FIX REQUIREMENTS:
 6. NO LOOK-AHEAD BIAS:
    ❌ .shift(-1), .pct_change(-1), .diff(-1) — looks into future
    ❌ data['Close'].max()/.min()/.mean()/.quantile() — global = uses all future data
-   ✅ .rolling(N).mean()/.std()/.max()/.quantile(q) — use rolling version instead
+   ✅ .rolling(N).mean()/.std()/.max()/.quantile(q) — use rolling version instead{tim_fix_section}
 
 OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN."""
 
@@ -933,10 +947,15 @@ class StrategySandbox:
             # Check for all-zero (strategy never enters market = useless)
             time_in_market = (signals.abs() > 0.01).mean()
             if time_in_market < 0.01:
+                sig_min  = float(signals.min())
+                sig_max  = float(signals.max())
+                sig_mean = float(signals.mean())
                 return False, (
-                    "Strategy never enters the market (time_in_market < 1%). "
+                    f"Strategy never enters the market (time_in_market={time_in_market:.3%}). "
+                    f"Signal stats: min={sig_min:.4f}, max={sig_max:.4f}, mean={sig_mean:.6f}. "
                     "Entry conditions are too strict or logically impossible. "
-                    "Make sure buy/short conditions can actually trigger on real TQQQ data."
+                    "FIX: Relax thresholds (e.g., RSI>70→RSI>55, RVI>80→RVI>60) or add "
+                    "OR conditions so entries actually trigger on real TQQQ data."
                 )
 
             return True, ""
