@@ -491,29 +491,30 @@ OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
         """
         class_name = f"Strategy_Gen{strategy_id}"
 
+        # Truncate code to avoid 413 tokens_limit_reached on GitHub Models
+        # GitHub Models context limit is ~8K tokens; code + prompt must fit
+        MAX_CODE_CHARS = 4000
+        code_for_prompt = code if len(code) <= MAX_CODE_CHARS else (
+            code[:MAX_CODE_CHARS] + f"\n...(truncated {len(code)-MAX_CODE_CHARS} chars)..."
+        )
+
         prompt = f"""You are debugging Python code for a trading strategy.
 
 BROKEN CODE:
 ```python
-{code}
+{code_for_prompt}
 ```
 
-ERROR MESSAGE:
-{error}
+ERROR: {error[:300]}
 
-TASK:
-Fix the code so it runs without errors.
+FIX REQUIREMENTS:
+1. Class name: `{class_name}`, inherits `BaseStrategy`
+2. Methods: init(self, data), generate_signals(self) -> pd.Series [0.0–1.0], get_description(self)
+3. INDEX: pd.Series(np_array, index=self.data.index) — NOT pd.Series(np_array)
+4. NO external libs: talib, ta, pandas_ta — pandas/numpy only
+5. Internal helpers take ONLY self: def _helper(self), NOT def _helper(self, data)
 
-REQUIREMENTS:
-1. The class must be named exactly: `{class_name}`
-2. It must inherit from `BaseStrategy`
-3. Must implement init(), generate_signals(), get_description()
-4. generate_signals() must return pd.Series with values 0.0 to 1.0
-5. INDEX ALIGNMENT: pd.Series from numpy arrays MUST have index:
-   ✅ pd.Series(np_array, index=self.data.index)
-   ❌ pd.Series(np_array) — causes signal length to DOUBLE vs data length!
-
-OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
+OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN."""
 
         # 主力：Groq (fix task — fast models)
         result = None
