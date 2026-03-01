@@ -664,6 +664,12 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN."""
             code
         )
 
+        # Fix TypeError: bad operand type for unary ~: 'float'
+        # LLM writes `~exit_signal` (bitwise NOT) but signal is float 0.0/1.0.
+        # Replace `~(expr)` → `(1 - (expr))` and `~var` → `(1 - var)`
+        code = re.sub(r'~\s*\(([^)]+)\)', r'(1 - (\1))', code)
+        code = re.sub(r'~\s*([a-zA-Z_]\w*)\b', r'(1 - \1)', code)
+
         # Fix bitwise OR/AND type errors on floats: `float | series` or `series | float`
         # LLM sometimes writes `position | series` where position is a float — invalid in Python
         # Safe fix: replace `0.0 | ` / `0 | ` (common in signal combination) with logical equivalent
