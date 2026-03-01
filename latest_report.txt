@@ -1,38 +1,60 @@
 
-==================================================
-📊 TQQQ Strategy Discovery Report
-   2026-02-17 08:30:04
-==================================================
+═══════════════════════════════════════════════════════════════
+📊 TQQQ 策略進化報告
+   生成時間: 2026-03-01 15:48:29
+═══════════════════════════════════════════════════════════════
 
-📈 Overall
-  Total iterations: 229
-  Successful: 174 (76%)
-  Best: Strategy_Gen3 (metric: 0.77)
-  Hall of Fame: 0 strategies
+📈 總體統計
+───────────────────────────────────────────────────────────────
+   總迭代次數: 994
+   成功策略數: 704 (70.8%)
+   最佳 Composite: 1.3133
+   最佳策略: Cross_RVI_State_RVI_Trans_RVI_Extreme
 
-  This session: 50 iters, 49 ok
-  Duration: 3:17:54
-  LLM calls: 102 (GitHub: 0, Gemini: 102)
+   本次運行: 15 次迭代
+   本次成功: 15 個策略
+   運行時長: 0:19:00.832203
 
-🏆 Top 5 Strategies
-──────────────────────────────────────────────────
-  #1 Strategy_Gen3: Sharpe=0.77 CAGR=21.2% MaxDD=-48.8%
-  #2 Strategy_Gen4: Sharpe=0.64 CAGR=18.0% MaxDD=-52.8%
-  #3 Strategy_Gen112: Sharpe=0.64 CAGR=15.4% MaxDD=-31.2%
-  #4 Strategy_Gen209: Sharpe=0.62 CAGR=16.5% MaxDD=-41.3%
-  #5 Strategy_Gen193: Sharpe=0.60 CAGR=15.7% MaxDD=-40.6%
+🏆 Top 5 策略
+───────────────────────────────────────────────────────────────
+   #1 Cross_RVI_State_RVI_Trans_RVI_Extreme
+       Comp: 1.3133 | Sharpe: 1.29 | CAGR: 53.0% | MaxDD: -40.3%
+   #2 Cross_RVI_State_RVI_Trans_RVI_Extreme
+       Comp: 1.3133 | Sharpe: 1.29 | CAGR: 53.0% | MaxDD: -40.3%
+   #3 Cross_RVI_State_RVI_Trans_RVI_Extreme
+       Comp: 1.3133 | Sharpe: 1.29 | CAGR: 53.0% | MaxDD: -40.3%
+   #4 Cross_RVI_State_RVI_Trans_RVI_Extreme
+       Comp: 1.3133 | Sharpe: 1.29 | CAGR: 53.0% | MaxDD: -40.3%
+   #5 Strategy_Gen448
+       Comp: 1.3133 | Sharpe: 1.29 | CAGR: 53.0% | MaxDD: -40.3%
 
-📝 Last 10 Iterations
-──────────────────────────────────────────────────
-  ✅ Strategy_Gen220: Sharpe=0.00
-  ✅ Strategy_Gen221: Sharpe=-0.65
-  ✅ Strategy_Gen222: Sharpe=0.00
-  ✅ Strategy_Gen223: Sharpe=0.09
-  ✅ Strategy_Gen224: Sharpe=-0.04
-  ✅ Strategy_Gen225: Sharpe=0.20
-  ✅ Strategy_Gen226: Sharpe=-2.04
-  ✅ Strategy_Gen227: Sharpe=-9.56
-  ✅ Strategy_Gen228: Sharpe=0.00
-  ✅ Strategy_Gen229: Sharpe=-1.24
+📝 最近 10 次迭代
+───────────────────────────────────────────────────────────────
+   ✅ Strategy_Gen985: Calmar:0.12 Sharpe:0.02 CAGR:1.9% MaxDD:-15.3%
+   ✅ Strategy_Gen986: Calmar:0.02 Sharpe:-0.10 CAGR:-0.8% MaxDD:-43.6%
+   ❌ Strategy_Gen987: Error: Strategy never enters the mark
+   ✅ Strategy_Gen988: Calmar:0.21 Sharpe:0.42 CAGR:11.0% MaxDD:-51.3%
+   ✅ Strategy_Gen989: Calmar:0.05 Sharpe:-0.05 CAGR:1.4% MaxDD:-27.9%
+   ✅ Strategy_Gen990: Calmar:0.08 Sharpe:0.13 CAGR:2.8% MaxDD:-35.7%
+   ❌ Strategy_Gen991: Error: Strategy never enters the mark
+   ❌ Strategy_Gen992: Error: TypeError: _rvi_single() takes
+   ✅ Strategy_Gen993: Calmar:0.36 Sharpe:0.61 CAGR:19.7% MaxDD:-54.9%
+   ❌ Strategy_Gen994: Error: Strategy never enters the mark
 
-==================================================
+🔑 API Manager 狀態:
+   總請求: 9 | 成功: 9
+   Key 切換: 204 | Model 切換: 23
+
+   當前: Key #2 + gemini-2.0-flash
+
+   gemini-2.5-flash-lite: 0/10 Keys 可用
+   gemini-2.0-flash-lite: 0/10 Keys 可用
+   gemini-2.5-flash: 0/10 Keys 可用
+   gemini-2.0-flash: 4/10 Keys 可用
+   gemini-1.5-flash: 0/10 Keys 可用
+   gemini-2.5-pro: 10/10 Keys 可用
+   gemini-exp-1206: 0/10 Keys 可用
+
+   🐙 GitHub Models: ✅ 可用 (4 個模型作為備用)
+
+═══════════════════════════════════════════════════════════════
