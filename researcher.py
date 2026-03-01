@@ -460,12 +460,31 @@ class {class_name}(BaseStrategy):
     def get_description(self) -> str:
         return "{class_name}: <brief description>"
 
+═══════════════════════════════════════════════════════════════
+🚨 CRITICAL: SCALE & COLUMN CHECKS (most common failure causes)
+═══════════════════════════════════════════════════════════════
+SCALE CHECK — indicators have different value ranges:
+  • RSI, RVI, Stochastic, CCI(norm): 0–100 → compare to 30, 50, 70
+  • TEMA, SMA, EMA, HMA: price-level ($1–$100+) → compare to OTHER moving averages or use SLOPE
+    ✅ CORRECT: tema > tema.shift(1)   (slope check)
+    ✅ CORRECT: tema > sma_200         (relative comparison)
+    ❌ WRONG:   tema > 0.2             (price-level vs micro threshold — NEVER fires!)
+    ❌ WRONG:   tema.rolling(3).mean() > 0.8  (same mistake, always True or always False)
+  • ATR: dollar value per bar → compare to close * 0.02 (2% of price) or use percentile
+  • BB_Width, Normalized indicators: 0–1 range → compare to 0.02, 0.05, etc.
+  • Williams %R: –100 to 0 → compare to –80 (oversold) or –20 (overbought)
+
+COLUMN RESTRICTION — self.data ONLY has these 5 columns:
+  ✅ 'Open', 'High', 'Low', 'Close', 'Volume'
+  ❌ 'sim_vix_pctile', 'vix', 'adx', 'rsi', or ANY computed column — DO NOT EXIST!
+  → Compute all indicators yourself from the 5 available columns.
+
 ⚠️ SELF-CHECK BEFORE SUBMITTING:
-- Can your conditions ACTUALLY trigger on real data? (e.g. RSI crosses 50 → YES; RSI == 50.000 exactly → NEVER fires)
-- If generate_signals() returns all 0.0, Sharpe=0 and the strategy is USELESS.
-- Internal helper methods (e.g. _get_regime) must take ONLY self as argument.
-  ❌ WRONG: def _get_regime(self, data)  ← will crash when called as self._get_regime()
-  ✅ RIGHT:  def _get_regime(self)        ← accesses self.data set in init()
+- TRACE your entry condition for a typical bull day (Close going up, RSI=60, RVI=65):
+  Does your entry fire? If not, RELAX the thresholds.
+- Target: entry condition should be True for at least 10–15% of all 4000 trading days.
+- If generate_signals() returns all 0.0, the strategy is USELESS (Sharpe=0, rejected).
+- Internal helper methods must take ONLY self: def _helper(self), NOT def _helper(self, data)
 
 OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
 
@@ -518,18 +537,46 @@ OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
         )
 
         # Detect "never enters market" to add targeted fix guidance
-        is_tim_error = 'time_in_market' in error or 'never enters' in error or 'Signal stats' in error
+        is_tim_error = ('time_in_market' in error or 'never enters' in error
+                        or 'Signal stats' in error or 'SCALE MISMATCH' in error)
         tim_fix_section = ""
         if is_tim_error:
             tim_fix_section = """
 7. ⚠️ CRITICAL — SIGNALS ARE ALL ZERO (never enters market):
-   DIAGNOSE: Entry condition is too strict or logically always-False.
-   FIX strategies (choose one or combine):
-   a) RELAX thresholds: RSI>70 → RSI>50, RVI>80 → RVI>55, MA crossover window
-   b) ADD rolling baseline: use close > close.rolling(20).mean() instead of fixed levels
-   c) ADD multiple OR paths: signal = (condition_a | condition_b).astype(float)
-   d) CHECK boolean logic: ensure comparison produces True values on real TQQQ daily data
-   VERIFY mentally: on a trending asset, your entry condition should be True ≥10% of days."""
+   TOP ROOT CAUSES (check these first):
+   A) SCALE MISMATCH: Comparing price-level indicator to tiny threshold
+      ❌ BROKEN:  tema.rolling(3).mean() > 0.2  (TEMA is $10–$100, never ≤0.2!)
+      ❌ BROKEN:  sma.rolling(5).mean() < 0.8   (SMA is price-level, always > 0.8)
+      ✅ FIX:     tema > tema.shift(1)           (slope: is TEMA rising?)
+      ✅ FIX:     close > sma_50                 (price above moving average)
+   B) NON-EXISTENT COLUMN: data['sim_vix_pctile'], data['vix'], etc. → KeyError crash
+      ✅ FIX: Compute from scratch using Close: vix_proxy = close.pct_change().rolling(20).std() * 100
+   C) IMPOSSIBLE TRANSITION: too many simultaneous conditions (all must be True at once)
+      ❌ BROKEN:  prev=='NEUTRAL' & curr=='BULL' & rvi>70 & obv>obv_20ma & cmf>0.1
+      ✅ FIX:     prev=='NEUTRAL' & curr=='BULL'  (2 conditions max for entry transition)
+   D) CONDITION NEVER TRUE on real data:
+      ❌ BROKEN:  rvi > 95  (extreme — fires 0.1% of days)
+      ✅ FIX:     rvi > 59  (moderate threshold — fires ~30% of days)
+   GENERAL FIXES:
+   a) RELAX thresholds: RSI>70 → RSI>50, RVI>80 → RVI>55
+   b) ADD rolling baseline: close > close.rolling(20).mean()
+   c) ADD OR paths: signal = (condition_a | condition_b).astype(float)
+   VERIFY: entry condition must be True for ≥10% of 4000 trading days."""
+
+        # Detect KeyError for missing custom DataFrame columns
+        is_key_error = 'KeyError' in error
+        key_fix_section = ""
+        if is_key_error:
+            key_match = re.search(r"KeyError:\s*['\"](\w+)['\"]", error)
+            missing_key = key_match.group(1) if key_match else 'CUSTOM_COL'
+            key_fix_section = f"""
+7. ⚠️ CRITICAL — KeyError: '{missing_key}' not found in DataFrame:
+   self.data ONLY has columns: 'Open', 'High', 'Low', 'Close', 'Volume'
+   FIX: Compute '{missing_key}' as a LOCAL VARIABLE inside generate_signals():
+     - donchian_mid = (self.data['High'].rolling(20).max() + self.data['Low'].rolling(20).min()) / 2
+   Do NOT store computed cols in self.data — compute them as local vars inline."""
+
+        extra_sections = tim_fix_section + key_fix_section
 
         prompt = f"""You are debugging Python code for a trading strategy.
 
@@ -549,7 +596,7 @@ FIX REQUIREMENTS:
 6. NO LOOK-AHEAD BIAS:
    ❌ .shift(-1), .pct_change(-1), .diff(-1) — looks into future
    ❌ data['Close'].max()/.min()/.mean()/.quantile() — global = uses all future data
-   ✅ .rolling(N).mean()/.std()/.max()/.quantile(q) — use rolling version instead{tim_fix_section}
+   ✅ .rolling(N).mean()/.std()/.max()/.quantile(q) — use rolling version instead{extra_sections}
 
 OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN."""
 
@@ -709,6 +756,22 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN."""
             return m.group(0)
 
         code = re.sub(r'pd\.Series\(([^)]+)\)', _fix_series_index, code)
+
+        # P-023: Remove references to non-existent custom columns
+        # LLM sometimes uses columns like 'sim_vix_pctile', 'vix', 'adx', 'rsi', etc.
+        # that don't exist in self.data. Detect and replace with safe fallback computed values.
+        NON_STANDARD_COLS = {
+            r"data\[[\'\"]sim_vix_pctile[\'\"]\]": "data['Close'].pct_change().rolling(20).std() * 1000",
+            r"data\[[\'\"]sim_vix[\'\"]\]":         "data['Close'].pct_change().rolling(20).std() * 1000",
+            r"data\[[\'\"]vix[\'\"]\]":             "data['Close'].pct_change().rolling(20).std() * 1000",
+            r"self\.data\[[\'\"]sim_vix_pctile[\'\"]\]": "self.data['Close'].pct_change().rolling(20).std() * 1000",
+            r"self\.data\[[\'\"]sim_vix[\'\"]\]":        "self.data['Close'].pct_change().rolling(20).std() * 1000",
+            r"self\.data\[[\'\"]vix[\'\"]\]":            "self.data['Close'].pct_change().rolling(20).std() * 1000",
+        }
+        for pattern, replacement in NON_STANDARD_COLS.items():
+            if re.search(pattern, code):
+                code = re.sub(pattern, replacement, code)
+                print(f"   🔧 P-023: 替換非標準欄位引用 → {replacement[:40]}...")
 
         # Detect missing abstract method implementations and append stubs
         has_init = bool(re.search(r'def init\s*\(', code))
@@ -950,12 +1013,38 @@ class StrategySandbox:
                 sig_min  = float(signals.min())
                 sig_max  = float(signals.max())
                 sig_mean = float(signals.mean())
+
+                # Auto-diagnose: inspect internal indicator values for scale mismatch hints
+                diag_hints = []
+                for attr in vars(strategy):
+                    if attr.startswith('_'):
+                        continue
+                    try:
+                        val = getattr(strategy, attr)
+                        if isinstance(val, pd.Series) and len(val) > 100:
+                            v_min = float(val.dropna().min())
+                            v_max = float(val.dropna().max())
+                            v_mean = float(val.dropna().mean())
+                            # Flag suspicious price-level indicators compared to 0-1 thresholds
+                            if v_mean > 5.0 and v_max > 10.0:
+                                diag_hints.append(f"{attr}:range=[{v_min:.1f},{v_max:.1f}] (price-level)")
+                    except Exception:
+                        pass
+
+                scale_hint = ""
+                if diag_hints:
+                    scale_hint = (
+                        " DETECTED price-level indicators: " + ", ".join(diag_hints[:3]) +
+                        ". Do NOT compare these to thresholds like 0.2 or 0.8! "
+                        "Use: indicator > indicator.shift(1) (slope) or indicator > other_ma (relative)."
+                    )
+
                 return False, (
                     f"Strategy never enters the market (time_in_market={time_in_market:.3%}). "
-                    f"Signal stats: min={sig_min:.4f}, max={sig_max:.4f}, mean={sig_mean:.6f}. "
-                    "Entry conditions are too strict or logically impossible. "
-                    "FIX: Relax thresholds (e.g., RSI>70→RSI>55, RVI>80→RVI>60) or add "
-                    "OR conditions so entries actually trigger on real TQQQ data."
+                    f"Signal stats: min={sig_min:.4f}, max={sig_max:.4f}, mean={sig_mean:.6f}."
+                    + scale_hint +
+                    " FIX: Check SCALE MISMATCH (price-level indicator vs tiny threshold), "
+                    "RELAX thresholds (RSI>70→RSI>55, RVI>80→RVI>60), or add OR conditions."
                 )
 
             return True, ""

@@ -166,6 +166,25 @@
 
 ## 待確認問題（尚未修復）
 
+## [P-023] LLM 指標 Scale 不匹配 → 條件永遠不發動（never enters market）
+- **症狀**：`Strategy never enters the market (time_in_market=0.000%)`；Signal max=0.0000
+- **根本原因**：LLM 將 price-level 指標（TEMA/SMA，值域 $10–$100+）與微小固定閾值比較（如 `> 0.2`, `> 0.8`）。由於 TEMA 遠大於 0.2，crossover 條件（`TEMA.rolling(3).mean().shift(1) <= 0.2`）永遠 False，進場訊號永遠不觸發。
+- **修復**：
+  1. `generate_strategy_code` prompt 加入 SCALE CHECK 表格：說明各指標的值域與正確比較方法
+  2. `fix_strategy_code` TIM fix section 加入 SCALE MISMATCH 為首要診斷項目
+  3. `test_strategy` TIM 偵測時自動掃描策略屬性，回報 price-level 指標名稱與值域
+  4. `_fix_code_structure` 加入 P-023 區塊：替換非標準欄位引用（`sim_vix_pctile` → 計算版）
+- **日期**：2026-03-01
+
+## [P-024] LLM 引用不存在的欄位（sim_vix_pctile、vix 等）→ KeyError
+- **症狀**：`KeyError: 'sim_vix_pctile'`，策略無法載入
+- **根本原因**：LLM 在 prompt 範例中看到 "Simulated_VIX" 指標名稱，自以為 DataFrame 裡有 `sim_vix_pctile` 欄位
+- **修復**：
+  1. `_fix_code_structure` P-023 區塊：自動偵測並替換 `data['sim_vix_pctile']` 等非標準欄位為 rolling std 計算版
+  2. `generate_strategy_code` prompt 加入 COLUMN RESTRICTION 警告：只允許 Open/High/Low/Close/Volume
+  3. `fix_strategy_code` KeyError section 已有處理，現在 _fix_code_structure 提前修復
+- **日期**：2026-03-01
+
 ### [PENDING-001] backtest.py resample('ME') 版本相容性
 - pandas 2.2+ 推薦 'ME'，但舊版不支援，可能出現 FutureWarning 或 ValueError
 - **建議**：用 `try/except` 判斷 pandas 版本選擇 'ME' 或 'M'
