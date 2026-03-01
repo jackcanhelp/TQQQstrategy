@@ -154,7 +154,10 @@ class BacktestEngine:
 
         # Generate signals
         raw_signals = strategy.generate_signals()
-        signals = strategy.validate_signals(raw_signals)
+        if hasattr(strategy, 'validate_signals'):
+            signals = strategy.validate_signals(raw_signals)
+        else:
+            signals = raw_signals.clip(-1.0, 1.0).fillna(0.0)
 
         # Align signals with returns (shift by 1 to avoid lookahead)
         # Signal on day T determines position on day T+1
@@ -343,7 +346,10 @@ class BacktestEngine:
         # Initialize strategy and generate signals on full data
         strategy.init(self.data)
         raw_signals = strategy.generate_signals()
-        signals = strategy.validate_signals(raw_signals)
+        if hasattr(strategy, 'validate_signals'):
+            signals = strategy.validate_signals(raw_signals)
+        else:
+            signals = raw_signals.clip(-1.0, 1.0).fillna(0.0)
 
         # Align signals (shift by 1 to avoid lookahead)
         position = signals.shift(1).fillna(0)

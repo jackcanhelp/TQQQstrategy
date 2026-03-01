@@ -37,7 +37,7 @@ class AutoRunner:
         self,
         report_every: int = 50,
         target_sharpe: float = 2.0,
-        max_total_iterations: int = 1000,
+        max_total_iterations: int = None,  # None = 無限迭代
         notification_method: str = 'file',  # 'file', 'telegram', 'email'
         notification_config: dict = None
     ):
@@ -100,6 +100,7 @@ class AutoRunner:
             'name': f'Strategy_Gen{strategy_id}',
             'error': None
         }
+        idea = "N/A"  # initialize before try so except block can use it
 
         try:
             # Generate idea
@@ -165,6 +166,8 @@ class AutoRunner:
 
         except Exception as e:
             result['error'] = str(e)[:100]
+            # Always record so total_iterations increments — prevents ID from being stuck
+            self._record_failure(strategy_id, idea, result['error'])
 
         self.session_iterations += 1
         return result
@@ -436,7 +439,7 @@ class AutoRunner:
         print("🚀 TQQQ Auto Runner 啟動")
         print(f"   報告頻率: 每 {self.report_every} 次迭代")
         print(f"   目標 Sharpe: {self.target_sharpe}")
-        print(f"   最大迭代: {self.max_total_iterations}")
+        print(f"   最大迭代: {'無限' if self.max_total_iterations is None else self.max_total_iterations}")
         print("=" * 60)
         self._send_telegram_alert(
             f"🚀 TQQQ Auto Runner 啟動\n"
@@ -450,7 +453,7 @@ class AutoRunner:
             iteration += 1
             current_total = self.generator.history['total_iterations']
 
-            if current_total >= self.max_total_iterations:
+            if self.max_total_iterations is not None and current_total >= self.max_total_iterations:
                 print(f"\n🏁 達到最大迭代次數 ({self.max_total_iterations})")
                 break
 
@@ -543,8 +546,8 @@ def main():
                         help='Report every N iterations (default: 50)')
     parser.add_argument('--target-sharpe', type=float, default=2.0,
                         help='Target Sharpe ratio to stop (default: 2.0)')
-    parser.add_argument('--max-iterations', type=int, default=1000,
-                        help='Maximum total iterations (default: 1000)')
+    parser.add_argument('--max-iterations', type=int, default=0,
+                        help='Maximum total iterations (0 = infinite, default: infinite)')
     parser.add_argument('--notify', type=str, default='file',
                         choices=['file', 'telegram', 'email'],
                         help='Notification method (default: file)')
@@ -565,7 +568,7 @@ def main():
     runner = AutoRunner(
         report_every=args.report_every,
         target_sharpe=args.target_sharpe,
-        max_total_iterations=args.max_iterations,
+        max_total_iterations=args.max_iterations if args.max_iterations > 0 else None,
         notification_method=args.notify,
         notification_config=notification_config
     )

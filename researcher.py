@@ -359,11 +359,37 @@ lower = (high + low) / 2 - 2 * atr
    - `generate_signals(self) -> pd.Series` - return 0.0 to 1.0
    - `get_description(self) -> str` - explain strategy
 
-4. Available: pandas as pd, numpy as np, BaseStrategy
-5. Data columns: ['Open', 'High', 'Low', 'Close', 'Volume']
-6. Signals: 0.0 = cash, 1.0 = fully invested, 0-1 for partial
+4. Import EXACTLY: `from strategy_base import BaseStrategy` (NOT `from BaseStrategy import ...`)
+5. `__init__` must take NO arguments: `def __init__(self): super().__init__()`
+6. Data columns available in self.data: ['Open', 'High', 'Low', 'Close', 'Volume']
+7. Signals: 0.0 = cash, 1.0 = fully invested, 0-1 for partial
+8. Handle NaN: Use .fillna(0) or .bfill() (never forward-fill from future!)
 
-7. Handle NaN: Use .fillna(0) or .bfill() (never forward-fill from future!)
+EXAMPLE STRUCTURE:
+from strategy_base import BaseStrategy
+import pandas as pd
+import numpy as np
+
+class {class_name}(BaseStrategy):
+    def __init__(self):
+        super().__init__()
+
+    def init(self, data: pd.DataFrame) -> None:
+        self.data = data
+        # calculate indicators here
+
+    def _get_regime(self) -> pd.Series: ...
+    def _get_entry_signal(self) -> pd.Series: ...
+    def _get_exit_signal(self) -> pd.Series: ...
+
+    def generate_signals(self) -> pd.Series:
+        regime = self._get_regime()
+        entry = self._get_entry_signal()
+        exit_signal = self._get_exit_signal()
+        return (regime * entry * (1 - exit_signal)).clip(0, 1)
+
+    def get_description(self) -> str:
+        return "{class_name}: <brief description>"
 
 OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
 
@@ -384,10 +410,7 @@ OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
         if result is None:
             raise Exception("API 呼叫失敗，Groq、GitHub Models 和 Gemini 都不可用")
         code = self._clean_code(result)
-
-        # Add imports if missing
-        if "from strategy_base import BaseStrategy" not in code:
-            code = "from strategy_base import BaseStrategy\nimport pandas as pd\nimport numpy as np\n\n" + code
+        code = self._fix_imports(code)
 
         # Save to file
         file_path = self.GENERATED_DIR / f"strategy_gen_{strategy_id}.py"
@@ -440,10 +463,7 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
         if result is None:
             raise Exception("API 呼叫失敗，Groq、GitHub Models 和 Gemini 都不可用")
         code = self._clean_code(result)
-
-        # Add imports if missing
-        if "from strategy_base import BaseStrategy" not in code:
-            code = "from strategy_base import BaseStrategy\nimport pandas as pd\nimport numpy as np\n\n" + code
+        code = self._fix_imports(code)
 
         # Save to file
         file_path = self.GENERATED_DIR / f"strategy_gen_{strategy_id}.py"
@@ -463,6 +483,37 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
         code = code.strip()
 
         return code
+
+    def _fix_imports(self, code: str) -> str:
+        """
+        Ensure correct imports and remove wrong import variants the LLM tends to generate.
+        Common LLM mistakes:
+          - from BaseStrategy import BaseStrategy   (module name wrong)
+          - import BaseStrategy                      (not a package)
+          - from strategy_base.BaseStrategy import   (wrong dot notation)
+        """
+        # Strip wrong import patterns
+        wrong_patterns = [
+            r'from\s+BaseStrategy\s+import\s+[^\n]+',
+            r'import\s+BaseStrategy\b[^\n]*',
+            r'from\s+strategy_base\.BaseStrategy\s+import\s+[^\n]+',
+        ]
+        for pat in wrong_patterns:
+            code = re.sub(pat, '', code)
+
+        # Ensure correct imports are present at the top
+        header_lines = []
+        if "from strategy_base import BaseStrategy" not in code:
+            header_lines.append("from strategy_base import BaseStrategy")
+        if "import pandas as pd" not in code:
+            header_lines.append("import pandas as pd")
+        if "import numpy as np" not in code:
+            header_lines.append("import numpy as np")
+
+        if header_lines:
+            code = "\n".join(header_lines) + "\n\n" + code
+
+        return code.strip()
 
     def _get_evolution_mode(self, iteration: int) -> str:
         """根據迭代次數決定演化模式。"""

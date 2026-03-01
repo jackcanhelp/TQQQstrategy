@@ -61,6 +61,40 @@
 
 ---
 
+---
+
+## [P-008] strategy_id 永遠是同一個值（例如 673）
+- **症狀**：每次迭代都顯示 "Running iteration 673..."，total_iterations 不遞增
+- **根本原因**：`run_single_iteration()` 的 `except Exception` 路徑只設定 `result['error']`，沒有呼叫 `_record_failure()`，導致 `total_iterations` 永遠不遞增，`get_next_strategy_id()` 一直回傳同一個值
+- **修復**：在 try 前初始化 `idea = "N/A"`，在 except 末尾也加 `_record_failure(strategy_id, idea, result['error'])`
+- **日期**：2026-03-01
+
+---
+
+## [P-009] LLM 生成錯誤的 import（`from BaseStrategy import ...`）
+- **症狀**：`ModuleNotFoundError: No module named 'BaseStrategy'`（或 'BaseStra' 截斷版）
+- **根本原因**：LLM 看到 `class Foo(BaseStrategy)` 就自作聰明寫 `from BaseStrategy import BaseStrategy`（把類名當模組名），正確應是 `from strategy_base import BaseStrategy`
+- **修復**：加入 `_fix_imports()` 方法，用 regex 移除錯誤 import 並確保正確 import 在頂端；prompt 明確標注 `Import EXACTLY: from strategy_base import BaseStrategy`
+- **日期**：2026-03-01
+
+---
+
+## [P-010] LLM 生成 `__init__(self, data)` 導致實例化失敗
+- **症狀**：`TypeError: __init__() missing 1 required positional argument: 'data'`
+- **根本原因**：`StrategySandbox.load_strategy()` 用 `strategy_class()` 無參數實例化，但 LLM 看到 `init(self, data)` 和 `BaseStrategy` 就誤寫成帶參數的 `__init__(self, data)`
+- **修復**：在 prompt 的 EXAMPLE STRUCTURE 中明確展示 `def __init__(self): super().__init__()`，說明 `__init__` 不接受任何參數
+- **日期**：2026-03-01
+
+---
+
+## [P-011] backtest.py 呼叫 `strategy.validate_signals()` 但策略未繼承 BaseStrategy
+- **症狀**：`AttributeError: 'Strategy_GenN' object has no attribute 'validate_signals'`
+- **根本原因**：`BacktestEngine.run()` 無條件呼叫 `strategy.validate_signals()`，但若 LLM 生成的類別沒有正確繼承 BaseStrategy（可能因 import 失敗），此方法不存在
+- **修復**：`backtest.py` 改用 `hasattr` 檢查，無方法時 fallback 到 `raw_signals.clip(-1, 1).fillna(0)`
+- **日期**：2026-03-01
+
+---
+
 ## 待確認問題（尚未修復）
 
 ### [PENDING-001] backtest.py resample('ME') 版本相容性
