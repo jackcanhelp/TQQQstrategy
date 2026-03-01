@@ -192,8 +192,9 @@ Respond ONLY with the JSON object, no additional text."""
             logger.warning(f"⚠️ 無法解析 {model_name} 回應: {e}")
             return None
 
-    def _call_model(self, model_config: Dict, prompt: str) -> Optional[str]:
-        """呼叫單一模型。"""
+    def _call_model(self, model_config: Dict, prompt: str,
+                    system_msg: str = "You are a quantitative trading expert. Always respond in valid JSON format.") -> Optional[str]:
+        """呼叫單一模型，支援自訂 system message。"""
         model_name = model_config["name"]
         model_id = model_config["model_id"]
         timeout = model_config["timeout"]
@@ -207,11 +208,11 @@ Respond ONLY with the JSON object, no additional text."""
                 response = self.client.chat.completions.create(
                     model=model_id,
                     messages=[
-                        {"role": "system", "content": "You are a quantitative trading expert. Always respond in valid JSON format."},
+                        {"role": "system", "content": system_msg},
                         {"role": "user", "content": prompt}
                     ],
                     max_tokens=max_tokens,
-                    temperature=0.3,  # 較低溫度以獲得一致性
+                    temperature=0.3,
                     timeout=timeout,
                 )
                 return response.choices[0].message.content
@@ -221,7 +222,7 @@ Respond ONLY with the JSON object, no additional text."""
                 response = self.client.complete(
                     model=model_id,
                     messages=[
-                        SystemMessage(content="You are a quantitative trading expert. Always respond in valid JSON format."),
+                        SystemMessage(content=system_msg),
                         UserMessage(content=prompt)
                     ],
                     max_tokens=max_tokens,
@@ -307,13 +308,20 @@ Keep the response concise and actionable."""
 
         return None
 
+    # Code-generation system prompt: no JSON, pure Python only
+    _CODE_SYSTEM_MSG = (
+        "You are an expert Python quantitative developer. "
+        "Output ONLY valid Python code. No JSON, no markdown, no explanations."
+    )
+
     def generate(self, prompt: str) -> Optional[str]:
         """
-        Public interface: 依序嘗試各模型，返回第一個成功的原始回應文字。
+        Public interface for code/text generation.
+        Uses a code-appropriate system prompt (NOT JSON-forced).
         供 researcher.py 等外部模組使用。
         """
         for model_config in MODEL_HIERARCHY:
-            response = self._call_model(model_config, prompt)
+            response = self._call_model(model_config, prompt, system_msg=self._CODE_SYSTEM_MSG)
             if response:
                 logger.info(f"✅ GitHub Models ({model_config['name']}) 回應成功")
                 return response

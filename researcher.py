@@ -491,15 +491,36 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
 
     def _clean_code(self, code: str) -> str:
         """Clean up AI-generated code."""
+        # If model returned JSON wrapper like {"code": "..."}, extract the code
+        import json as _json
+        stripped = code.strip()
+        if stripped.startswith('{') and '"code"' in stripped:
+            try:
+                parsed = _json.loads(stripped)
+                if isinstance(parsed, dict):
+                    for key in ('code', 'python_code', 'strategy_code', 'content'):
+                        if key in parsed and isinstance(parsed[key], str):
+                            code = parsed[key]
+                            break
+            except Exception:
+                pass  # not valid JSON, treat as raw code
+
         # Remove markdown code blocks
         code = re.sub(r'^```python\s*', '', code, flags=re.MULTILINE)
         code = re.sub(r'^```\s*$', '', code, flags=re.MULTILINE)
         code = re.sub(r'```$', '', code)
 
-        # Remove any leading/trailing whitespace
-        code = code.strip()
+        # Replace Unicode smart quotes and punctuation that break Python parsing
+        unicode_replacements = {
+            '\u201c': '"', '\u201d': '"',  # curly double quotes
+            '\u2018': "'", '\u2019': "'",  # curly single quotes
+            '\u2003': ' ', '\u00a0': ' ',  # em space, non-breaking space
+            '\u2013': '-', '\u2014': '-',  # en/em dash
+        }
+        for bad, good in unicode_replacements.items():
+            code = code.replace(bad, good)
 
-        return code
+        return code.strip()
 
     def _fix_imports(self, code: str) -> str:
         """
