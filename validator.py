@@ -137,6 +137,57 @@ class StrategyValidator:
         return is_valid, warnings
 
 
+    # ─────────────────────────────────────────────────────────────
+    # Minimum quality thresholds for TQQQ strategies
+    # ─────────────────────────────────────────────────────────────
+    QUALITY_THRESHOLDS = {
+        'min_sharpe':        0.5,    # 風險調整收益必須正且達標
+        'min_cagr':          0.05,   # 至少 5% 年化報酬，不能跑輸現金
+        'max_drawdown':     -0.70,   # 最大回撤上限 -70%（TQQQ 買持 2022 年是 -87%）
+        'min_time_in_market': 0.02,  # 至少 2% 時間在市場（不能完全躺平）
+    }
+
+    @classmethod
+    def validate_quality(cls, result) -> Tuple[bool, str]:
+        """
+        判斷策略是否達到最低品質標準。
+        只有 quality_pass=True 的策略才算「好策略」。
+
+        與 validate_backtest_results 不同：
+          - validate_backtest_results: 檢查結果是否「不合理」（過高的 Sharpe 等作弊訊號）
+          - validate_quality: 檢查結果是否「夠好」（正的風險調整收益、實際交易等）
+
+        Returns:
+            Tuple[bool, str]: (quality_pass, reason_if_failed)
+        """
+        reasons = []
+        t = cls.QUALITY_THRESHOLDS
+
+        # Sharpe ≤ 0 → 風險調整後虧損，無用
+        if result.sharpe_ratio <= 0:
+            reasons.append(f"Sharpe={result.sharpe_ratio:.2f}≤0 (風調虧損)")
+        elif result.sharpe_ratio < t['min_sharpe']:
+            reasons.append(f"Sharpe={result.sharpe_ratio:.2f}<{t['min_sharpe']} (風調太低)")
+
+        # CAGR ≤ 0 → 長期虧損
+        if result.cagr <= 0:
+            reasons.append(f"CAGR={result.cagr:.1%}≤0 (負報酬)")
+        elif result.cagr < t['min_cagr']:
+            reasons.append(f"CAGR={result.cagr:.1%}<{t['min_cagr']:.0%} (報酬太低)")
+
+        # MaxDD 太深 → 不可接受的風險
+        if result.max_drawdown < t['max_drawdown']:
+            reasons.append(f"MaxDD={result.max_drawdown:.0%}<{t['max_drawdown']:.0%} (回撤過深)")
+
+        # Time in market 太少 → 策略基本上不交易（等於躺平）
+        if result.time_in_market < t['min_time_in_market']:
+            reasons.append(f"TIM={result.time_in_market:.1%}<{t['min_time_in_market']:.0%} (躺平)")
+
+        if reasons:
+            return False, " | ".join(reasons)
+        return True, ""
+
+
 class LookAheadDetector:
     """
     Runtime detection of look-ahead bias by comparing

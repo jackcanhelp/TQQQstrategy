@@ -148,20 +148,25 @@ class AutoRunner:
             # Run backtest
             bt_result = self.engine.run(strategy)
 
-            # Validate results
+            # Validate results (anti-cheat: reject unrealistically perfect results)
             results_valid, _ = StrategyValidator.validate_backtest_results(bt_result)
             if not results_valid:
                 result['error'] = 'Unrealistic results'
                 self._record_failure(strategy_id, idea, result['error'])
                 return result
 
-            # Success!
+            # Quality gate: check minimum performance thresholds
+            quality_pass, quality_reason = StrategyValidator.validate_quality(bt_result)
+
+            # Technical success (code ran, results realistic)
             result['success'] = True
             result['sharpe'] = bt_result.sharpe_ratio
-            result['calmar'] = bt_result.calmar_ratio  # 主要指標
+            result['calmar'] = bt_result.calmar_ratio
             result['cagr'] = bt_result.cagr
             result['max_dd'] = bt_result.max_drawdown
             result['idea'] = idea[:200]
+            result['quality_pass'] = quality_pass
+            result['quality_reason'] = quality_reason
 
             self.generator.record_result(
                 strategy_id=strategy_id,
@@ -172,7 +177,9 @@ class AutoRunner:
                 cagr=bt_result.cagr,
                 max_dd=bt_result.max_drawdown,
                 failure_analysis=bt_result.get_failure_analysis(),
-                success=True
+                success=True,
+                quality_pass=quality_pass,
+                quality_reason=quality_reason,
             )
 
             self.session_successes += 1
@@ -212,8 +219,11 @@ class AutoRunner:
         successful = [s for s in history['strategies'] if s.get('success', False)]
         success_rate = len(successful) / total * 100 if total > 0 else 0
 
-        # Top 5 strategies (ranked by composite score, filter out "do nothing" strategies)
-        rankable = [s for s in successful if s.get('sharpe', 0) > 0 and s.get('cagr', 0) > 0.05]
+        # Top 5 strategies: quality_pass=True only (向下相容：舊記錄用 sharpe>0 and cagr>5% fallback)
+        rankable = [
+            s for s in successful
+            if s.get('quality_pass', (s.get('sharpe', 0) > 0 and s.get('cagr', 0) > 0.05))
+        ]
         top5 = sorted(rankable, key=lambda x: x.get('composite', x.get('calmar', 0)), reverse=True)[:5]
 
         best_composite = history.get('best_composite', history.get('best_calmar', best_sharpe))
@@ -478,37 +488,47 @@ class AutoRunner:
                 sharpe = result['sharpe']
                 calmar = result.get('calmar', 0.0)
                 composite = result.get('composite', calmar)
-                print(f"✅ Sharpe: {sharpe:.2f} Calmar: {calmar:.2f}")
+                quality_pass = result.get('quality_pass', False)
+                quality_reason = result.get('quality_reason', '')
                 self._consec_api_fail = 0
 
-                # Commit new strategy file to git
-                strategy_file = Path('generated_strategies') / f"{result['name']}.py"
-                if strategy_file.exists():
-                    self._git_commit(
-                        f"[auto] {result['name']}: Sharpe={sharpe:.2f} Calmar={calmar:.2f} CAGR={result['cagr']:.1%}",
-                        files=[strategy_file, 'history_of_thoughts.json']
-                    )
+                if quality_pass:
+                    # ✅ 好策略：達到品質門檻
+                    print(f"✅ Sharpe: {sharpe:.2f} Calmar: {calmar:.2f} CAGR: {result['cagr']:.1%} MaxDD: {result['max_dd']:.1%}")
+                else:
+                    # 📊 技術成功但品質不足（負 Sharpe、躺平、CAGR 太低等）
+                    reason_short = quality_reason[:50] if quality_reason else "低品質"
+                    print(f"📊 Sharpe: {sharpe:.2f} Calmar: {calmar:.2f} [{reason_short}]")
 
-                # Milestone: new best composite → immediate alert + push
-                if composite > self._last_committed_best + 0.05:
-                    self._last_committed_best = composite
-                    alert_msg = (
-                        f"🏆 新最佳策略！{result['name']}\n"
-                        f"Composite: {composite:.4f}\n"
-                        f"Sharpe: {sharpe:.2f} | Calmar: {calmar:.2f}\n"
-                        f"CAGR: {result['cagr']:.1%} | MaxDD: {result['max_dd']:.1%}"
-                    )
-                    self._send_telegram_alert(alert_msg)
-                    self._git_push()
+                # 只有品質策略才 commit（避免垃圾塞滿 git history）
+                if quality_pass:
+                    strategy_file = Path('generated_strategies') / f"{result['name']}.py"
+                    if strategy_file.exists():
+                        self._git_commit(
+                            f"[auto] {result['name']}: Sharpe={sharpe:.2f} Calmar={calmar:.2f} CAGR={result['cagr']:.1%}",
+                            files=[strategy_file, 'history_of_thoughts.json']
+                        )
 
-                # Check target Sharpe
-                if sharpe >= self.target_sharpe:
-                    print(f"\n🎯 TARGET ACHIEVED! Sharpe {sharpe:.2f} >= {self.target_sharpe}")
-                    report = self.generate_report()
-                    print(report)
-                    self.send_notification(report)
-                    self._git_push()
-                    break
+                    # Milestone: new best composite → immediate alert + push
+                    if composite > self._last_committed_best + 0.05:
+                        self._last_committed_best = composite
+                        alert_msg = (
+                            f"🏆 新最佳策略！{result['name']}\n"
+                            f"Composite: {composite:.4f}\n"
+                            f"Sharpe: {sharpe:.2f} | Calmar: {calmar:.2f}\n"
+                            f"CAGR: {result['cagr']:.1%} | MaxDD: {result['max_dd']:.1%}"
+                        )
+                        self._send_telegram_alert(alert_msg)
+                        self._git_push()
+
+                    # Check target Sharpe
+                    if sharpe >= self.target_sharpe:
+                        print(f"\n🎯 TARGET ACHIEVED! Sharpe {sharpe:.2f} >= {self.target_sharpe}")
+                        report = self.generate_report()
+                        print(report)
+                        self.send_notification(report)
+                        self._git_push()
+                        break
             else:
                 error_msg = result['error'][:50] if result['error'] else 'Failed'
                 print(f"❌ {error_msg}")

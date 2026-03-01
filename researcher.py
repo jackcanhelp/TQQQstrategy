@@ -669,10 +669,13 @@ CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeti
         # Get last 5 strategies for context
         recent = self.history["strategies"][-5:]
 
-        # 找出成功的策略
+        # 找出品質通過的策略（quality_pass=True）
+        # 舊記錄向下相容：用 sharpe>0 and cagr>5% 作為 fallback
         successful = [s for s in self.history["strategies"] if s.get("success")]
-        # Filter out "do nothing" strategies (Sharpe <= 0 or CAGR <= 5%)
-        rankable = [s for s in successful if s.get("sharpe", 0) > 0 and s.get("cagr", 0) > 0.05]
+        rankable = [
+            s for s in successful
+            if s.get("quality_pass", (s.get("sharpe", 0) > 0 and s.get("cagr", 0) > 0.05))
+        ]
         best_strategies = sorted(rankable, key=lambda x: x.get("composite", x.get("calmar", 0)), reverse=True)[:3]
 
         best_composite = self.history.get('best_composite', self.history.get('best_calmar', self.history.get('best_sharpe', 0)))
@@ -733,7 +736,9 @@ CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeti
         max_dd: float,
         failure_analysis: str,
         success: bool,
-        calmar: float = 0.0  # 主要優化指標
+        calmar: float = 0.0,     # 主要優化指標
+        quality_pass: bool = False,  # 是否通過品質門檻
+        quality_reason: str = ""     # 未通過的原因
     ) -> None:
         """Record strategy result in history."""
         self.history["total_iterations"] += 1
@@ -748,16 +753,18 @@ CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeti
             "max_dd": max_dd,
             "failure_analysis": failure_analysis,
             "success": success,
+            "quality_pass": quality_pass,
+            "quality_reason": quality_reason,
             "timestamp": datetime.now().isoformat()
         }
 
         self.history["strategies"].append(result)
 
-        # Update best — use Calmar as primary ranking metric
-        # Filter: must have Sharpe > 0 and CAGR > 5% to qualify (no "do nothing" strategies)
-        if (calmar > self.history.get("best_calmar", self.history.get("best_sharpe", 0))
-                and sharpe > 0.0 and cagr > 0.05):
-            self.history["best_sharpe"] = calmar  # 向下相容：欄位名保留但存 Calmar
+        # Update best — only quality-passing strategies qualify
+        # Primary metric: Calmar; secondary guard: quality_pass
+        if (quality_pass
+                and calmar > self.history.get("best_calmar", self.history.get("best_sharpe", 0))):
+            self.history["best_sharpe"] = calmar  # 向下相容
             self.history["best_calmar"] = calmar
             self.history["best_strategy"] = strategy_name
 
