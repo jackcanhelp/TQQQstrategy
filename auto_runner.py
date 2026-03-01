@@ -497,7 +497,7 @@ class AutoRunner:
                     print(f"✅ Sharpe: {sharpe:.2f} Calmar: {calmar:.2f} CAGR: {result['cagr']:.1%} MaxDD: {result['max_dd']:.1%}")
                 else:
                     # 📊 技術成功但品質不足（負 Sharpe、躺平、CAGR 太低等）
-                    reason_short = quality_reason[:50] if quality_reason else "低品質"
+                    reason_short = quality_reason[:100] if quality_reason else "低品質"
                     print(f"📊 Sharpe: {sharpe:.2f} Calmar: {calmar:.2f} [{reason_short}]")
 
                 # 只有品質策略才 commit（避免垃圾塞滿 git history）

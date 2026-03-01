@@ -213,16 +213,23 @@ CONTEXT:
 {indicator_selection}
 
 ═══════════════════════════════════════════════════════════════
-🧬 CHAMPION DNA — PROVEN STRATEGY (Sharpe=1.28)
+🧬 CHAMPION DNA — PROVEN STRATEGY (Sharpe=0.95, CAGR=43%, MaxDD=-49%)
 ═══════════════════════════════════════════════════════════════
 Our best strategy uses RVI (Relative Volatility Index) with STATE MACHINE:
-- 3 States: Green (RVI>59=bull), Orange (neutral), Red (RVI<42=bear)
+- 3 States: Green (RVI>59=bull), Orange (42-59=neutral), Red (RVI<42=bear)
 - BUY on state TRANSITION: Orange/Red → Green (momentum building)
-- SELL: RVI > 76 (overbought) or RVI < 42 (breakdown)
-- SHORT: Orange → Red transition, ATR×1.8 take-profit/stop-loss
+- SELL: RVI > 76 (overbought) OR RVI < 42 (breakdown)
+- SHORT: Orange → Red transition only, ATR×1.8 take-profit/stop-loss
+- RVI formula: std=34 (population, ddof=0), smooth EMA=20, refined=(H+L)/2
 
-WHY IT WORKS: Transitions capture MOMENTUM SHIFTS, not static levels.
+WHY IT WORKS: TRANSITIONS capture momentum SHIFTS, not static levels.
 YOUR TASK: MUTATE one module while keeping the winning pattern.
+Example mutations:
+  • Change buy_trigger (try 55, 62), sell_low (try 38, 45), atr_factor (1.5-2.2)
+  • Add a volume confirmation filter before the transition entry
+  • Add a 200-SMA regime gate: only trade longs when Close > SMA(200)
+  • Replace ATR TP/SL with Donchian channel or trailing stop
+  • Combine RVI states with RSI divergence for higher-conviction entries
 
 ═══════════════════════════════════════════════════════════════
 🎯 OBJECTIVE: Beat Sharpe=1.28 AND MaxDD > -30%
@@ -319,22 +326,61 @@ Then combine in generate_signals():
 - Maximum 4 conditions per signal
 
 ═══════════════════════════════════════════════════════════════
-📊 INDICATOR IMPLEMENTATION GUIDE
+🏆 COPY-PASTE READY: PROVEN RVI FORMULA (Sharpe=0.95, CAGR=43%)
 ═══════════════════════════════════════════════════════════════
-Common indicator formulas (copy-paste ready):
+This is the CHAMPION formula — tested and working. Use or mutate it:
+
+def _rvi_single(self, src: pd.Series) -> pd.Series:
+    std    = src.rolling(34).std(ddof=0)         # population std, length=34
+    change = src.diff()
+    up_ema   = std.where(change >= 0, 0.0).ewm(span=20, adjust=False).mean()
+    down_ema = std.where(change <  0, 0.0).ewm(span=20, adjust=False).mean()
+    return 100.0 * up_ema / (up_ema + down_ema + 1e-9)
+
+def init(self, data):
+    self.data = data
+    # Refined RVI = average of RVI(High) and RVI(Low)
+    self.rvi = (self._rvi_single(data['High']) + self._rvi_single(data['Low'])) / 2
+    # ATR
+    h, l, c = data['High'], data['Low'], data['Close']
+    tr = pd.concat([h-l, (h-c.shift(1)).abs(), (l-c.shift(1)).abs()], axis=1).max(axis=1)
+    self.atr = tr.rolling(14).mean()
+
+def generate_signals(self):
+    # State machine — TRANSITION-based entry (key insight!)
+    rvi = self.rvi
+    signals, position, prev = pd.Series(0.0, index=self.data.index), 0.0, 'orange'
+    short_px = np.nan
+    for i in range(1, len(signals)):
+        rv = rvi.iloc[i]
+        if np.isnan(rv): signals.iloc[i] = position; continue
+        curr = 'green' if rv > 59 else ('red' if rv < 42 else 'orange')
+        if position == 1.0 and (rv > 76 or rv < 42): position = 0.0       # exit long
+        elif position == -1.0:
+            atr_i = self.atr.iloc[i]
+            if not np.isnan(short_px) and atr_i > 0:
+                if self.data['Low'].iloc[i] <= short_px - atr_i*1.8: position = 0.0; short_px = np.nan  # TP
+                if self.data['High'].iloc[i] >= short_px + atr_i*1.8: position = 0.0; short_px = np.nan  # SL
+            if position == -1.0 and prev in ('orange','red') and curr=='green': position = 0.0; short_px = np.nan
+        if position == 0.0:
+            if prev in ('orange','red') and curr=='green': position = 1.0  # BUY on →Green
+            elif prev=='orange' and curr=='red':                            # SHORT on Orange→Red
+                position = -1.0; short_px = self.data['Close'].iloc[i]
+        signals.iloc[i] = position; prev = curr
+    return signals
+
+═══════════════════════════════════════════════════════════════
+📊 OTHER INDICATOR FORMULAS (copy-paste ready)
+═══════════════════════════════════════════════════════════════
+# ATR (Average True Range)
+tr = pd.concat([high-low, abs(high-close.shift(1)), abs(low-close.shift(1))], axis=1).max(axis=1)
+atr = tr.rolling(14).mean()
 
 # HMA (Hull Moving Average)
 def hma(series, period):
     half_wma = series.rolling(period//2).mean()
     full_wma = series.rolling(period).mean()
     return (2 * half_wma - full_wma).rolling(int(np.sqrt(period))).mean()
-
-# ATR (Average True Range)
-tr = pd.concat([high-low, abs(high-close.shift(1)), abs(low-close.shift(1))], axis=1).max(axis=1)
-atr = tr.rolling(14).mean()
-
-# ADX (for regime filter: ADX < 20 = no trend = cash)
-# Simplified: Use ATR slope as proxy
 
 # Bollinger Band Width (squeeze detection)
 bb_width = (upper_band - lower_band) / middle_band
@@ -345,9 +391,8 @@ williams_r = (highest_high - close) / (highest_high - lowest_low) * -100
 # OBV (On-Balance Volume)
 obv = (np.sign(close.diff()) * volume).cumsum()
 
-# Supertrend (simplified)
-upper = (high + low) / 2 + 2 * atr
-lower = (high + low) / 2 - 2 * atr
+# ADX simplified proxy (use ATR slope)
+adx_proxy = atr.diff(5)  # positive = trending, negative = ranging
 
 ═══════════════════════════════════════════════════════════════
 📋 CLASS REQUIREMENTS
@@ -394,6 +439,13 @@ class {class_name}(BaseStrategy):
 
     def get_description(self) -> str:
         return "{class_name}: <brief description>"
+
+⚠️ SELF-CHECK BEFORE SUBMITTING:
+- Can your conditions ACTUALLY trigger on real data? (e.g. RSI crosses 50 → YES; RSI == 50.000 exactly → NEVER fires)
+- If generate_signals() returns all 0.0, Sharpe=0 and the strategy is USELESS.
+- Internal helper methods (e.g. _get_regime) must take ONLY self as argument.
+  ❌ WRONG: def _get_regime(self, data)  ← will crash when called as self._get_regime()
+  ✅ RIGHT:  def _get_regime(self)        ← accesses self.data set in init()
 
 OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
 

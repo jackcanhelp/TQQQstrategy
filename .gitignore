@@ -33,6 +33,7 @@ wheels/
 # Generated strategies (tracked selectively)
 generated_strategies/*.py
 !generated_strategies/__init__.py
+!generated_strategies/strategy_rvi_champion.py
 
 # Logs and reports
 logs/
