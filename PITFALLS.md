@@ -105,6 +105,16 @@
 
 ---
 
+---
+
+## [P-013] LLM 生成斷行 import 導致 SyntaxError
+- **症狀**：`from strategy_base \nimport pandas as pd`（import 被斷成兩行），Python 語法錯誤
+- **根本原因**：`_fix_imports()` 舊版只清除 `from BaseStrategy ...` 等明確錯誤，沒有清除 `from strategy_base` 的所有變體（含斷行形式）
+- **修復**：`_fix_imports()` 改為「先核爆所有 from strategy_base 行，再重建正確 import」；`generate_strategy_code()` 加入 `ast.parse()` 預驗證，發現 SyntaxError 立即觸發 fix 而非等到 sandbox 才報錯
+- **日期**：2026-03-01
+
+---
+
 ## 待確認問題（尚未修復）
 
 ### [PENDING-001] backtest.py resample('ME') 版本相容性
