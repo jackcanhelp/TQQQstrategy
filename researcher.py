@@ -905,7 +905,15 @@ CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeti
             s for s in successful
             if s.get("quality_pass", (s.get("sharpe", 0) > 0 and s.get("cagr", 0) > 0.05))
         ]
-        best_strategies = sorted(rankable, key=lambda x: x.get("composite", x.get("calmar", 0)), reverse=True)[:3]
+        # 去重：每個策略名稱只保留最好的一條記錄
+        seen_names = {}
+        for s in rankable:
+            name = s.get('name', '')
+            score = s.get('composite') or s.get('calmar') or s.get('sharpe', 0)
+            if name not in seen_names or score > seen_names[name][0]:
+                seen_names[name] = (score, s)
+        unique_rankable = [v[1] for v in seen_names.values()]
+        best_strategies = sorted(unique_rankable, key=lambda x: x.get("composite") or x.get("calmar") or x.get("sharpe", 0), reverse=True)[:3]
 
         best_composite = self.history.get('best_composite', self.history.get('best_calmar', self.history.get('best_sharpe', 0)))
         context_lines = [
