@@ -11,8 +11,15 @@ import json
 import time
 import argparse
 import subprocess
+import logging
 from datetime import datetime
 from pathlib import Path
+
+# 壓制 httpx / openai / multi_model_client 的 INFO/DEBUG 噪音
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+logging.getLogger("openai").setLevel(logging.WARNING)
+logging.getLogger("multi_model_client").setLevel(logging.WARNING)
 
 import yfinance as yf
 import pandas as pd

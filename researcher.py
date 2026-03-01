@@ -411,6 +411,7 @@ OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
             raise Exception("API 呼叫失敗，Groq、GitHub Models 和 Gemini 都不可用")
         code = self._clean_code(result)
         code = self._fix_imports(code)
+        code = self._fix_code_structure(code, class_name)
 
         # Pre-validate syntax before saving — catch obvious LLM errors early
         import ast
@@ -472,6 +473,7 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
             raise Exception("API 呼叫失敗，Groq、GitHub Models 和 Gemini 都不可用")
         code = self._clean_code(result)
         code = self._fix_imports(code)
+        code = self._fix_code_structure(code, class_name)
 
         # Validate syntax of fixed code
         import ast as _ast
@@ -528,6 +530,47 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
             header_lines.append("import numpy as np")
 
         return "\n".join(header_lines) + "\n\n" + code
+
+    def _fix_code_structure(self, code: str, class_name: str) -> str:
+        """
+        Fix common structural mistakes in LLM-generated strategy code.
+        Called after _fix_imports().
+        """
+        # Fix: def init(self): → def init(self, data: pd.DataFrame) -> None:
+        # LLM sometimes omits the data parameter
+        code = re.sub(
+            r'def init\s*\(\s*self\s*\)\s*(?:->.*?)?:',
+            'def init(self, data: pd.DataFrame) -> None:',
+            code
+        )
+
+        # Fix: def init(self, data): → def init(self, data: pd.DataFrame) -> None:
+        code = re.sub(
+            r'def init\s*\(\s*self\s*,\s*data\s*\)\s*(?:->.*?)?:',
+            'def init(self, data: pd.DataFrame) -> None:',
+            code
+        )
+
+        # Detect missing abstract method implementations and append stubs
+        has_init = bool(re.search(r'def init\s*\(', code))
+        has_generate = bool(re.search(r'def generate_signals\s*\(', code))
+
+        if not has_init:
+            stub = (
+                f"\n    def init(self, data: pd.DataFrame) -> None:\n"
+                f"        self.data = data\n"
+            )
+            # Insert before class body end (before last line with content)
+            code = code.rstrip() + stub
+
+        if not has_generate:
+            stub = (
+                f"\n    def generate_signals(self) -> pd.Series:\n"
+                f"        return pd.Series(0.0, index=self.data.index)\n"
+            )
+            code = code.rstrip() + stub
+
+        return code
 
     def _get_evolution_mode(self, iteration: int) -> str:
         """根據迭代次數決定演化模式。"""

@@ -49,24 +49,24 @@ MODEL_HIERARCHY = [
         "model_id": "openai/gpt-4.1",  # GitHub Models 上最強 OpenAI 模型
         "role": "Lead Strategist",
         "description": "Logic-heavy and multi-step tasks",
-        "timeout": 60,
-        "max_tokens": 1000,
+        "timeout": 120,
+        "max_tokens": 4096,  # 策略代碼可達 200+ 行，1000 會截斷 → EOF SyntaxError
     },
     {
         "name": "DeepSeek-V3",
         "model_id": "deepseek/DeepSeek-V3-0324",
         "role": "Check & Balance / Failover",
         "description": "High-performance alternative for trend validation",
-        "timeout": 45,
-        "max_tokens": 1000,
+        "timeout": 90,
+        "max_tokens": 4096,
     },
     {
         "name": "Llama-4-Scout-17B",
         "model_id": "meta/Llama-4-Scout-17B-16E-Instruct",
         "role": "Safety Net",
         "description": "Multi-document processing fallback",
-        "timeout": 30,
-        "max_tokens": 800,
+        "timeout": 60,
+        "max_tokens": 4096,
     },
 ]
 
