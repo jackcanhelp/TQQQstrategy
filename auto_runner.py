@@ -178,6 +178,7 @@ class AutoRunner:
                 idea=idea,
                 sharpe=bt_result.sharpe_ratio,
                 calmar=bt_result.calmar_ratio,
+                composite=result.get('composite', bt_result.calmar_ratio),
                 cagr=bt_result.cagr,
                 max_dd=bt_result.max_drawdown,
                 failure_analysis=bt_result.get_failure_analysis(),

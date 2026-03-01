@@ -917,38 +917,85 @@ CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeti
         ]
 
         for s in best_strategies[:3]:
-            cs = s.get('composite', 0)
+            # composite 優先，fallback 到 calmar，再 fallback 到 sharpe
+            cs = s.get('composite') or s.get('calmar') or s.get('sharpe', 0)
             context_lines.append(
-                f"  - {s['name']}: Composite={cs:.4f}, Sharpe={s['sharpe']:.2f}, "
+                f"  - {s['name']}: Score={cs:.4f}, Sharpe={s['sharpe']:.2f}, "
                 f"CAGR={s.get('cagr', 0):.1%}, MaxDD={s['max_dd']:.1%}"
             )
 
+        # 最近質量分析
+        recent_quality = [s for s in recent if s.get("success")]
+        recent_pass = [s for s in recent_quality if s.get("quality_pass")]
+        recent_fail_quality = [s for s in recent_quality if not s.get("quality_pass")]
+
         context_lines.append("")
-        context_lines.append("📉 RECENT ATTEMPTS:")
-
+        context_lines.append("📉 RECENT ATTEMPTS (last 5):")
         for s in recent:
-            status = "✅" if s.get("success") else "❌"
-            context_lines.append(
-                f"  {status} {s['name']}: Sharpe={s['sharpe']:.2f}, MaxDD={s['max_dd']:.1%}"
-            )
-            if s.get("failure_analysis"):
-                context_lines.append(f"      → {s['failure_analysis'][:80]}")
+            if s.get("success"):
+                qmark = "✅" if s.get("quality_pass") else "📊"
+                info = f"Sharpe={s['sharpe']:.2f}, CAGR={s.get('cagr',0):.1%}, MaxDD={s['max_dd']:.1%}"
+                reason = s.get("quality_reason", "")
+                tag = f" [{reason[:60]}]" if reason else ""
+                context_lines.append(f"  {qmark} {s['name']}: {info}{tag}")
+            else:
+                err = s.get("failure_analysis", "Unknown")[:60]
+                context_lines.append(f"  ❌ {s['name']}: {err}")
 
-        # 痛苦回饋：找出最常失敗的時期
+        # 最近 20 次品質失敗模式分析
+        recent20 = self.history["strategies"][-20:]
+        fail_reasons = {}
+        for s in recent20:
+            if s.get("success") and not s.get("quality_pass"):
+                reason = s.get("quality_reason", "Unknown")
+                # 擷取主要失敗原因關鍵字
+                if "Sharpe" in reason and "≤0" in reason:
+                    key = "Negative Sharpe (losing strategy)"
+                elif "Sharpe" in reason and "<0.5" in reason:
+                    key = "Low Sharpe (<0.5)"
+                elif "MaxDD" in reason:
+                    key = "MaxDD too deep (>-70%)"
+                elif "CAGR" in reason:
+                    key = "Low CAGR (<5%)"
+                elif "TIM" in reason or "躺平" in reason:
+                    key = "Flatline (never enters)"
+                else:
+                    key = reason[:40] if reason else "Unknown"
+                fail_reasons[key] = fail_reasons.get(key, 0) + 1
+
+        if fail_reasons:
+            context_lines.append("")
+            context_lines.append("🔴 QUALITY FAILURES (last 20 runs):")
+            for reason, count in sorted(fail_reasons.items(), key=lambda x: -x[1]):
+                context_lines.append(f"  {count}x: {reason}")
+            # 提供針對性建議
+            top_reason = max(fail_reasons, key=fail_reasons.get)
+            context_lines.append("")
+            if "Negative" in top_reason or "Losing" in top_reason:
+                context_lines.append("  → FIX: Add stronger regime filter (only long when Close > SMA200)")
+                context_lines.append("         Add ATR-based stop-loss to cut losses quickly")
+            elif "Low Sharpe" in top_reason:
+                context_lines.append("  → FIX: Tighten entry criteria, reduce false signals")
+                context_lines.append("         Use RVI state transitions (proven: Sharpe=1.29)")
+            elif "MaxDD" in top_reason:
+                context_lines.append("  → FIX: Hard trailing stop: exit when price < peak*(1-0.15)")
+                context_lines.append("         Reduce position size during high ATR periods")
+
+        # 痛苦回饋
         context_lines.append("")
         context_lines.append("⚠️ PAIN POINTS (strategies died here):")
-        context_lines.append("  - 2022-04: Fed rate hikes caused false breakouts")
-        context_lines.append("  - 2020-03: COVID crash - need regime detection")
-        context_lines.append("  - 2018-12: Q4 selloff - volatility spike ignored")
+        context_lines.append("  - 2022-04: Fed rate hikes caused false breakouts (need vol filter)")
+        context_lines.append("  - 2020-03: COVID crash (need regime detection, NEVER long in bear)")
+        context_lines.append("  - 2018-12: Q4 selloff (volatility spike = exit signal)")
 
         # 概念注入（隨機選一個）
         import random
         concepts = [
             "Try Volume Analysis (OBV, Volume-Weighted MACD) to confirm trends.",
-            "Explore Volatility Targeting: adjust position size inversely to ATR.",
-            "Consider Dual Momentum: compare TQQQ vs QQQ vs Cash momentum.",
-            "Add Mean Reversion filter: avoid buying when RSI > 70.",
-            "Use Regime Detection: 200-day SMA slope + VIX level combination.",
+            "Explore Volatility Targeting: scale position size inversely to ATR percentile.",
+            "Consider Dual Momentum: compare TQQQ vs SMA(200) to decide cash vs full.",
+            "Add RSI divergence filter: avoid new longs when RSI < 40.",
+            "Use hard trailing stop: exit when Close < rolling_max(20) * 0.92.",
         ]
         context_lines.append("")
         context_lines.append(f"💡 CONCEPT TO EXPLORE: {random.choice(concepts)}")
@@ -965,12 +1012,16 @@ CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeti
         max_dd: float,
         failure_analysis: str,
         success: bool,
-        calmar: float = 0.0,     # 主要優化指標
+        calmar: float = 0.0,        # 主要優化指標
+        composite: float = 0.0,     # 綜合分數（若無則等於 calmar）
         quality_pass: bool = False,  # 是否通過品質門檻
         quality_reason: str = ""     # 未通過的原因
     ) -> None:
         """Record strategy result in history."""
         self.history["total_iterations"] += 1
+
+        # composite fallback to calmar if not provided
+        effective_composite = composite if composite > 0 else calmar
 
         result = {
             "id": strategy_id,
@@ -978,6 +1029,7 @@ CONCEPT INJECTION: Try incorporating Volume Analysis (OBV) or Volatility Targeti
             "idea": idea[:500],  # Truncate long ideas
             "sharpe": sharpe,
             "calmar": calmar,
+            "composite": effective_composite,
             "cagr": cagr,
             "max_dd": max_dd,
             "failure_analysis": failure_analysis,
