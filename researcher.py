@@ -364,6 +364,10 @@ lower = (high + low) / 2 - 2 * atr
 6. Data columns available in self.data: ['Open', 'High', 'Low', 'Close', 'Volume']
 7. Signals: 0.0 = cash, 1.0 = fully invested, 0-1 for partial
 8. Handle NaN: Use .fillna(0) or .bfill() (never forward-fill from future!)
+9. INDEX ALIGNMENT (CRITICAL): When wrapping numpy arrays in pd.Series, ALWAYS add index:
+   ✅ CORRECT: pd.Series(np.where(...), index=self.data.index)
+   ❌ WRONG:   pd.Series(np.where(...))  ← integer index vs datetime index = DOUBLED signal length!
+   This applies to: np.where(), np.array(), and any variable created from numpy operations.
 
 EXAMPLE STRUCTURE:
 from strategy_base import BaseStrategy
@@ -452,6 +456,9 @@ REQUIREMENTS:
 2. It must inherit from `BaseStrategy`
 3. Must implement init(), generate_signals(), get_description()
 4. generate_signals() must return pd.Series with values 0.0 to 1.0
+5. INDEX ALIGNMENT: pd.Series from numpy arrays MUST have index:
+   ✅ pd.Series(np_array, index=self.data.index)
+   ❌ pd.Series(np_array) — causes signal length to DOUBLE vs data length!
 
 OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
 
@@ -571,6 +578,25 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
             'def init(self, data: pd.DataFrame) -> None:',
             code
         )
+
+        # Fix P-019: pd.Series(np_array) without index → datetime index misalignment
+        # When a numpy array (from np.where etc.) is wrapped in pd.Series without index,
+        # combining it with datetime-indexed data creates union index = doubled length.
+        # Fix: pd.Series(var) → pd.Series(var, index=self.data.index)
+        # Only for simple variable name arguments (not lists/dicts/complex expressions)
+        def _fix_series_index(m):
+            args = m.group(1).strip()
+            # Skip if already has index=, or is a list literal, or is a complex expression
+            if 'index=' in args:
+                return m.group(0)
+            if args.startswith('[') or args.startswith('{'):
+                return m.group(0)  # literal - intentional
+            # Only fix simple identifiers (numpy array variables)
+            if re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', args):
+                return f'pd.Series({args}, index=self.data.index)'
+            return m.group(0)
+
+        code = re.sub(r'pd\.Series\(([^)]+)\)', _fix_series_index, code)
 
         # Detect missing abstract method implementations and append stubs
         has_init = bool(re.search(r'def init\s*\(', code))

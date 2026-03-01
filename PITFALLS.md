@@ -115,6 +115,16 @@
 
 ---
 
+## [P-019] Signal length doubled (8072 != 4036) — pd.Series 缺少 index
+- **症狀**：`Signal length (8072) != data length (4036)`，恰好是 2 倍
+- **根本原因**：LLM 在計算 ADX 等指標時，用 `pd.Series(np.where(...))` 把 numpy array 包成 Series，但沒有指定 index。numpy array 預設使用整數 index（0, 1, 2, ...），與 datetime index 的原始數據相加時，pandas 取兩者的 **union index** → 長度翻倍
+- **修復**：
+  1. `_fix_code_structure()` 加入 regex：把 `pd.Series(var)` 替換為 `pd.Series(var, index=self.data.index)`（僅限簡單變數名，跳過 literal `[...]` 和已有 `index=` 的）
+  2. `generate_strategy_code` 和 `fix_strategy_code` prompt 加入明確警告：numpy array 轉 Series 必須加 `index=self.data.index`
+- **日期**：2026-03-01
+
+---
+
 ## 待確認問題（尚未修復）
 
 ### [PENDING-001] backtest.py resample('ME') 版本相容性
