@@ -602,6 +602,22 @@ OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
    This also applies to: np.zeros(len(data)), np.ones(len(data)), np.full(len(data), val)
    → ALL numpy outputs stored as attributes or variables that are later used as Series MUST be wrapped."""
 
+        # Detect float bitwise OR/AND TypeError
+        is_bitwise_error = ("for |: 'float'" in error or "for &: 'float'" in error
+                            or "for |: 'bool'" in error or "'float' and 'float'" in error)
+        bitwise_fix_section = ""
+        if is_bitwise_error:
+            bitwise_fix_section = """
+7. ⚠️ CRITICAL — TypeError: unsupported operand type(s) for | or &: 'float':
+   Float pd.Series (0.0/1.0) do NOT support | and & operators in Python 3.9.
+   FIX for combining float signal Series:
+   ❌ BROKEN: return sig_a | sig_b       ← float OR float = TypeError
+   ❌ BROKEN: exit = long_exit | short_exit
+   ✅ FIX:    return np.maximum(sig_a, sig_b)   ← OR logic for floats
+   ✅ FIX:    exit = np.maximum(long_exit, short_exit)
+   ✅ FIX:    signals = np.minimum(entry, regime)  ← AND logic for floats
+   Alternative: cast to bool first: (sig_a.astype(bool) | sig_b.astype(bool)).astype(float)"""
+
         # Detect helper function signature mismatch
         is_sig_error = 'takes' in error and 'positional argument' in error
         sig_fix_section = ""
@@ -614,7 +630,7 @@ OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
    ✅ FIX B:  self._calc(close)  (remove extra arg from call)
    Simplest: use self.data directly inside helpers, no parameters needed."""
 
-        extra_sections = tim_fix_section + key_fix_section + ndarray_fix_section + sig_fix_section
+        extra_sections = tim_fix_section + key_fix_section + ndarray_fix_section + bitwise_fix_section + sig_fix_section
 
         prompt = f"""You are debugging Python code for a trading strategy.
 
@@ -748,6 +764,14 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN."""
         Fix common structural mistakes in LLM-generated strategy code.
         Called after _fix_imports().
         """
+        # Fix deprecated pandas syntax (pandas 2.x FutureWarning → will raise in future)
+        # fillna(method='ffill') → ffill()
+        code = re.sub(r'\.fillna\s*\(\s*method\s*=\s*[\'"]ffill[\'"]\s*\)', '.ffill()', code)
+        code = re.sub(r'\.fillna\s*\(\s*method\s*=\s*[\'"]bfill[\'"]\s*\)', '.bfill()', code)
+        # replace(method='ffill') → ffill()
+        code = re.sub(r'\.replace\s*\(\s*method\s*=\s*[\'"]ffill[\'"]\s*\)', '.ffill()', code)
+        code = re.sub(r'\.replace\s*\(\s*method\s*=\s*[\'"]bfill[\'"]\s*\)', '.bfill()', code)
+
         # Fix: def init(self): → def init(self, data: pd.DataFrame) -> None:
         # LLM sometimes omits the data parameter
         code = re.sub(
@@ -791,6 +815,24 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN."""
         # Note: this is a heuristic — only catch the most common pattern
         code = re.sub(r'(?<!\w)0\.0\s*\|(?!\|)\s*', '', code)  # `0.0 | x` → `x`
         code = re.sub(r'(?<!\w)0\s*\|(?!\|)\s*(?=[a-zA-Z_(])', '', code)  # `0 | x` → `x`
+
+        # Fix `return sig_a | sig_b` / `return sig_a & sig_b` where signals are float (0.0/1.0)
+        # pd.Series([1.0]) | pd.Series([0.0]) raises TypeError in Python 3.9 pandas
+        # Convert: `var_a | var_b` → `(var_a.astype(bool) | var_b.astype(bool)).astype(float)`
+        # Only fix return-statement patterns (most common source of this error)
+        def _fix_float_bitwise(m):
+            op = m.group(2)
+            a, b = m.group(1).strip(), m.group(3).strip()
+            if op == '|':
+                return f'return np.maximum({a}, {b})'
+            else:  # &
+                return f'return np.minimum({a}, {b})'
+        code = re.sub(
+            r'\breturn\s+([a-zA-Z_]\w*)\s*([|&])(?![|&])\s*([a-zA-Z_]\w*)\s*$',
+            _fix_float_bitwise,
+            code,
+            flags=re.MULTILINE
+        )
 
         # Fix P-019: pd.Series(np_array) without index → datetime index misalignment
         # When a numpy array (from np.where etc.) is wrapped in pd.Series without index,
