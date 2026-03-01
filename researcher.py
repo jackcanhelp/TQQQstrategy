@@ -407,6 +407,7 @@ adx_proxy = atr.diff(5)  # positive = trending, negative = ranging
 4. Import EXACTLY: `from strategy_base import BaseStrategy` (NOT `from BaseStrategy import ...`)
 5. `__init__` must take NO arguments: `def __init__(self): super().__init__()`
 6. Data columns available in self.data: ['Open', 'High', 'Low', 'Close', 'Volume']
+   ❌ FORBIDDEN imports: talib, ta, pandas_ta, finta — NOT installed. Use pandas/numpy ONLY.
 7. Signals: 0.0 = cash, 1.0 = fully invested, 0-1 for partial
 8. Handle NaN: Use .fillna(0) or .bfill() (never forward-fill from future!)
 9. INDEX ALIGNMENT (CRITICAL): When wrapping numpy arrays in pd.Series, ALWAYS add index:
@@ -596,8 +597,16 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
         code = re.sub(r'from\s+BaseStrategy\b[^\n]*', '', code, flags=re.MULTILINE)
         code = re.sub(r'import\s+BaseStrategy\b[^\n]*', '', code, flags=re.MULTILINE)
         # Remove any orphan 'import' lines that appear to be the continuation of a split import
-        # e.g. a line that is just "import BaseStrategy" or "import BaseStrategy, pandas as pd"
         code = re.sub(r'^\s*import\s+BaseStrategy\b[^\n]*', '', code, flags=re.MULTILINE)
+
+        # P-021: Remove unavailable TA libraries (talib, ta, pandas_ta not installed)
+        # LLM sometimes imports these — replace with nothing so pure pandas/numpy is used
+        FORBIDDEN_TA_LIBS = ['talib', 'ta', 'pandas_ta', 'finta', 'stockstats']
+        for lib in FORBIDDEN_TA_LIBS:
+            code = re.sub(rf'^import\s+{lib}\b[^\n]*', '', code, flags=re.MULTILINE)
+            code = re.sub(rf'^from\s+{lib}\b[^\n]*', '', code, flags=re.MULTILINE)
+            # Also replace usage like talib.RSI(...) with a comment that prompts fix
+            code = re.sub(rf'\b{lib}\.', f'# REMOVED_{lib.upper()}_CALL.', code)
 
         # Collapse multiple blank lines
         code = re.sub(r'\n{3,}', '\n\n', code).strip()

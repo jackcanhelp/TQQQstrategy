@@ -115,6 +115,16 @@
 
 ---
 
+## [P-021] LLM import 未安裝的 TA 函式庫（talib, ta, pandas_ta）
+- **症狀**：`Failed to load strategy: No module named 'talib'`（或 ta, pandas_ta）
+- **根本原因**：LLM 在訓練資料中看過這些常見 TA 庫，但本環境未安裝
+- **修復**：
+  1. `_fix_imports()` 加入 FORBIDDEN_TA_LIBS 清單，自動移除這些 import 並替換 `lib.Func(...)` 為 `# REMOVED_LIB_CALL.`（觸發 fix 路徑重寫純 pandas 版本）
+  2. `generate_strategy_code` prompt 明確標注 `❌ FORBIDDEN imports: talib, ta, pandas_ta`
+- **日期**：2026-03-01
+
+---
+
 ## [P-020] 好策略定義不合理：負 Sharpe / 躺平策略標記為 ✅
 - **症狀**：`✅ Sharpe: 0.00 Calmar: 0.00` 或 `✅ Sharpe: -0.37` 出現，誤導為好策略
 - **根本原因**：`run_single_iteration()` 的成功判斷只基於「回測跑完了」，沒有品質門檻
