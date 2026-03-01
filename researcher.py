@@ -894,6 +894,15 @@ class StrategySandbox:
             if signals.isna().all():
                 return False, "All signals are NaN"
 
+            # Check for all-zero (strategy never enters market = useless)
+            time_in_market = (signals.abs() > 0.01).mean()
+            if time_in_market < 0.01:
+                return False, (
+                    "Strategy never enters the market (time_in_market < 1%). "
+                    "Entry conditions are too strict or logically impossible. "
+                    "Make sure buy/short conditions can actually trigger on real TQQQ data."
+                )
+
             return True, ""
 
         except Exception as e:
