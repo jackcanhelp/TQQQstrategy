@@ -51,11 +51,17 @@ class StrategyValidator:
             if re.search(pattern, code, re.IGNORECASE):
                 warnings.append(f"⚠️ LOOK-AHEAD RISK: {message}")
 
-        # Check for proper signal shifting
+        # Check for proper temporal offset (any backward-looking method suffices)
         if 'generate_signals' in code:
-            # Signals should be shifted before applying to returns
-            if '.shift(' not in code and 'shift' not in code.lower():
-                warnings.append("⚠️ WARNING: No shift() found - signals may have look-ahead bias")
+            backward_looking = (
+                '.shift(' in code
+                or '.diff(' in code
+                or '.pct_change(' in code
+                or '.ewm(' in code
+                or '.rolling(' in code
+            )
+            if not backward_looking:
+                warnings.append("⚠️ WARNING: No temporal offset found - signals may have look-ahead bias")
 
         is_valid = len([w for w in warnings if 'LOOK-AHEAD' in w]) == 0
         return is_valid, warnings

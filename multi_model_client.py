@@ -307,10 +307,10 @@ Keep the response concise and actionable."""
 
         return None
 
-    def _call_model_chain(self, prompt: str) -> Optional[str]:
+    def generate(self, prompt: str) -> Optional[str]:
         """
-        依序嘗試各模型，返回第一個成功的原始回應文字。
-        供 researcher.py 等外部模組直接呼叫。
+        Public interface: 依序嘗試各模型，返回第一個成功的原始回應文字。
+        供 researcher.py 等外部模組使用。
         """
         for model_config in MODEL_HIERARCHY:
             response = self._call_model(model_config, prompt)
@@ -318,6 +318,10 @@ Keep the response concise and actionable."""
                 logger.info(f"✅ GitHub Models ({model_config['name']}) 回應成功")
                 return response
         return None
+
+    def _call_model_chain(self, prompt: str) -> Optional[str]:
+        """Deprecated alias for generate(). Use generate() instead."""
+        return self.generate(prompt)
 
     def get_stats(self) -> str:
         """取得使用統計。"""

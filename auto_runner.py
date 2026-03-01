@@ -10,6 +10,7 @@ import sys
 import json
 import time
 import argparse
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -58,6 +59,12 @@ class AutoRunner:
         self.session_start = datetime.now()
         self.session_iterations = 0
         self.session_successes = 0
+
+        # API failure consecutive counter (initialized here to avoid AttributeError)
+        self._consec_api_fail = 0
+
+        # Track best composite for milestone detection
+        self._last_committed_best = 0.0
 
     def _load_data(self) -> pd.DataFrame:
         """Load or download TQQQ data."""
@@ -275,8 +282,15 @@ class AutoRunner:
         with open('latest_report.txt', 'w', encoding='utf-8') as f:
             f.write(report)
 
+    def _telegram_post(self, bot_token: str, chat_id: str, text: str) -> bool:
+        """Low-level Telegram message POST. Returns True on success."""
+        import requests
+        url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+        resp = requests.post(url, data={'chat_id': chat_id, 'text': text}, timeout=15)
+        return resp.status_code == 200 and resp.json().get('ok', False)
+
     def _send_telegram(self, report: str):
-        """Send report via Telegram."""
+        """Send report via Telegram, splitting into pages if > 4000 chars."""
         try:
             import requests
             bot_token = self.notification_config.get('telegram_bot_token')
@@ -286,21 +300,102 @@ class AutoRunner:
                 print("⚠️ Telegram not configured")
                 return
 
-            # Telegram has 4096 char limit, truncate if needed
-            if len(report) > 4000:
-                report = report[:4000] + "\n...(truncated)"
+            # Split on line boundaries to avoid breaking tables/code blocks
+            PAGE_SIZE = 3800  # leave room for page header
+            lines = report.split('\n')
+            pages = []
+            current = []
+            current_len = 0
+            for line in lines:
+                if current_len + len(line) + 1 > PAGE_SIZE and current:
+                    pages.append('\n'.join(current))
+                    current = [line]
+                    current_len = len(line) + 1
+                else:
+                    current.append(line)
+                    current_len += len(line) + 1
+            if current:
+                pages.append('\n'.join(current))
 
-            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-            resp = requests.post(url, data={
-                'chat_id': chat_id,
-                'text': report,
-            })
-            if resp.status_code == 200 and resp.json().get('ok'):
-                print("📱 Report sent via Telegram")
-            else:
-                print(f"⚠️ Telegram API 回應異常: {resp.text[:100]}")
+            total = len(pages)
+            for i, page in enumerate(pages, 1):
+                header = f"[{i}/{total}] " if total > 1 else ""
+                ok = self._telegram_post(bot_token, chat_id, header + page)
+                if not ok:
+                    print(f"⚠️ Telegram page {i}/{total} 發送失敗")
+                else:
+                    print(f"📱 Telegram [{i}/{total}] sent")
+                if total > 1 and i < total:
+                    time.sleep(1)  # avoid flood limits between pages
+
         except Exception as e:
             print(f"⚠️ Telegram send failed: {e}")
+
+    def _send_telegram_alert(self, message: str):
+        """Send an immediate critical alert via Telegram (short, high-priority)."""
+        try:
+            import requests
+            bot_token = self.notification_config.get('telegram_bot_token')
+            chat_id = self.notification_config.get('telegram_chat_id')
+            if not bot_token or not chat_id:
+                return
+            self._telegram_post(bot_token, chat_id, f"🚨 ALERT [{datetime.now().strftime('%H:%M:%S')}]\n{message}")
+        except Exception as e:
+            print(f"⚠️ Telegram alert failed: {e}")
+
+    def _git_commit(self, message: str, files: list = None):
+        """
+        Commit specified files (or all tracked changes) to git.
+        Silently skips if git is not available or nothing to commit.
+        """
+        try:
+            repo_dir = Path(__file__).parent
+            if files:
+                for f in files:
+                    subprocess.run(['git', 'add', str(f)], cwd=repo_dir,
+                                   capture_output=True, timeout=30)
+            else:
+                subprocess.run(['git', 'add', '-u'], cwd=repo_dir,
+                               capture_output=True, timeout=30)
+
+            result = subprocess.run(
+                ['git', 'commit', '-m', message],
+                cwd=repo_dir, capture_output=True, text=True, timeout=30
+            )
+            if result.returncode == 0:
+                print(f"   📝 Git committed: {message[:60]}")
+            # returncode 1 = "nothing to commit" — silently ignore
+        except Exception as e:
+            print(f"   ⚠️ Git commit failed: {e}")
+
+    def _git_push(self):
+        """Push to remote. Requires GITHUB_TOKEN in env."""
+        try:
+            repo_dir = Path(__file__).parent
+            token = os.getenv('GITHUB_TOKEN', '')
+            # Read current remote URL and inject token if HTTPS
+            url_result = subprocess.run(
+                ['git', 'remote', 'get-url', 'origin'],
+                cwd=repo_dir, capture_output=True, text=True, timeout=10
+            )
+            remote_url = url_result.stdout.strip()
+            if token and remote_url.startswith('https://') and '@' not in remote_url:
+                authed = remote_url.replace('https://', f'https://{token}@')
+                push_result = subprocess.run(
+                    ['git', 'push', authed, 'HEAD'],
+                    cwd=repo_dir, capture_output=True, text=True, timeout=60
+                )
+            else:
+                push_result = subprocess.run(
+                    ['git', 'push'],
+                    cwd=repo_dir, capture_output=True, text=True, timeout=60
+                )
+            if push_result.returncode == 0:
+                print("   ☁️ Git pushed to remote")
+            else:
+                print(f"   ⚠️ Git push failed: {push_result.stderr[:80]}")
+        except Exception as e:
+            print(f"   ⚠️ Git push error: {e}")
 
     def _send_email(self, report: str):
         """Send report via email."""
@@ -342,6 +437,12 @@ class AutoRunner:
         print(f"   目標 Sharpe: {self.target_sharpe}")
         print(f"   最大迭代: {self.max_total_iterations}")
         print("=" * 60)
+        self._send_telegram_alert(
+            f"🚀 TQQQ Auto Runner 啟動\n"
+            f"目標 Sharpe: {self.target_sharpe}\n"
+            f"最大迭代: {self.max_total_iterations}\n"
+            f"報告頻率: 每 {self.report_every} 次"
+        )
 
         iteration = 0
         while True:
@@ -357,26 +458,56 @@ class AutoRunner:
             result = self.run_single_iteration()
 
             if result['success']:
-                print(f"✅ Sharpe: {result['sharpe']:.2f}")
-                consecutive_failures = 0
+                sharpe = result['sharpe']
+                calmar = result.get('calmar', 0.0)
+                composite = result.get('composite', calmar)
+                print(f"✅ Sharpe: {sharpe:.2f} Calmar: {calmar:.2f}")
+                self._consec_api_fail = 0
 
-                # Check target
-                if result['sharpe'] >= self.target_sharpe:
-                    print(f"\n🎯 TARGET ACHIEVED! Sharpe {result['sharpe']:.2f} >= {self.target_sharpe}")
+                # Commit new strategy file to git
+                strategy_file = Path('generated_strategies') / f"{result['name']}.py"
+                if strategy_file.exists():
+                    self._git_commit(
+                        f"[auto] {result['name']}: Sharpe={sharpe:.2f} Calmar={calmar:.2f} CAGR={result['cagr']:.1%}",
+                        files=[strategy_file, 'history_of_thoughts.json']
+                    )
+
+                # Milestone: new best composite → immediate alert + push
+                if composite > self._last_committed_best + 0.05:
+                    self._last_committed_best = composite
+                    alert_msg = (
+                        f"🏆 新最佳策略！{result['name']}\n"
+                        f"Composite: {composite:.4f}\n"
+                        f"Sharpe: {sharpe:.2f} | Calmar: {calmar:.2f}\n"
+                        f"CAGR: {result['cagr']:.1%} | MaxDD: {result['max_dd']:.1%}"
+                    )
+                    self._send_telegram_alert(alert_msg)
+                    self._git_push()
+
+                # Check target Sharpe
+                if sharpe >= self.target_sharpe:
+                    print(f"\n🎯 TARGET ACHIEVED! Sharpe {sharpe:.2f} >= {self.target_sharpe}")
                     report = self.generate_report()
                     print(report)
                     self.send_notification(report)
+                    self._git_push()
                     break
             else:
                 error_msg = result['error'][:50] if result['error'] else 'Failed'
                 print(f"❌ {error_msg}")
 
-                # API 全掛時加長冷卻
-                if result['error'] and '都不可用' in result['error']:
-                    consecutive_failures = getattr(self, '_consec_api_fail', 0) + 1
-                    self._consec_api_fail = consecutive_failures
-                    cooldown = min(60 * consecutive_failures, 300)  # 60s, 120s, ... 最多 300s
-                    print(f"   ⏳ API 全部限流，冷卻 {cooldown} 秒...")
+                # API 全掛偵測（中英文錯誤訊息都涵蓋）
+                api_down_keywords = ['都不可用', 'all apis', 'api failed', 'no api keys']
+                err_lower = (result['error'] or '').lower()
+                if any(kw in err_lower for kw in api_down_keywords):
+                    self._consec_api_fail += 1
+                    cooldown = min(60 * self._consec_api_fail, 300)
+                    print(f"   ⏳ API 全部限流，冷卻 {cooldown} 秒... (連續 {self._consec_api_fail} 次)")
+                    if self._consec_api_fail >= 3:
+                        self._send_telegram_alert(
+                            f"⚠️ API 已連續失敗 {self._consec_api_fail} 次，系統進入長冷卻。\n"
+                            f"請檢查 API Keys 配額狀態。"
+                        )
                     time.sleep(cooldown)
                     continue
                 else:
@@ -388,6 +519,12 @@ class AutoRunner:
                 report = self.generate_report()
                 print(report)
                 self.send_notification(report)
+                # Push history to remote periodically
+                self._git_commit(
+                    f"[auto] 週期報告 iteration={iteration} successes={self.session_successes}",
+                    files=['history_of_thoughts.json', 'latest_report.txt']
+                )
+                self._git_push()
 
             # Delay between iterations to pace API usage
             time.sleep(5)

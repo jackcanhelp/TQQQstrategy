@@ -258,7 +258,7 @@ Keep response concise and actionable."""
             gh = _get_github_client()
             if gh:
                 print("   🔄 Groq 不可用，切換到 GitHub Models...")
-                result = gh._call_model_chain(prompt)
+                result = gh.generate(prompt)
         if result is None:
             # 最終備援：Gemini
             print("   🔄 切換到 Gemini...")
@@ -376,7 +376,7 @@ OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
             gh = _get_github_client()
             if gh:
                 print("   🔄 Groq 不可用，切換到 GitHub Models 生成代碼...")
-                result = gh._call_model_chain(prompt)
+                result = gh.generate(prompt)
         if result is None:
             # 最終備援：Gemini
             print("   🔄 切換到 Gemini 生成代碼...")
@@ -432,7 +432,7 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
             gh = _get_github_client()
             if gh:
                 print("   🔄 Groq 不可用，切換到 GitHub Models 修復代碼...")
-                result = gh._call_model_chain(prompt)
+                result = gh.generate(prompt)
         if result is None:
             # 最終備援：Gemini
             print("   🔄 切換到 Gemini 修復代碼...")

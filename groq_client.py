@@ -128,13 +128,14 @@ class GroqClient:
             key=lambda x: (0 if x == 4 else 1, x)
         )
 
-    def _rotate_from_pool(self, pool_keys: List[int]) -> Optional[int]:
-        """Pick next key from a pool using round-robin. Returns key index or None."""
+    def _rotate_pool_keys(self, pool_keys: List[int], task: str) -> List[int]:
+        """Reorder pool_keys starting from current round-robin index for even distribution."""
         if not pool_keys:
-            return None
-        # Simple round-robin within the available keys
-        idx = pool_keys[0]  # Default to first available
-        return idx
+            return []
+        n = len(pool_keys)
+        start = self._pool_index.get(task, 0) % n
+        self._pool_index[task] = (start + 1) % n
+        return pool_keys[start:] + pool_keys[:start]
 
     def _try_call(self, key_index: int, model: str, prompt: str) -> Optional[str]:
         """Attempt a single API call. Returns result or None."""
@@ -191,11 +192,12 @@ class GroqClient:
         self.calls += 1
         models = self.MODELS_BY_TASK.get(task, self.MODELS_BY_TASK["idea"])
 
-        # Phase 1: Try dedicated pool keys
+        # Phase 1: Try dedicated pool keys (round-robin start for even distribution)
         pool_keys = self._get_pool_keys(task)
         if pool_keys:
+            rotated_keys = self._rotate_pool_keys(pool_keys, task)
             for model in models:
-                for key_idx in pool_keys:
+                for key_idx in rotated_keys:
                     result = self._try_call(key_idx, model, prompt)
                     if result:
                         self.successes += 1
