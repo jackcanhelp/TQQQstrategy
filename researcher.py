@@ -429,10 +429,21 @@ adx_proxy = atr.diff(5)  # positive = trending, negative = ranging
    ❌ FORBIDDEN imports: talib, ta, pandas_ta, finta — NOT installed. Use pandas/numpy ONLY.
 7. Signals: 0.0 = cash, 1.0 = fully invested, 0-1 for partial
 8. Handle NaN: Use .fillna(0) or .bfill() (never forward-fill from future!)
-9. INDEX ALIGNMENT (CRITICAL): When wrapping numpy arrays in pd.Series, ALWAYS add index:
-   ✅ CORRECT: pd.Series(np.where(...), index=self.data.index)
-   ❌ WRONG:   pd.Series(np.where(...))  ← integer index vs datetime index = DOUBLED signal length!
-   This applies to: np.where(), np.array(), and any variable created from numpy operations.
+9. NUMPY → PANDAS (CRITICAL): np.where() returns numpy array. You CANNOT call pandas methods on it!
+   ❌ WRONG: self.state = np.where(...)          ← numpy array, calling .shift() on it crashes!
+   ❌ WRONG: state = np.where(...); state.shift(1)  ← AttributeError: ndarray has no .shift
+   ✅ CORRECT: self.state = pd.Series(np.where(...), index=self.data.index)
+   ✅ CORRECT: state = pd.Series(np.where(...), index=self.data.index); state.shift(1)
+   RULE: Every np.where() result that will be used as a Series MUST be wrapped immediately.
+
+10. HELPER FUNCTIONS: Parameters must match exactly between definition and call:
+    ❌ WRONG: def _calc_rvi(self, src): ...    then calling: self._calc_rvi(close, 14)  ← 3 args given, 2 expected
+    ✅ CORRECT: def _calc_rvi(self, src, window): ...  match the call signature
+    ✅ CORRECT: def _calc_rvi(self): use self.data directly inside
+
+11. CUSTOM LOOP LENGTH: When building sar_vals=[] loop, pad with NaN for warmup bars:
+    ✅ CORRECT: sar_vals = [np.nan] * warmup; then start loop at i=warmup
+    This ensures len(sar_vals) == len(data) when converted to pd.Series.
 
 EXAMPLE STRUCTURE:
 from strategy_base import BaseStrategy
@@ -576,7 +587,34 @@ OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
      - donchian_mid = (self.data['High'].rolling(20).max() + self.data['Low'].rolling(20).min()) / 2
    Do NOT store computed cols in self.data — compute them as local vars inline."""
 
-        extra_sections = tim_fix_section + key_fix_section
+        # Detect numpy.ndarray calling pandas methods
+        is_ndarray_error = 'ndarray' in error and ('has no attribute' in error or 'AttributeError' in error)
+        ndarray_fix_section = ""
+        if is_ndarray_error:
+            attr_match = re.search(r"has no attribute '(\w+)'", error)
+            bad_attr = attr_match.group(1) if attr_match else 'shift'
+            ndarray_fix_section = f"""
+7. ⚠️ CRITICAL — numpy.ndarray has no attribute '{bad_attr}':
+   np.where() returns a NUMPY ARRAY, not a pandas Series. You cannot call .{bad_attr}() on it!
+   FIND: self.xxx = np.where(...)  OR  var = np.where(...)
+   FIX:  self.xxx = pd.Series(np.where(...), index=self.data.index)
+         var = pd.Series(np.where(...), index=self.data.index)
+   This also applies to: np.zeros(len(data)), np.ones(len(data)), np.full(len(data), val)
+   → ALL numpy outputs stored as attributes or variables that are later used as Series MUST be wrapped."""
+
+        # Detect helper function signature mismatch
+        is_sig_error = 'takes' in error and 'positional argument' in error
+        sig_fix_section = ""
+        if is_sig_error:
+            sig_fix_section = """
+7. ⚠️ CRITICAL — Helper function argument count mismatch:
+   Check that the definition and call agree on parameters:
+   ❌ BROKEN: def _calc(self, src): ...  then calling  self._calc(close, 14)  ← 3 args, expects 2
+   ✅ FIX A:  def _calc(self, src, window): ...  (add window param to definition)
+   ✅ FIX B:  self._calc(close)  (remove extra arg from call)
+   Simplest: use self.data directly inside helpers, no parameters needed."""
+
+        extra_sections = tim_fix_section + key_fix_section + ndarray_fix_section + sig_fix_section
 
         prompt = f"""You are debugging Python code for a trading strategy.
 
@@ -723,6 +761,22 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN."""
             r'def init\s*\(\s*self\s*,\s*data\s*\)\s*(?:->.*?)?:',
             'def init(self, data: pd.DataFrame) -> None:',
             code
+        )
+
+        # P-025: Fix numpy.ndarray assigned to self.xxx from np.where() — wrap with pd.Series
+        # Pattern: self.varname = np.where(...)  on a single line → pd.Series(np.where(...), index=self.data.index)
+        # This prevents AttributeError when .shift() / .fillna() / .rolling() called later.
+        def _wrap_self_npwhere(m):
+            indent  = m.group(1)
+            varname = m.group(2)
+            rest    = m.group(3)  # everything from np.where( to end of line
+            return f"{indent}{varname} = pd.Series({rest}, index=self.data.index)"
+
+        code = re.sub(
+            r'^(\s*)(self\.\w+)\s*=\s*(np\.where\(.+)$',
+            _wrap_self_npwhere,
+            code,
+            flags=re.MULTILINE
         )
 
         # Fix TypeError: bad operand type for unary ~: 'float'

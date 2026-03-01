@@ -166,6 +166,21 @@
 
 ## 待確認問題（尚未修復）
 
+## [P-025] numpy.ndarray 呼叫 pandas 方法 → AttributeError
+- **症狀**：`AttributeError: 'numpy.ndarray' object has no attribute 'shift'`（或 fillna / iloc / rolling）
+- **根本原因**：LLM 把 `np.where(...)` 結果直接存入 `self.state`，之後呼叫 `self.state.shift(1)` — numpy array 沒有 `.shift()`
+- **修復**：
+  1. `_fix_code_structure` P-025 區塊：自動偵測 `self.xxx = np.where(...)` 並包成 `pd.Series(np.where(...), index=self.data.index)`
+  2. `generate_strategy_code` prompt rule 9 更新：明確說明 np.where 返回 numpy array，必須立即包 pd.Series
+  3. `fix_strategy_code` 加入 ndarray 偵測：當錯誤含 'ndarray' 時注入針對性修復指引
+- **日期**：2026-03-01
+
+## [P-026] Helper 函數簽名不匹配 → TypeError: takes N positional arguments
+- **症狀**：`TypeError: _calculate_rvi() takes 2 positional arguments but 3 were given`
+- **根本原因**：LLM 定義 `def _calc(self, src)` 但呼叫 `self._calc(close, 14)` — 傳了額外的 window 參數
+- **修復**：`fix_strategy_code` 加入 sig_fix_section，提示 LLM 要對齊定義與呼叫的參數數量
+- **日期**：2026-03-01
+
 ## [P-023] LLM 指標 Scale 不匹配 → 條件永遠不發動（never enters market）
 - **症狀**：`Strategy never enters the market (time_in_market=0.000%)`；Signal max=0.0000
 - **根本原因**：LLM 將 price-level 指標（TEMA/SMA，值域 $10–$100+）與微小固定閾值比較（如 `> 0.2`, `> 0.8`）。由於 TEMA 遠大於 0.2，crossover 條件（`TEMA.rolling(3).mean().shift(1) <= 0.2`）永遠 False，進場訊號永遠不觸發。
