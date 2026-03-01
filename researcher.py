@@ -412,6 +412,14 @@ OUTPUT ONLY PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS, NO ```python TAGS."""
         code = self._clean_code(result)
         code = self._fix_imports(code)
 
+        # Pre-validate syntax before saving — catch obvious LLM errors early
+        import ast
+        try:
+            ast.parse(code)
+        except SyntaxError as e:
+            print(f"   ⚠️ 代碼語法錯誤，立即嘗試修復: {e}")
+            code, _ = self.fix_strategy_code(code, f"SyntaxError: {e}", strategy_id)
+
         # Save to file
         file_path = self.GENERATED_DIR / f"strategy_gen_{strategy_id}.py"
         with open(file_path, 'w') as f:
@@ -465,6 +473,13 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
         code = self._clean_code(result)
         code = self._fix_imports(code)
 
+        # Validate syntax of fixed code
+        import ast as _ast
+        try:
+            _ast.parse(code)
+        except SyntaxError as e:
+            print(f"   ⚠️ 修復後仍有語法錯誤: {e}（會在 sandbox 階段被捕獲）")
+
         # Save to file
         file_path = self.GENERATED_DIR / f"strategy_gen_{strategy_id}.py"
         with open(file_path, 'w') as f:
@@ -486,34 +501,33 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN, NO EXPLANATIONS."""
 
     def _fix_imports(self, code: str) -> str:
         """
-        Ensure correct imports and remove wrong import variants the LLM tends to generate.
-        Common LLM mistakes:
-          - from BaseStrategy import BaseStrategy   (module name wrong)
-          - import BaseStrategy                      (not a package)
-          - from strategy_base.BaseStrategy import   (wrong dot notation)
+        Aggressively ensure correct imports.
+        LLM tends to generate broken variants like:
+          - from strategy_base \\nimport pandas  (split across lines)
+          - from BaseStrategy import BaseStrategy
+          - from strategy_base.BaseStrategy import ...
+        Strategy: nuke ALL strategy_base/BaseStrategy import lines, then re-add the correct one.
         """
-        # Strip wrong import patterns
-        wrong_patterns = [
-            r'from\s+BaseStrategy\s+import\s+[^\n]+',
-            r'import\s+BaseStrategy\b[^\n]*',
-            r'from\s+strategy_base\.BaseStrategy\s+import\s+[^\n]+',
-        ]
-        for pat in wrong_patterns:
-            code = re.sub(pat, '', code)
+        # Remove ALL lines that start with 'from strategy_base' (any variant, including split lines)
+        code = re.sub(r'from\s+strategy_base\b[^\n]*', '', code, flags=re.MULTILINE)
+        # Remove wrong BaseStrategy imports
+        code = re.sub(r'from\s+BaseStrategy\b[^\n]*', '', code, flags=re.MULTILINE)
+        code = re.sub(r'import\s+BaseStrategy\b[^\n]*', '', code, flags=re.MULTILINE)
+        # Remove any orphan 'import' lines that appear to be the continuation of a split import
+        # e.g. a line that is just "import BaseStrategy" or "import BaseStrategy, pandas as pd"
+        code = re.sub(r'^\s*import\s+BaseStrategy\b[^\n]*', '', code, flags=re.MULTILINE)
 
-        # Ensure correct imports are present at the top
-        header_lines = []
-        if "from strategy_base import BaseStrategy" not in code:
-            header_lines.append("from strategy_base import BaseStrategy")
+        # Collapse multiple blank lines
+        code = re.sub(r'\n{3,}', '\n\n', code).strip()
+
+        # Build canonical header
+        header_lines = ["from strategy_base import BaseStrategy"]
         if "import pandas as pd" not in code:
             header_lines.append("import pandas as pd")
         if "import numpy as np" not in code:
             header_lines.append("import numpy as np")
 
-        if header_lines:
-            code = "\n".join(header_lines) + "\n\n" + code
-
-        return code.strip()
+        return "\n".join(header_lines) + "\n\n" + code
 
     def _get_evolution_mode(self, iteration: int) -> str:
         """根據迭代次數決定演化模式。"""
