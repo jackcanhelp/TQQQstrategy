@@ -19,15 +19,47 @@ class StrategyValidator:
     """
 
     # Dangerous patterns in code that suggest look-ahead bias
+    # Each entry: (regex_pattern, severity, message)
+    # severity: 'HARD' = reject outright; 'SOFT' = warning only
     LOOKAHEAD_PATTERNS = [
-        (r'\.shift\s*\(\s*-', "Negative shift detected - this looks into the future"),
-        (r'\.iloc\s*\[\s*\w+\s*\+\s*\d+', "Forward iloc indexing detected"),
-        (r'\.loc\s*\[\s*\w+\s*\+', "Forward loc indexing detected"),
-        (r'tomorrow|next_day', "Suspicious variable name suggesting future data"),
-        (r'future_(?:price|return|close|value|data)', "Variable accessing future data"),
-        (r'\.rolling\s*\([^)]*center\s*=\s*True', "Rolling with center=True uses future data"),
-        (r'\.expanding\s*\(\s*\)\.(?:max|min|mean)\s*\(\s*\)', "Expanding window may leak if applied to full series then indexed"),
-        (r'data\s*\[\s*[\'"]Close[\'"]\s*\]\s*\.\s*max\s*\(\s*\)|data\s*\[\s*[\'"]Close[\'"]\s*\]\s*\.\s*min\s*\(\s*\)', "Global max/min on price series uses future data"),
+        # ── Hard rejections ─────────────────────────────────────────────────────
+        (r'\.shift\s*\(\s*-\d',
+         'HARD', "Negative shift .shift(-N) looks into the future"),
+        (r'\.shift\s*\(periods\s*=\s*-',
+         'HARD', "shift(periods=-N) looks into the future"),
+        (r'\.pct_change\s*\(\s*-',
+         'HARD', "pct_change(-N) returns next-bar return — pure look-ahead"),
+        (r'\.diff\s*\(\s*-',
+         'HARD', "diff(-N) computes future difference — look-ahead bias"),
+        (r'\.iloc\s*\[\s*\w+\s*\+\s*\d',
+         'HARD', "Forward iloc[i+N] indexing in a loop — look-ahead bias"),
+        (r'\.loc\s*\[\s*\w+\s*\+',
+         'HARD', "Forward .loc[date+offset] indexing — look-ahead bias"),
+        (r'\.rolling\s*\([^)]*center\s*=\s*True',
+         'HARD', "rolling(center=True) uses future bars symmetrically"),
+        # ── Hard: global statistics on price series without rolling window ─────
+        (r'(?:self\.data|data)\s*\[\s*[\'"](?:Close|High|Low|Open|Volume)[\'"]\s*\]\s*\.\s*(?:max|min)\s*\(\s*\)',
+         'HARD', "Global .max()/.min() on OHLCV column — uses data from the future to set threshold"),
+        (r'(?:self\.data|data)\s*\[\s*[\'"](?:Close|High|Low|Open|Volume)[\'"]\s*\]\s*\.\s*quantile\s*\(',
+         'HARD', "Global .quantile() on OHLCV column — future data leaks into threshold"),
+        (r'(?:self\.data|data)\s*\[\s*[\'"](?:Close|High|Low|Open|Volume)[\'"]\s*\]\s*\.\s*mean\s*\(\s*\)',
+         'HARD', "Global .mean() on OHLCV column — future data leaks (use .rolling().mean())"),
+        (r'(?:self\.data|data)\s*\[\s*[\'"](?:Close|High|Low|Open|Volume)[\'"]\s*\]\s*\.\s*std\s*\(\s*\)',
+         'HARD', "Global .std() on OHLCV column — future data leaks (use .rolling().std())"),
+        # ── Hard: variable names / explicit future references ──────────────────
+        (r'\btomorrow\b|\bnext_day\b|\bnext_bar\b',
+         'HARD', "Variable name explicitly references future bar"),
+        (r'\bfuture_(?:price|return|close|value|data|high|low|open)\b',
+         'HARD', "Variable named future_* accesses future data"),
+        (r'\blook_?ahead\b',
+         'HARD', "Variable/comment explicitly mentions look-ahead"),
+        # ── Soft warnings (don't reject, just warn) ────────────────────────────
+        (r'\.expanding\s*\(\s*\)\.(?:max|min|mean)\s*\(\s*\)',
+         'SOFT', "expanding().max/min() grows with more data — verify no forward reference"),
+        (r'\.nlargest\s*\(|\.nsmallest\s*\(',
+         'SOFT', "nlargest/nsmallest on full series may introduce look-ahead if reindexed"),
+        (r'\.sort_values\s*\([^)]*\)\s*\.(?:head|tail|iloc)',
+         'SOFT', "sort_values + head/tail may reorder future data into current position"),
     ]
 
     # Patterns that suggest proper implementation
@@ -40,16 +72,24 @@ class StrategyValidator:
     @classmethod
     def validate_code(cls, code: str) -> Tuple[bool, List[str]]:
         """
-        Static analysis of strategy code for potential issues.
+        Static analysis of strategy code for look-ahead bias and other issues.
+
+        HARD patterns → strategy is rejected (is_valid=False)
+        SOFT patterns → warning only, strategy still allowed
 
         Returns:
             Tuple of (is_valid, list_of_warnings)
         """
         warnings = []
+        hard_violations = []
 
-        for pattern, message in cls.LOOKAHEAD_PATTERNS:
+        for pattern, severity, message in cls.LOOKAHEAD_PATTERNS:
             if re.search(pattern, code, re.IGNORECASE):
-                warnings.append(f"⚠️ LOOK-AHEAD RISK: {message}")
+                if severity == 'HARD':
+                    hard_violations.append(message)
+                    warnings.append(f"❌ LOOK-AHEAD BIAS: {message}")
+                else:
+                    warnings.append(f"⚠️ SOFT WARNING: {message}")
 
         # Check for proper temporal offset (any backward-looking method suffices)
         if 'generate_signals' in code:
@@ -61,9 +101,13 @@ class StrategyValidator:
                 or '.rolling(' in code
             )
             if not backward_looking:
-                warnings.append("⚠️ WARNING: No temporal offset found - signals may have look-ahead bias")
+                warnings.append("⚠️ WARNING: No backward-looking operation found — verify no look-ahead bias")
 
-        is_valid = len([w for w in warnings if 'LOOK-AHEAD' in w]) == 0
+        # Report total count
+        if hard_violations:
+            warnings.insert(0, f"❌ REJECTED: {len(hard_violations)} look-ahead violation(s) found")
+
+        is_valid = len(hard_violations) == 0
         return is_valid, warnings
 
     @classmethod

@@ -115,6 +115,19 @@
 
 ---
 
+## [P-022] Look-ahead bias 偵測不完整——多種未來資料存取方式未被攔截
+- **症狀**：策略通過靜態驗證但實際使用未來資料（例如 `.pct_change(-1)`、`data['Close'].max()`、`rolling(center=True)`）
+- **根本原因**：舊版 `LOOKAHEAD_PATTERNS` 只偵測 `.shift(-n)` 和幾個特定模式，漏掉多種常見 LLM 錯誤
+- **修復**：全面擴充 `validator.py` 偵測規則（HARD / SOFT 分級）：
+  - **HARD（直接拒絕）**：`shift(-N)`、`pct_change(-N)`、`diff(-N)`、`shift(periods=-N)`、`data['Close'].max()`、`.quantile()`（全域）、`.mean()`（全域）、`.std()`（全域）、`rolling(center=True)`、變數名 `tomorrow`/`next_bar`/`future_`/`look_ahead`
+  - **SOFT（警告）**：`expanding().max/min()`、`nlargest/nsmallest`、`sort_values+head/tail`
+  - 更新 `validate_code()` 為 3-tuple 格式（pattern, severity, message）
+  - 拒絕時 auto_runner 印出具體違規訊息
+  - code gen 和 fix prompt 均加入詳細的 ✅/❌ 對照表
+- **日期**：2026-03-01
+
+---
+
 ## [P-021] LLM import 未安裝的 TA 函式庫（talib, ta, pandas_ta）
 - **症狀**：`Failed to load strategy: No module named 'talib'`（或 ta, pandas_ta）
 - **根本原因**：LLM 在訓練資料中看過這些常見 TA 庫，但本環境未安裝

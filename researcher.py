@@ -232,14 +232,18 @@ Example mutations:
   • Combine RVI states with RSI divergence for higher-conviction entries
 
 ═══════════════════════════════════════════════════════════════
-🎯 OBJECTIVE: Beat Sharpe=1.28 AND MaxDD > -30%
+🎯 OBJECTIVE: Sharpe ≥ 0.5, CAGR ≥ 5%, MaxDD ≥ -70%
 ═══════════════════════════════════════════════════════════════
 
 REQUIRED MODULES:
 1. STATE MACHINE — define 2-3 market states using indicators
 2. TRANSITION-BASED ENTRY — buy on state changes, not thresholds
 3. ADAPTIVE EXIT — ATR-based or volatility-adjusted stops
-4. OPTIONAL SHORT — state transition to bearish with TP/SL
+4. DRAWDOWN PROTECTION (MANDATORY) — one of:
+   a. ATR volatility filter: don't enter when ATR > N-day 90th percentile
+   b. Hard trailing stop: exit when price drops X*ATR from rolling high
+   c. Regime gate: only long when Close > SMA(200)
+5. OPTIONAL SHORT — state transition to bearish with ATR TP/SL
 
 RULES:
 ❌ FORBIDDEN: shift(-1), future prices, forward indexing
@@ -251,7 +255,7 @@ RESPOND WITH:
 1. Strategy Name
 2. State Machine Logic (what states, what indicators define them)
 3. Entry: Which transitions trigger buy/short
-4. Exit & Risk: Adaptive exit conditions
+4. Exit & Risk: Adaptive exit + drawdown protection mechanism
 5. Key Parameters (integers only)
 
 Keep response concise and actionable."""
@@ -313,10 +317,25 @@ Then combine in generate_signals():
    signal = regime * entry * (1 - exit)
 
 ═══════════════════════════════════════════════════════════════
-⚠️ NO LOOK-AHEAD BIAS (CRITICAL)
+🚫 NO LOOK-AHEAD BIAS — STRATEGY WILL BE REJECTED IF VIOLATED
 ═══════════════════════════════════════════════════════════════
-❌ FORBIDDEN: df.shift(-1), df.iloc[i+1], future data
-✅ ALLOWED: df.rolling(20).mean(), df.shift(1), backward-looking only
+❌ FORBIDDEN (automatic rejection):
+  • df.shift(-1) or df.shift(periods=-N)   ← looks into future bar
+  • df.pct_change(-1)                       ← tomorrow's return
+  • df.diff(-1)                             ← future difference
+  • df['Close'].max()  / df['Close'].min()  ← global: uses ALL future data
+  • df['Close'].mean() / df['Close'].std()  ← global: uses ALL future data
+  • df['Close'].quantile(0.9)              ← global: uses ALL future data
+  • rolling(center=True)                   ← symmetric window = future bars
+  • Any variable named: tomorrow, next_bar, future_price, look_ahead
+
+✅ ALLOWED (backward-looking only):
+  • df.rolling(N).mean() / .std() / .max() ← uses only past N bars
+  • df.ewm(span=N).mean()                  ← exponential moving average
+  • df.shift(1) or df.shift(N) where N>0   ← delays signal by N bars
+  • df.diff(1)                             ← today minus yesterday
+  • df.pct_change(1)                       ← today's return (positive period)
+  • df.rolling(N).quantile(q)             ← rolling quantile = OK
 
 ═══════════════════════════════════════════════════════════════
 📐 ANTI-OVERFITTING RULES
@@ -513,6 +532,10 @@ FIX REQUIREMENTS:
 3. INDEX: pd.Series(np_array, index=self.data.index) — NOT pd.Series(np_array)
 4. NO external libs: talib, ta, pandas_ta — pandas/numpy only
 5. Internal helpers take ONLY self: def _helper(self), NOT def _helper(self, data)
+6. NO LOOK-AHEAD BIAS:
+   ❌ .shift(-1), .pct_change(-1), .diff(-1) — looks into future
+   ❌ data['Close'].max()/.min()/.mean()/.quantile() — global = uses all future data
+   ✅ .rolling(N).mean()/.std()/.max()/.quantile(q) — use rolling version instead
 
 OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN."""
 
@@ -640,6 +663,13 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN."""
             'def init(self, data: pd.DataFrame) -> None:',
             code
         )
+
+        # Fix bitwise OR/AND type errors on floats: `float | series` or `series | float`
+        # LLM sometimes writes `position | series` where position is a float — invalid in Python
+        # Safe fix: replace `0.0 | ` / `0 | ` (common in signal combination) with logical equivalent
+        # Note: this is a heuristic — only catch the most common pattern
+        code = re.sub(r'(?<!\w)0\.0\s*\|(?!\|)\s*', '', code)  # `0.0 | x` → `x`
+        code = re.sub(r'(?<!\w)0\s*\|(?!\|)\s*(?=[a-zA-Z_(])', '', code)  # `0 | x` → `x`
 
         # Fix P-019: pd.Series(np_array) without index → datetime index misalignment
         # When a numpy array (from np.where etc.) is wrapped in pd.Series without index,

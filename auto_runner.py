@@ -116,10 +116,14 @@ class AutoRunner:
             # Generate code
             code, file_path = self.generator.generate_strategy_code(idea, strategy_id)
 
-            # Validate code
+            # Validate code — static look-ahead bias analysis
             is_valid, warnings = StrategyValidator.validate_code(code)
             if not is_valid:
-                result['error'] = 'Look-ahead bias in code'
+                # Extract the specific violation for the log
+                violations = [w for w in warnings if 'LOOK-AHEAD BIAS' in w]
+                violation_msg = violations[0][:80] if violations else 'Look-ahead bias detected'
+                result['error'] = violation_msg
+                print(f"   🚫 {violation_msg}")
                 self._record_failure(strategy_id, idea, result['error'])
                 return result
 
