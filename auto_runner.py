@@ -380,7 +380,8 @@ class AutoRunner:
             )
             remote_url = url_result.stdout.strip()
             if token and remote_url.startswith('https://') and '@' not in remote_url:
-                authed = remote_url.replace('https://', f'https://{token}@')
+                # GitHub requires "username:token" format, not just "token"
+                authed = remote_url.replace('https://', f'https://jackcanhelp:{token}@')
                 push_result = subprocess.run(
                     ['git', 'push', authed, 'HEAD'],
                     cwd=repo_dir, capture_output=True, text=True, timeout=60
