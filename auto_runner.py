@@ -116,16 +116,22 @@ class AutoRunner:
                 self._record_failure(strategy_id, idea, result['error'])
                 return result
 
-            # Load and test
+            # Load and test (load_strategy can raise on SyntaxError — convert to success/error)
             class_name = f"Strategy_Gen{strategy_id}"
-            strategy = self.sandbox.load_strategy(file_path, class_name)
-            success, error = self.sandbox.test_strategy(strategy, self.data)
-
-            if not success:
-                # Try to fix once
-                code, file_path = self.generator.fix_strategy_code(code, error, strategy_id)
+            try:
                 strategy = self.sandbox.load_strategy(file_path, class_name)
                 success, error = self.sandbox.test_strategy(strategy, self.data)
+            except Exception as load_err:
+                success, error = False, str(load_err)[:200]
+
+            if not success:
+                # Try to fix once (pass the actual error so LLM knows what to fix)
+                code, file_path = self.generator.fix_strategy_code(code, error, strategy_id)
+                try:
+                    strategy = self.sandbox.load_strategy(file_path, class_name)
+                    success, error = self.sandbox.test_strategy(strategy, self.data)
+                except Exception as load_err:
+                    success, error = False, str(load_err)[:200]
 
             if not success:
                 result['error'] = error[:100]

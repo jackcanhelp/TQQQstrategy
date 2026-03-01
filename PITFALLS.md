@@ -95,6 +95,16 @@
 
 ---
 
+---
+
+## [P-012] SyntaxError 被外層 except 吞掉，永遠不進 fix 路徑
+- **症狀**：`Syntax error in generated code: invalid syntax` 後直接記錄失敗，沒有嘗試修復
+- **根本原因**：`sandbox.load_strategy()` 遇到 SyntaxError 會 raise Exception；在 `run_single_iteration()` 中，`load_strategy()` 直接在主 try 塊裡被呼叫，一旦 raise 就跳到最外層 except，完全繞過 `if not success: fix_strategy_code()` 路徑
+- **修復**：用 inner try/except 包住 `load_strategy()` + `test_strategy()`，將任何 Exception 轉換為 `success=False, error=str(e)` 的形式，讓 fix 路徑正常觸發
+- **日期**：2026-03-01
+
+---
+
 ## 待確認問題（尚未修復）
 
 ### [PENDING-001] backtest.py resample('ME') 版本相容性
