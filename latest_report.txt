@@ -1,60 +1,39 @@
 
-═══════════════════════════════════════════════════════════════
-📊 TQQQ 策略進化報告
-   生成時間: 2026-03-01 15:48:29
-═══════════════════════════════════════════════════════════════
+=======================================================
+📊 TQQQ Strategy Discovery Report
+   2026-03-02 19:18:37
+=======================================================
 
-📈 總體統計
-───────────────────────────────────────────────────────────────
-   總迭代次數: 994
-   成功策略數: 704 (70.8%)
-   最佳 Composite: 1.3133
-   最佳策略: Cross_RVI_State_RVI_Trans_RVI_Extreme
+📈 Overall
+  Total iterations: 1135
+  Successful: 730 (64%)
+  Best: Strategy_Gen1131 (Composite: 0.4137)
+  Hall of Fame: 0 strategies
 
-   本次運行: 15 次迭代
-   本次成功: 15 個策略
-   運行時長: 0:19:00.832203
+  This session: 75 iters, 4 ok
+  Duration: 1:08:50
+  LLM calls: 206 (Groq: 205 [Groq: 205/206 ok, 5 keys | pools: idea=80, code=23, fix=31, overflow=71 | models: kimi-k2-instruct=79, llama-3.3-70b-versatile=59, llama-3.1-8b-instant=51 | cooling: 1 keys], GitHub: 1, Gemini: 0)
 
-🏆 Top 5 策略
-───────────────────────────────────────────────────────────────
-   #1 Cross_RVI_State_RVI_Trans_RVI_Extreme
-       Comp: 1.3133 | Sharpe: 1.29 | CAGR: 53.0% | MaxDD: -40.3%
-   #2 Cross_RVI_State_RVI_Trans_RVI_Extreme
-       Comp: 1.3133 | Sharpe: 1.29 | CAGR: 53.0% | MaxDD: -40.3%
-   #3 Cross_RVI_State_RVI_Trans_RVI_Extreme
-       Comp: 1.3133 | Sharpe: 1.29 | CAGR: 53.0% | MaxDD: -40.3%
-   #4 Cross_RVI_State_RVI_Trans_RVI_Extreme
-       Comp: 1.3133 | Sharpe: 1.29 | CAGR: 53.0% | MaxDD: -40.3%
-   #5 Strategy_Gen448
-       Comp: 1.3133 | Sharpe: 1.29 | CAGR: 53.0% | MaxDD: -40.3%
+🏆 Top 5 Strategies (by composite score)
+───────────────────────────────────────────────────────
+  #1 Cross_RVI_State_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=1.29 CAGR=53.0% MaxDD=-40.3%
+  #2 Cross_RVI_State_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=1.29 CAGR=53.0% MaxDD=-40.3%
+  #3 Cross_RVI_State_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=1.29 CAGR=53.0% MaxDD=-40.3%
+  #4 Cross_RVI_State_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=1.29 CAGR=53.0% MaxDD=-40.3%
+  #5 Strategy_Gen448: Comp=0.0000 Sharpe=1.29 CAGR=53.0% MaxDD=-40.3%
 
-📝 最近 10 次迭代
-───────────────────────────────────────────────────────────────
-   ✅ Strategy_Gen985: Calmar:0.12 Sharpe:0.02 CAGR:1.9% MaxDD:-15.3%
-   ✅ Strategy_Gen986: Calmar:0.02 Sharpe:-0.10 CAGR:-0.8% MaxDD:-43.6%
-   ❌ Strategy_Gen987: Error: Strategy never enters the mark
-   ✅ Strategy_Gen988: Calmar:0.21 Sharpe:0.42 CAGR:11.0% MaxDD:-51.3%
-   ✅ Strategy_Gen989: Calmar:0.05 Sharpe:-0.05 CAGR:1.4% MaxDD:-27.9%
-   ✅ Strategy_Gen990: Calmar:0.08 Sharpe:0.13 CAGR:2.8% MaxDD:-35.7%
-   ❌ Strategy_Gen991: Error: Strategy never enters the mark
-   ❌ Strategy_Gen992: Error: TypeError: _rvi_single() takes
-   ✅ Strategy_Gen993: Calmar:0.36 Sharpe:0.61 CAGR:19.7% MaxDD:-54.9%
-   ❌ Strategy_Gen994: Error: Strategy never enters the mark
+📝 Last 10 Iterations
+───────────────────────────────────────────────────────
+  ❌ Strategy_Gen1126: REJECTED: Exposure=2.9% below 5%
+  ❌ Strategy_Gen1127: REJECTED: MaxDD=-56.8% worse than -50%
+  ❌ Strategy_Gen1128: REJECTED: MaxDD=-50.8% worse than -50%
+  ❌ Strategy_Gen1129: REJECTED: Exposure=2.2% below 5%
+  ❌ Strategy_Gen1130: KeyError: 'VIX'
+Traceback (most recent c
+  ✅ Strategy_Gen1131: Comp=0.4137 Sharpe=1.27 CAGR=51.7% MaxDD=-40.3%
+  ✅ Cross_RVI_State_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=1.27 CAGR=52.0% MaxDD=-40.3%
+  ✅ Cross_RVI_State_RVI_Trans_RSI_OB: Comp=0.0000 Sharpe=1.22 CAGR=50.0% MaxDD=-39.2%
+  ✅ Cross_RVI_State_MACD_Cross_RSI_OB: Comp=0.0000 Sharpe=1.14 CAGR=48.2% MaxDD=-46.1%
+  ❌ Strategy_Gen1132: Strategy never enters the market (time_i
 
-🔑 API Manager 狀態:
-   總請求: 9 | 成功: 9
-   Key 切換: 204 | Model 切換: 23
-
-   當前: Key #2 + gemini-2.0-flash
-
-   gemini-2.5-flash-lite: 0/10 Keys 可用
-   gemini-2.0-flash-lite: 0/10 Keys 可用
-   gemini-2.5-flash: 0/10 Keys 可用
-   gemini-2.0-flash: 4/10 Keys 可用
-   gemini-1.5-flash: 0/10 Keys 可用
-   gemini-2.5-pro: 10/10 Keys 可用
-   gemini-exp-1206: 0/10 Keys 可用
-
-   🐙 GitHub Models: ✅ 可用 (4 個模型作為備用)
-
-═══════════════════════════════════════════════════════════════
+=======================================================

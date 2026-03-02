@@ -47,16 +47,30 @@ class GroqClient:
             "llama-3.1-8b-instant",                             # 14.4K RPD, fastest
             "meta-llama/llama-4-scout-17b-16e-instruct",        # Good understanding
         ],
+        "director": [  # Strategic review, high-quality reasoning required
+            "moonshotai/kimi-k2-instruct",                      # Best reasoning
+            "meta-llama/llama-4-scout-17b-16e-instruct",        # Large context fallback
+            "qwen/qwen3-32b",                                   # Versatile fallback
+        ],
+        "secretary": [  # Synthesis + JSON output, structured reasoning
+            "moonshotai/kimi-k2-instruct",                      # Best structured output
+            "meta-llama/llama-4-scout-17b-16e-instruct",        # Good JSON output
+            "qwen/qwen3-32b",                                   # Versatile fallback
+        ],
     }
 
     # ── Key pool indices (0-based) per task type ──
-    # idea: K1,K2 (index 0,1) — creative tasks get dedicated keys
-    # code: K3,K4 (index 2,3) — code gen gets dedicated keys
-    # fix:  K5    (index 4)   — fix is fast & light, 1 key suffices
+    # idea:      K1,K2 (index 0,1) — creative tasks get dedicated keys
+    # code:      K3,K4 (index 2,3) — code gen gets dedicated keys
+    # fix:       K5    (index 4)   — fix is fast & light, 1 key suffices
+    # director:  K1,K2 (index 0,1) — shares idea pool (infrequent, high quality)
+    # secretary: K1,K2 (index 0,1) — shares idea pool (infrequent, structured output)
     KEY_POOLS = {
-        "idea": [0, 1],
-        "code": [2, 3],
-        "fix":  [4],
+        "idea":      [0, 1],
+        "code":      [2, 3],
+        "fix":       [4],
+        "director":  [0, 1],
+        "secretary": [0, 1],
     }
 
     # Rate limit cooldown tracking (seconds to wait per key)
@@ -72,7 +86,7 @@ class GroqClient:
                 self.keys.append(key)
 
         # Per-pool round-robin index
-        self._pool_index: Dict[str, int] = {"idea": 0, "code": 0, "fix": 0}
+        self._pool_index: Dict[str, int] = {"idea": 0, "code": 0, "fix": 0, "director": 0, "secretary": 0}
 
         # Rate limit cooldown tracker: key_index → timestamp when usable again
         self._key_cooldown: Dict[int, float] = {}
@@ -81,7 +95,7 @@ class GroqClient:
         self.calls = 0
         self.successes = 0
         self.model_stats: Dict[str, int] = {}
-        self.pool_stats: Dict[str, int] = {"idea": 0, "code": 0, "fix": 0, "overflow": 0}
+        self.pool_stats: Dict[str, int] = {"idea": 0, "code": 0, "fix": 0, "director": 0, "secretary": 0, "overflow": 0}
 
         # Lazy-init clients per key
         self._clients: dict = {}
@@ -231,7 +245,7 @@ class GroqClient:
 
         # Pool usage stats
         pool_info = []
-        for pool_name in ["idea", "code", "fix", "overflow"]:
+        for pool_name in ["idea", "code", "fix", "director", "secretary", "overflow"]:
             count = self.pool_stats.get(pool_name, 0)
             if count > 0:
                 pool_info.append(f"{pool_name}={count}")

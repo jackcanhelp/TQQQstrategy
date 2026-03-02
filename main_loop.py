@@ -38,6 +38,7 @@ from strategy_base import BaseStrategy
 from backtest import BacktestEngine
 from validator import StrategyValidator, LookAheadDetector
 from researcher import StrategySandbox
+from brief_system import InternalAnalyst, Secretary
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -307,7 +308,8 @@ def record_result(history: Dict, strategy_id: int, name: str, idea: str,
 # ═══════════════════════════════════════════════════════════════
 def build_idea_prompt(history: Dict, indicator_menu: str,
                       director_advice: Optional[str] = None,
-                      oos_warning: Optional[str] = None) -> str:
+                      oos_warning: Optional[str] = None,
+                      brief: Optional[Dict] = None) -> str:
     """Build the strategy idea generation prompt with Champion DNA + mutation feedback."""
 
     # Context from history
@@ -422,11 +424,29 @@ Try a COMPLETELY DIFFERENT approach. Explore a new indicator combination."""
 You MUST incorporate the Director's advice into your strategy design.
 """
 
+    # Secretary brief injection (higher priority than Director's raw advice)
+    brief_section = ""
+    if brief:
+        brief_section = f"""
+═══════════════════════════════════════════════════════════════
+📋 RESEARCH BRIEF (Secretary Synthesis — HIGHEST PRIORITY)
+═══════════════════════════════════════════════════════════════
+Theme: {brief.get('focus_theme', '')}
+Priority indicators to use: {', '.join(brief.get('required_indicators', []))}
+Avoid these patterns: {'; '.join(brief.get('avoid_patterns', []))}
+Target exploration: {brief.get('exploration_target', '')}
+---
+{brief.get('brief_text', '')}
+
+This brief synthesizes Director guidance + historical analysis. Follow it over generic mutation modes.
+"""
+
     return f"""You are a Quantitative Research Director designing TQQQ (3x Leveraged Nasdaq) strategies.
 
 {context}
 {mutation}
 {director_section}
+{brief_section}
 {oos_section}
 
 ═══════════════════════════════════════════════════════════════
@@ -520,6 +540,13 @@ RULES:
 - Maximum 4 conditions per signal
 - Cash (0 exposure) is a valid and powerful position
 - Signals: -1.0 (short) to 1.0 (long), 0.0 = cash
+
+⛔ ABSOLUTELY FORBIDDEN — these columns DO NOT EXIST in self.data:
+  Yield curve: YC_Invert, YC2Y10Y, 2Y-10Y, 2Y, 10Y, US_10Y, curve_2y10y, YC_2Y10Y
+  Fed/macro: FedWatch, FedCutProb, CME_CutProb, CME_3mo_cut_prob, FedPiv, FedFunds
+  External data: VIX (only Sim_VIX exists), SPY, QQQ, any ticker not TQQQ
+  Anything not in the INDICATOR MENU above = KeyError = WASTED iteration
+  The Director's macro suggestions are IDEAS only — translate them to available indicators!
 
 RESPOND WITH:
 1. Strategy Name
@@ -627,6 +654,11 @@ CRITICAL RULES:
 - Return pd.Series of floats -1.0 to 1.0 (negative = short)
 - Use a for-loop to track position state (stateful logic)
 
+⛔ COLUMNS THAT DO NOT EXIST (using them = immediate KeyError crash):
+  YC_Invert, YC2Y10Y, 2Y, 10Y, US_10Y, curve_2y10y, FedWatch, FedCutProb,
+  CME_CutProb, CME_3mo_cut_prob, FedPiv, FedFunds, VIX, SPY, QQQ
+  If the strategy idea mentions macro/yield curve → use Sim_VIX or ATR_Pct as proxy instead.
+
 OUTPUT ONLY PYTHON CODE. No markdown, no explanations."""
 
 
@@ -684,6 +716,7 @@ def run_iteration(
     director_advice: Optional[str] = None,
     oos_warning: Optional[str] = None,
     notify_method: str = "file",
+    brief: Optional[Dict] = None,
 ) -> Dict:
     """Run a single strategy discovery iteration."""
 
@@ -708,7 +741,8 @@ def run_iteration(
     print("   💡 Generating idea...")
     idea_prompt = build_idea_prompt(history, indicator_menu,
                                     director_advice=director_advice,
-                                    oos_warning=oos_warning)
+                                    oos_warning=oos_warning,
+                                    brief=brief)
     idea = llm.generate(idea_prompt, task="idea")
     if not idea:
         result["error"] = "LLM failed to generate idea"
@@ -895,9 +929,8 @@ def run_iteration(
         check_hall_of_fame(result["name"], bt.sharpe_ratio, bt.max_drawdown,
                           bt.cagr, bt.calmar_ratio, idea)
 
-        # Instant Telegram on new record (composite score)
-        if (composite > history.get("best_composite", 0)
-                and notify_method == "telegram"):
+        # Instant Telegram + git push on new record (composite score)
+        if composite > history.get("best_composite", 0):
             record_msg = (
                 f"🏆 NEW RECORD! {result['name']}\n"
                 f"Composite: {composite:.4f}\n"
@@ -907,7 +940,13 @@ def run_iteration(
                 f"Test Sharpe={test_sharpe:.2f} Test CAGR={test_cagr:.1%} Test MaxDD={test_max_dd:.1%}\n"
                 f"Test Composite={test_composite:.4f}"
             )
-            send_telegram(record_msg)
+            if notify_method == "telegram":
+                send_telegram(record_msg)
+            strategy_file = GENERATED_DIR / f"strategy_gen_{strategy_id}.py"
+            git_push(
+                f"[record] {result['name']}: Comp={composite:.4f} Sharpe={bt.sharpe_ratio:.2f} CAGR={bt.cagr:.1%}",
+                files=[strategy_file, HISTORY_FILE, HALL_OF_FAME_FILE]
+            )
 
     except Exception as e:
         result["error"] = str(e)[:100]
@@ -981,15 +1020,77 @@ def send_telegram(report: str):
         chat_id = os.getenv("TELEGRAM_CHAT_ID")
         if not bot_token or not chat_id:
             return
-        text = report[:4000] if len(report) > 4000 else report
-        resp = requests.post(
-            f"https://api.telegram.org/bot{bot_token}/sendMessage",
-            data={"chat_id": chat_id, "text": text}
-        )
-        if resp.status_code == 200:
-            print("📱 Telegram report sent")
+        # Split into pages if > 4000 chars
+        PAGE_SIZE = 3800
+        lines = report.split('\n')
+        pages, current, cur_len = [], [], 0
+        for line in lines:
+            if cur_len + len(line) + 1 > PAGE_SIZE and current:
+                pages.append('\n'.join(current))
+                current, cur_len = [line], len(line) + 1
+            else:
+                current.append(line)
+                cur_len += len(line) + 1
+        if current:
+            pages.append('\n'.join(current))
+        total = len(pages)
+        for idx, page in enumerate(pages, 1):
+            header = f"[{idx}/{total}] " if total > 1 else ""
+            resp = requests.post(
+                f"https://api.telegram.org/bot{bot_token}/sendMessage",
+                data={"chat_id": chat_id, "text": header + page},
+                timeout=15
+            )
+            if resp.status_code == 200:
+                print(f"📱 Telegram [{idx}/{total}] sent")
+            if total > 1 and idx < total:
+                time.sleep(1)
     except Exception as e:
         print(f"⚠️ Telegram failed: {e}")
+
+
+def git_push(message: str = None, files: list = None):
+    """Commit changed files and push to remote. Silently skips if nothing to do."""
+    import subprocess
+    repo_dir = Path(__file__).parent
+    try:
+        # Stage files
+        if files:
+            for f in files:
+                subprocess.run(['git', 'add', str(f)], cwd=repo_dir,
+                               capture_output=True, timeout=30)
+        else:
+            subprocess.run(['git', 'add', '-u'], cwd=repo_dir,
+                           capture_output=True, timeout=30)
+        # Commit
+        msg = message or f"[auto] iteration update {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        commit = subprocess.run(
+            ['git', 'commit', '-m', msg],
+            cwd=repo_dir, capture_output=True, text=True, timeout=30
+        )
+        if commit.returncode != 0 and 'nothing to commit' not in commit.stdout + commit.stderr:
+            print(f"   ⚠️ git commit: {commit.stderr[:80]}")
+            return
+        if commit.returncode == 0:
+            print(f"   📝 git committed: {msg[:60]}")
+        # Push with token if available
+        token = os.getenv('GITHUB_TOKEN', '')
+        url_res = subprocess.run(['git', 'remote', 'get-url', 'origin'],
+                                 cwd=repo_dir, capture_output=True, text=True, timeout=10)
+        remote_url = url_res.stdout.strip()
+        if token and remote_url.startswith('https://') and '@' not in remote_url:
+            authed = remote_url.replace('https://', f'https://jackcanhelp:{token}@')
+            push = subprocess.run(['git', 'push', authed, 'HEAD'],
+                                  cwd=repo_dir, capture_output=True, text=True, timeout=60)
+        else:
+            push = subprocess.run(['git', 'push'],
+                                  cwd=repo_dir, capture_output=True, text=True, timeout=60)
+        if push.returncode == 0:
+            print("   ☁️ git pushed to remote")
+        else:
+            print(f"   ⚠️ git push failed: {push.stderr[:80]}")
+    except Exception as e:
+        print(f"   ⚠️ git_push error: {e}")
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -1045,10 +1146,18 @@ Based on the above data, provide a concise strategic directive (2-4 sentences) f
 2. What SPECIFIC indicator, risk management technique, or logic pattern should the team explore NEXT?
 3. What approaches should be AVOIDED based on recent failure patterns?
 
-Be specific and actionable. Reference actual indicator names and numbers.
+⚠️ CONSTRAINT — only recommend indicators from this AVAILABLE list:
+  Trend: SMA_20/50/200, EMA_20/50/200, MACD, MACD_signal, MACD_hist, ADX, Supertrend, Ichimoku_conv, Ichimoku_base, DI_Plus, DI_Minus, DI_Diff, Aroon_Up, Aroon_Down, Aroon_Osc, TRIX, PPO
+  Momentum: RSI, RSI_7, Stoch_K, Stoch_D, Williams_R, CCI, ROC, ROC_5, ROC_20, MFI, RVI, RVI_Refined, RVI_State, TSI, AO, UO
+  Volatility: ATR, ATR_Pct, BB_upper/middle/lower/width/pct, KC_upper/lower, Donchian_upper/lower, Sim_VIX, HV_10, HV_30, BB_Squeeze, VoV
+  Volume: OBV, OBV_SMA, CMF, Force_Index, Vol_Ratio, VWAP_Ratio
+  Structure: Drawdown, Days_Up, Days_Down, Gap_Pct, ZScore, SMA50_Dist, SMA200_Dist
+  Elder: Elder_Bull, Elder_Bear
+DO NOT suggest: yield curve, Fed funds rate, VIX (external), SPY, QQQ, or any macro data.
+Be specific and actionable.
 DO NOT write code. ONLY provide strategic direction."""
 
-    advice = llm.generate(director_prompt, task="idea")
+    advice = llm.generate(director_prompt, task="director")
     if advice:
         print(f"\n   👔 [投資總監] 戰術指導：{advice[:200]}...")
     return advice
@@ -1236,10 +1345,12 @@ def main():
     args = parser.parse_args()
 
     print("=" * 55)
-    print("🚀 TQQQ Strategy Discovery Engine v3")
+    print("🚀 TQQQ Strategy Discovery Engine v4")
     print(f"   🧬 Champion DNA + State Machine + Crossover")
-    print(f"   🔑 Groq 5-Key Pool: idea=K1,K2 | code=K3,K4 | fix=K5")
+    print(f"   🔑 Groq 5-Key Pool: idea/director/secretary=K1,K2 | code=K3,K4 | fix=K5")
+    print(f"   🤖 Multi-Agent: Director→InternalAnalyst→Secretary→IdeaGen")
     print(f"   👔 Director review every {DIRECTOR_INTERVAL} iters (stagnation: {STAGNATION_THRESHOLD})")
+    print(f"   📋 Brief refresh every {25} iters (Secretary synthesis)")
     print(f"   📊 Composite Score ranking + OOS validation")
     print(f"   🛡️ Hard Filter: MaxDD>{HARD_FILTER_MAX_DD:.0%}, Trades>={HARD_FILTER_MIN_TRADES}, Sharpe>={HARD_FILTER_MIN_SHARPE}")
     print(f"   Iterations: {args.iterations}")
@@ -1255,6 +1366,10 @@ def main():
     history = load_history()
     llm = LLMClient()
 
+    # ─── Multi-agent pipeline components ───
+    analyst = InternalAnalyst()
+    secretary = Secretary()
+
     # ─── Phase 0: Establish Champion baseline ───
     if not args.skip_baseline:
         run_champion_baseline(engine, data, history)
@@ -1266,30 +1381,45 @@ def main():
     best_composite_at_start = history.get("best_composite", 0)
     director_advice = None  # Current director guidance (injected into idea prompt)
     oos_warning = None      # OOS overfitting warning (injected into next idea prompt)
+    current_brief = None    # Secretary Brief (highest priority guidance for idea gen)
 
     for i in range(1, args.iterations + 1):
         strategy_id = history["total_iterations"] + 1
         print(f"\n[{i}/{args.iterations}] Iteration {strategy_id}")
 
-        # ─── Stagnation detection → early director call ───
+        # ─── Stagnation detection → early director call + brief refresh ───
         if (iters_since_improvement >= STAGNATION_THRESHOLD
                 and i % DIRECTOR_INTERVAL != 0):
-            print(f"\n   ⚠️ [停滯偵測] 已 {iters_since_improvement} 輪未突破，提前召喚總監")
+            print(f"\n   ⚠️ [停滯偵測] 已 {iters_since_improvement} 輪未突破，提前召喚總監+秘書")
             director_advice = get_director_advice(llm, history)
+            # Refresh brief: Analyst → Secretary
+            print("   🔍 [內部分析師] 分析歷史數據...")
+            analyst_report = analyst.analyze(history)
+            print("   📋 [秘書] 整合研究簡報...")
+            current_brief = secretary.create_brief(director_advice, analyst_report, llm)
             if director_advice and args.notify == "telegram":
+                brief_summary = current_brief.get("focus_theme", "") if current_brief else ""
                 send_telegram(
                     f"⚠️ 【停滯警報：{iters_since_improvement} 代未突破】\n"
-                    f"👔 總監緊急指導：\n{director_advice[:400]}"
+                    f"👔 總監緊急指導：\n{director_advice[:300]}\n"
+                    f"📋 研究簡報主題：{brief_summary[:150]}"
                 )
             iters_since_improvement = 0
 
-        # ─── Director review (every N iterations) ───
+        # ─── Director review (every N iterations) + brief refresh ───
         if i > 1 and i % DIRECTOR_INTERVAL == 0:
             print(f"\n   👔 [定期總監審查] 第 {i} 輪")
             director_advice = get_director_advice(llm, history)
+            # Refresh brief after director review
+            print("   🔍 [內部分析師] 分析歷史數據...")
+            analyst_report = analyst.analyze(history)
+            print("   📋 [秘書] 整合研究簡報...")
+            current_brief = secretary.create_brief(director_advice, analyst_report, llm)
             if director_advice and args.notify == "telegram":
+                brief_summary = current_brief.get("focus_theme", "") if current_brief else ""
                 send_telegram(
-                    f"👔 【第 {strategy_id} 代 — 總監戰術指導】\n{director_advice[:500]}"
+                    f"👔 【第 {strategy_id} 代 — 總監戰術指導】\n{director_advice[:300]}\n"
+                    f"📋 研究簡報主題：{brief_summary[:150]}"
                 )
 
         # ─── Crossover round (every N iterations) ───
@@ -1304,7 +1434,8 @@ def main():
         result = run_iteration(llm, engine, data, history, indicator_menu, strategy_id,
                                director_advice=director_advice,
                                oos_warning=oos_warning,
-                               notify_method=args.notify)
+                               notify_method=args.notify,
+                               brief=current_brief)
 
         # Consume OOS warning (only inject once)
         oos_warning = None
@@ -1353,7 +1484,7 @@ def main():
                 consec_api_fail = 0
                 iters_since_improvement += 1
 
-        # Periodic report
+        # Periodic report + brief refresh + git push
         if i % args.report_every == 0:
             stats = {
                 "iterations": i,
@@ -1363,8 +1494,23 @@ def main():
             }
             report = generate_report(history, stats)
             print(report)
+            with open("latest_report.txt", "w") as f:
+                f.write(report)
             if args.notify == "telegram":
                 send_telegram(report)
+            git_push(
+                f"[auto] report iter={strategy_id} ok={session_successes}",
+                files=[HISTORY_FILE, HALL_OF_FAME_FILE, Path("latest_report.txt")]
+            )
+            # Refresh brief after periodic report (if Director hasn't done it this cycle)
+            if i % DIRECTOR_INTERVAL != 0:
+                print("   🔍 [內部分析師] 定期分析更新...")
+                analyst_report = analyst.analyze(history)
+                print("   📋 [秘書] 更新研究簡報...")
+                current_brief = secretary.create_brief(director_advice, analyst_report, llm)
+                if current_brief and args.notify == "telegram":
+                    brief_summary = current_brief.get("focus_theme", "")
+                    send_telegram(f"📋 【研究簡報更新】\n主題：{brief_summary[:200]}")
 
         time.sleep(5)  # Pace API calls
 
@@ -1378,12 +1524,16 @@ def main():
     report = generate_report(history, stats)
     print(report)
 
+    with open("latest_report.txt", "w") as f:
+        f.write(report)
+
     if args.notify == "telegram":
         send_telegram(report)
 
-    # Save latest report
-    with open("latest_report.txt", "w") as f:
-        f.write(report)
+    git_push(
+        f"[final] iter={strategy_id} ok={session_successes}",
+        files=[HISTORY_FILE, HALL_OF_FAME_FILE, Path("latest_report.txt")]
+    )
 
 
 if __name__ == "__main__":
