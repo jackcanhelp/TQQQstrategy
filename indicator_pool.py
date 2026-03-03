@@ -14,6 +14,31 @@ import pandas as pd
 import yfinance as yf
 import ta
 
+# Optional ML/quant libraries — gracefully disabled if not installed
+try:
+    from hmmlearn.hmm import GaussianHMM as _GaussianHMM
+    _HMMLEARN_OK = True
+except ImportError:
+    _HMMLEARN_OK = False
+
+try:
+    from arch import arch_model as _arch_model
+    _ARCH_OK = True
+except ImportError:
+    _ARCH_OK = False
+
+try:
+    import ruptures as _rpt
+    _RUPTURES_OK = True
+except ImportError:
+    _RUPTURES_OK = False
+
+try:
+    import pandas_ta_classic as _pta
+    _PTA_OK = True
+except ImportError:
+    _PTA_OK = False
+
 
 CACHE_DIR = Path("cache")
 CACHE_DIR.mkdir(exist_ok=True)
@@ -112,6 +137,23 @@ INDICATOR_REGISTRY = {
     "Elder_Bear":{"category": "Momentum",   "column": "Elder_Bear","desc": "Elder Ray Bear Power: Low - EMA(13). <0=bears dominate"},
     "AO":        {"category": "Momentum",   "column": "AO",        "desc": "Awesome Oscillator (5,34). Momentum histogram. Cross zero=trend change"},
     "UO":        {"category": "Momentum",   "column": "UO",        "desc": "Ultimate Oscillator (7,14,28). Multi-timeframe momentum. >70=OB, <30=OS"},
+
+    # --- ML Regime (Phase 3A: hmmlearn + arch + ruptures) ---
+    "HMM_Regime":    {"category": "MLRegime", "column": "HMM_Regime",    "desc": "HMM 3-state regime: 0=bear, 1=neutral, 2=bull. GaussianHMM on daily returns+vol"},
+    "HMM_Prob_Bull": {"category": "MLRegime", "column": "HMM_Prob_Bull", "desc": "HMM probability of bull state (0-1). Continuous confidence score. >0.6=strong bull"},
+    "GARCH_Vol":     {"category": "MLRegime", "column": "GARCH_Vol",     "desc": "GARCH(1,1) conditional volatility (annualized %). Causal vol forecast. High=risk-off"},
+    "CP_Distance":   {"category": "MLRegime", "column": "CP_Distance",   "desc": "Days since last structural change point (PELT). >60=stable trend, <20=recent break"},
+
+    # --- New Momentum (Phase 3B: pandas-ta-classic) ---
+    "QQE":              {"category": "NewMomentum", "column": "QQE",              "desc": "Quantitative Qualitative Estimation: smoothed RSI momentum (0-100). Cross 50=signal"},
+    "STC":              {"category": "NewMomentum", "column": "STC",              "desc": "Schaff Trend Cycle (0-100): fast trend oscillator. >75=strong bull, <25=bear"},
+    "KDJ_K":            {"category": "NewMomentum", "column": "KDJ_K",            "desc": "KDJ K line (9,3): fast stochastic variant. K>D=bullish crossover"},
+    "KDJ_D":            {"category": "NewMomentum", "column": "KDJ_D",            "desc": "KDJ D line (9,3): slow stochastic signal. K>D crossover=entry signal"},
+    "KDJ_J":            {"category": "NewMomentum", "column": "KDJ_J",            "desc": "KDJ J line: 3K-2D, leads K and D. >100=overbought, <0=oversold"},
+    "CTI":              {"category": "NewMomentum", "column": "CTI",              "desc": "Correlation Trend Indicator (-1 to 1): price-time linear correlation. >0.8=strong uptrend"},
+    "SMI":              {"category": "NewMomentum", "column": "SMI",              "desc": "Stochastic Momentum Index (-100 to 100): refined stochastic. >40=bull zone, <-40=bear"},
+    "Squeeze_Pro_Hist": {"category": "NewMomentum", "column": "Squeeze_Pro_Hist", "desc": "Squeeze Pro histogram: momentum direction in squeeze. Positive=bullish momentum"},
+    "Squeeze_Pro_On":   {"category": "NewMomentum", "column": "Squeeze_Pro_On",   "desc": "Squeeze Pro on: 1=in squeeze (low vol, expect breakout), 0=breakout mode"},
 }
 
 
@@ -300,6 +342,137 @@ def calculate_indicators(data: pd.DataFrame) -> pd.DataFrame:
     df['Returns'] = close.pct_change()
     df['SMA_50_slope'] = (df['SMA_50'] - df['SMA_50'].shift(5)) / df['SMA_50'].shift(5)
     df['SMA_200_slope'] = (df['SMA_200'] - df['SMA_200'].shift(5)) / df['SMA_200'].shift(5)
+
+    # ── Phase 3A: ML Regime Indicators ──
+    if _HMMLEARN_OK:
+        try:
+            _ret = close.pct_change().fillna(0).values
+            _vol = close.pct_change().rolling(5).std().bfill().values
+            _X = np.column_stack([_ret, _vol])
+            _hmm = _GaussianHMM(n_components=3, covariance_type='diag', n_iter=100, random_state=42)
+            _hmm.fit(_X)
+            _states = _hmm.predict(_X)
+            _probs = _hmm.predict_proba(_X)
+            # Sort states by mean return: 0=bear, 1=neutral, 2=bull
+            _state_means = [float(_ret[_states == s].mean()) if (_states == s).any() else 0.0 for s in range(3)]
+            _order = np.argsort(_state_means)  # ascending order
+            _remap = {int(_order[i]): i for i in range(3)}
+            _states_sorted = np.array([_remap[s] for s in _states], dtype=float)
+            _bull_idx = int(_order[2])
+            df['HMM_Regime'] = pd.Series(_states_sorted, index=df.index)
+            df['HMM_Prob_Bull'] = pd.Series(_probs[:, _bull_idx], index=df.index)
+            print("   ✅ HMM 3-state regime computed")
+        except Exception as _e:
+            print(f"   ⚠️ HMM failed ({_e}), using neutral defaults")
+            df['HMM_Regime'] = 1.0
+            df['HMM_Prob_Bull'] = 0.5
+    else:
+        df['HMM_Regime'] = 1.0
+        df['HMM_Prob_Bull'] = 0.5
+
+    if _ARCH_OK:
+        try:
+            _ret_pct = close.pct_change().dropna() * 100
+            _garch = _arch_model(_ret_pct, vol='Garch', p=1, q=1, dist='normal')
+            _res = _garch.fit(disp='off', show_warning=False)
+            _cond_vol = pd.Series(_res.conditional_volatility.values, index=_ret_pct.index)
+            df['GARCH_Vol'] = (_cond_vol * np.sqrt(252)).reindex(df.index).ffill().bfill()
+            print("   ✅ GARCH(1,1) conditional volatility computed")
+        except Exception as _e:
+            print(f"   ⚠️ GARCH failed ({_e}), using HV_20 fallback")
+            df['GARCH_Vol'] = close.pct_change().rolling(20).std() * np.sqrt(252) * 100
+    else:
+        df['GARCH_Vol'] = close.pct_change().rolling(20).std() * np.sqrt(252) * 100
+
+    if _RUPTURES_OK:
+        try:
+            _signal = close.values.astype(float)
+            _algo = _rpt.Pelt(model='rbf').fit(_signal)
+            _bkps = _algo.predict(pen=10)
+            _cp_dist = np.zeros(len(_signal))
+            _prev_bp = 0
+            for _bp in _bkps[:-1]:
+                for _i in range(_prev_bp, _bp):
+                    _cp_dist[_i] = _i - _prev_bp
+                _prev_bp = _bp
+            for _i in range(_prev_bp, len(_signal)):
+                _cp_dist[_i] = _i - _prev_bp
+            df['CP_Distance'] = pd.Series(_cp_dist, index=df.index)
+            print(f"   ✅ Change points: {len(_bkps) - 1} breakpoints detected")
+        except Exception as _e:
+            print(f"   ⚠️ Ruptures failed ({_e}), using linear fallback")
+            df['CP_Distance'] = pd.Series(np.arange(len(df), dtype=float), index=df.index)
+    else:
+        df['CP_Distance'] = pd.Series(np.arange(len(df), dtype=float), index=df.index)
+
+    # ── Phase 3B: pandas-ta-classic indicators ──
+    _pta_defaults = ['QQE', 'STC', 'KDJ_K', 'KDJ_D', 'KDJ_J', 'CTI', 'SMI',
+                     'Squeeze_Pro_Hist', 'Squeeze_Pro_On']
+    if _PTA_OK:
+        try:
+            # QQE — Quantitative Qualitative Estimation
+            _qqe = _pta.qqe(close)
+            if _qqe is not None and not _qqe.empty:
+                _col = next((c for c in _qqe.columns if c.startswith('QQE_')), None)
+                df['QQE'] = _qqe[_col].reindex(df.index).fillna(50) if _col else 50.0
+            else:
+                df['QQE'] = 50.0
+
+            # STC — Schaff Trend Cycle
+            _stc = _pta.stc(close)
+            if _stc is not None and not _stc.empty:
+                _col = next((c for c in _stc.columns if c.startswith('STC_')), None)
+                df['STC'] = _stc[_col].reindex(df.index).fillna(50) if _col else 50.0
+            else:
+                df['STC'] = 50.0
+
+            # KDJ — Stochastic variant with J line
+            _kdj = _pta.kdj(high, low, close)
+            if _kdj is not None and not _kdj.empty:
+                _k = next((c for c in _kdj.columns if c.startswith('K_')), None)
+                _d = next((c for c in _kdj.columns if c.startswith('D_')), None)
+                _j = next((c for c in _kdj.columns if c.startswith('J_')), None)
+                df['KDJ_K'] = _kdj[_k].reindex(df.index).fillna(50) if _k else 50.0
+                df['KDJ_D'] = _kdj[_d].reindex(df.index).fillna(50) if _d else 50.0
+                df['KDJ_J'] = _kdj[_j].reindex(df.index).fillna(50) if _j else 50.0
+            else:
+                df['KDJ_K'] = df['KDJ_D'] = df['KDJ_J'] = 50.0
+
+            # CTI — Correlation Trend Indicator (returns Series)
+            _cti = _pta.cti(close)
+            if _cti is not None and len(_cti) > 0:
+                df['CTI'] = pd.Series(_cti.values, index=df.index).fillna(0)
+            else:
+                df['CTI'] = 0.0
+
+            # SMI — Stochastic Momentum Index (manual: _pta.smi has internal bug)
+            _hml = (high + low) / 2
+            _smi_num = (close - _hml).ewm(span=5, adjust=False).mean().ewm(span=3, adjust=False).mean()
+            _smi_den = ((high - low) / 2).ewm(span=5, adjust=False).mean().ewm(span=3, adjust=False).mean()
+            df['SMI'] = (100 * _smi_num / _smi_den.replace(0, float('nan'))).fillna(0)
+
+            # Squeeze Pro — momentum histogram + squeeze detection
+            # Columns: SQZPRO_20_2.0_20_2_1.5_1 (hist), SQZPRO_ON_WIDE/NORMAL/NARROW (squeeze)
+            _sqz = _pta.squeeze_pro(high, low, close)
+            if _sqz is not None and not _sqz.empty:
+                _hist_col = next((c for c in _sqz.columns if c.startswith('SQZPRO_') and '_ON_' not in c), None)
+                _on_col = next((c for c in _sqz.columns if 'SQZPRO_ON_NORMAL' in c), None)
+                if _on_col is None:
+                    _on_col = next((c for c in _sqz.columns if 'SQZPRO_ON' in c), None)
+                df['Squeeze_Pro_Hist'] = _sqz[_hist_col].reindex(df.index).fillna(0) if _hist_col else 0.0
+                df['Squeeze_Pro_On'] = _sqz[_on_col].reindex(df.index).fillna(0) if _on_col else 0.0
+            else:
+                df['Squeeze_Pro_Hist'] = 0.0
+                df['Squeeze_Pro_On'] = 0.0
+
+            print("   ✅ pandas-ta indicators computed (QQE, STC, KDJ, CTI, SMI, Squeeze_Pro)")
+        except Exception as _e:
+            print(f"   ⚠️ pandas-ta-classic failed ({_e}), using neutral defaults")
+            for _col in _pta_defaults:
+                df[_col] = 0.0
+    else:
+        for _col in _pta_defaults:
+            df[_col] = 0.0
 
     indicator_count = len([c for c in df.columns if c not in data.columns and c != 'Returns'])
     print(f"   ✅ {indicator_count} indicators calculated")

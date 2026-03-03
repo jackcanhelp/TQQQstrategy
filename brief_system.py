@@ -19,6 +19,23 @@ from typing import Dict, List, Optional
 from datetime import datetime
 
 
+def _parse_llm_json(raw: Optional[str]) -> Optional[dict]:
+    """Strip markdown fences from LLM response and parse as JSON. Returns None on failure."""
+    if not raw:
+        return None
+    try:
+        cleaned = raw.strip()
+        if cleaned.startswith("```"):
+            cleaned = re.sub(r'^```(?:json)?\s*', '', cleaned, flags=re.MULTILINE)
+            cleaned = re.sub(r'\s*```\s*$', '', cleaned)
+        match = re.search(r'\{[\s\S]+\}', cleaned)
+        if match:
+            cleaned = match.group()
+        return json.loads(cleaned)
+    except (json.JSONDecodeError, ValueError):
+        return None
+
+
 # ═══════════════════════════════════════════════════════════════
 # InternalAnalyst (A) — Pure Python stats + LLM narrative
 # ═══════════════════════════════════════════════════════════════
@@ -49,6 +66,11 @@ class InternalAnalyst:
         "Elder_Bull", "Elder_Bear",
         "Drawdown", "Days_Up", "Days_Down", "Gap_Pct",
         "ZScore", "SMA50_Dist", "SMA200_Dist",
+        # Phase 3A: ML Regime
+        "HMM_Regime", "HMM_Prob_Bull", "GARCH_Vol", "CP_Distance",
+        # Phase 3B: New Momentum (pandas-ta-classic)
+        "QQE", "STC", "KDJ_K", "KDJ_D", "KDJ_J", "CTI", "SMI",
+        "Squeeze_Pro_Hist", "Squeeze_Pro_On",
     ]
 
     # Category mapping for usage analysis
@@ -65,6 +87,9 @@ class InternalAnalyst:
         "TrendQuality": ["DI_Plus","DI_Minus","DI_Diff","Aroon_Up","Aroon_Down","Aroon_Osc","TRIX","PPO"],
         "AdvancedMomentum": ["TSI","AO","UO","Elder_Bull","Elder_Bear"],
         "Structure": ["Drawdown","Days_Up","Days_Down","Gap_Pct","ZScore","SMA50_Dist","SMA200_Dist"],
+        "MLRegime": ["HMM_Regime","HMM_Prob_Bull","GARCH_Vol","CP_Distance"],
+        "NewMomentum": ["QQE","STC","KDJ_K","KDJ_D","KDJ_J","CTI","SMI",
+                        "Squeeze_Pro_Hist","Squeeze_Pro_On"],
     }
 
     def analyze(self, history: Dict) -> str:
@@ -166,6 +191,22 @@ class InternalAnalyst:
 
         sorted_cats = sorted(cat_usage.items(), key=lambda x: x[1])
 
+        # ── 7b. Indicator diversity entropy (Phase 3C) ──
+        import math as _math
+        _counts = [v for v in indicator_counts.values() if v > 0]
+        _total_uses = sum(_counts)
+        if _total_uses > 0 and len(_counts) > 1:
+            _probs = [c / _total_uses for c in _counts]
+            _entropy = -sum(p * _math.log2(p) for p in _probs)
+            _max_entropy = _math.log2(len(indicator_counts))
+            diversity_pct = _entropy / _max_entropy if _max_entropy > 0 else 0.0
+        else:
+            diversity_pct = 0.0
+        # New pool indicators with zero usage (Phase 3A/3B) — immediate candidates
+        new_pool_inds = (self.CATEGORIES.get("MLRegime", []) +
+                         self.CATEGORIES.get("NewMomentum", []))
+        untried_new = [ind for ind in new_pool_inds if indicator_counts.get(ind, 0) == 0]
+
         # ── Compose report ──
         report = f"""=== INTERNAL ANALYST REPORT ===
 Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}
@@ -208,8 +249,12 @@ OVERUSED (dominant, may cause stagnation — try alternatives):"""
             report += f"\n  {ind}: {cnt} times"
 
         report += f"\n\nCATEGORY USAGE (lowest = least explored):"
-        for cat, cnt in sorted_cats[:4]:
+        for cat, cnt in sorted_cats[:5]:
             report += f"\n  {cat}: {cnt} total uses"
+
+        report += f"\n\nINDICATOR DIVERSITY: {diversity_pct:.1%} (100%=perfect spread, low%=monoculture)"
+        if untried_new:
+            report += f"\nNEW POOL (Phase 3, zero usage — try these first): {', '.join(untried_new[:8])}"
 
         # ── 8. Recommendations ──
         recommendations = []
@@ -249,6 +294,19 @@ OVERUSED (dominant, may cause stagnation — try alternatives):"""
                     f"EXPLORE: '{least_cat}' category barely tried. "
                     f"Candidate indicators: {', '.join(least_inds[:4])}"
                 )
+
+        # New pool adoption recommendation (Phase 3C)
+        if untried_new:
+            recommendations.append(
+                f"NEW POOL: {len(untried_new)} Phase-3 indicators have NEVER been used: "
+                f"{', '.join(untried_new[:5])}. "
+                "These provide genuinely new signal sources (ML regime, advanced momentum)."
+            )
+        if diversity_pct < 0.5:
+            recommendations.append(
+                f"MONOCULTURE ALERT: Indicator diversity only {diversity_pct:.1%} — "
+                "system over-concentrates on a few indicators. Force usage of untried categories."
+            )
 
         if recommendations:
             report += "\n\n--- RECOMMENDATIONS ---"
@@ -326,22 +384,11 @@ Output ONLY valid JSON:
 
     def _parse_json(self, raw: Optional[str], known_indicators: list) -> dict:
         """Parse JSON response and validate structure."""
-        if not raw:
-            return self._default_proposals()
-        try:
-            cleaned = raw.strip()
-            if cleaned.startswith("```"):
-                cleaned = re.sub(r'^```(?:json)?\s*', '', cleaned, flags=re.MULTILINE)
-                cleaned = re.sub(r'\s*```\s*$', '', cleaned)
-            match = re.search(r'\{[\s\S]+\}', cleaned)
-            if match:
-                cleaned = match.group()
-            data = json.loads(cleaned)
+        data = _parse_llm_json(raw)
+        if data:
             proposals = data.get("proposals", [])
             if isinstance(proposals, list) and len(proposals) > 0:
                 return {"proposals": proposals}
-        except (json.JSONDecodeError, KeyError, ValueError):
-            pass
         return self._default_proposals()
 
     def _default_proposals(self) -> dict:
@@ -433,23 +480,15 @@ Return corrected proposals as JSON only:
         corrected_raw = llm.generate(correction_prompt, task="secretary")
 
         if corrected_raw:
-            try:
-                cleaned = corrected_raw.strip()
-                if cleaned.startswith("```"):
-                    cleaned = re.sub(r'^```(?:json)?\s*', '', cleaned, flags=re.MULTILINE)
-                    cleaned = re.sub(r'\s*```\s*$', '', cleaned)
-                match = re.search(r'\{[\s\S]+\}', cleaned)
-                if match:
-                    data = json.loads(match.group())
-                    corrected = data.get("proposals", [])
-                    if corrected:
-                        return {
-                            "approved": True,
-                            "validated_proposals": corrected,
-                            "corrections": invalid,
-                        }
-            except (json.JSONDecodeError, KeyError, ValueError):
-                pass
+            data = _parse_llm_json(corrected_raw)
+            if data:
+                corrected = data.get("proposals", [])
+                if corrected:
+                    return {
+                        "approved": True,
+                        "validated_proposals": corrected,
+                        "corrections": invalid,
+                    }
 
         # Correction failed — return originals with approved=False
         return {
@@ -551,16 +590,8 @@ Rules:
             return self._default_brief(analyst_report)
 
         # Parse JSON
-        try:
-            cleaned = raw.strip()
-            if cleaned.startswith("```"):
-                cleaned = re.sub(r'^```(?:json)?\s*', '', cleaned, flags=re.MULTILINE)
-                cleaned = re.sub(r'\s*```\s*$', '', cleaned)
-            # Find JSON object
-            match = re.search(r'\{[\s\S]+\}', cleaned)
-            if match:
-                cleaned = match.group()
-            brief = json.loads(cleaned)
+        brief = _parse_llm_json(raw)
+        if brief:
             required_keys = ["focus_theme", "required_indicators", "avoid_patterns",
                              "exploration_target", "brief_text"]
             if all(k in brief for k in required_keys):
@@ -569,11 +600,10 @@ Rules:
                 if eq:
                     print(f"   🎯 Execution queue: {len(eq)} assignments ready")
                 return brief
-            else:
-                missing = [k for k in required_keys if k not in brief]
-                print(f"   ⚠️ Secretary JSON missing keys: {missing}, using default brief")
-        except (json.JSONDecodeError, KeyError) as e:
-            print(f"   ⚠️ Secretary JSON parse failed ({e}), using default brief")
+            missing = [k for k in required_keys if k not in brief]
+            print(f"   ⚠️ Secretary JSON missing keys: {missing}, using default brief")
+        else:
+            print("   ⚠️ Secretary JSON parse failed, using default brief")
 
         return self._default_brief(analyst_report)
 
@@ -627,6 +657,182 @@ Avoid: {avoid}
 Explore: {brief.get('exploration_target', '')}
 ---
 {brief.get('brief_text', '')}"""
+
+
+# ═══════════════════════════════════════════════════════════════
+# ExternalResearcher (F) — Proposes new indicators (inline helpers)
+# ═══════════════════════════════════════════════════════════════
+class ExternalResearcher:
+    """
+    F: External Researcher — proposes NEW technical indicators not in the 78-indicator pool.
+    Generates inline helper methods for strategy classes (no indicator_pool.py changes).
+    Uses task="director" for kimi-k2 / K1,K2 pool.
+    """
+
+    # Hardcoded fallback proposals — validated, reliable Python code
+    # These are distinct from both the 78-indicator pool AND the Phase 3B additions (QQE/STC/KDJ etc.)
+    FALLBACK_PROPOSALS = [
+        {
+            "name": "KAMA",
+            "full_name": "Kaufman Adaptive Moving Average",
+            "description": "Adapts MA speed to market noise — fast in trends, slow in chop",
+            "method_name": "_calc_kama",
+            "method_code": """def _calc_kama(self, prices, fast=2, slow=30):
+    fast_sc = 2.0 / (fast + 1)
+    slow_sc = 2.0 / (slow + 1)
+    arr = prices.ffill().bfill().values.astype(float)
+    kama = arr.copy()
+    for i in range(10, len(arr)):
+        direction = abs(arr[i] - arr[i - 10])
+        volatility = float(np.sum(np.abs(np.diff(arr[i - 10:i + 1]))))
+        er = direction / volatility if volatility > 0 else 0
+        sc = (er * (fast_sc - slow_sc) + slow_sc) ** 2
+        kama[i] = kama[i - 1] + sc * (arr[i] - kama[i - 1])
+    return pd.Series(kama, index=prices.index)""",
+            "usage": "kama = self._calc_kama(self.data['Close'], fast=2, slow=30)",
+            "suitable_for": "regime",
+            "entry_hint": "Bullish regime: Close > KAMA and KAMA slope positive (kama.diff() > 0)",
+        },
+        {
+            "name": "Hurst",
+            "full_name": "Rolling Hurst Exponent",
+            "description": "Fractal market dimension: >0.5=trending, 0.5=random walk, <0.5=mean-reverting",
+            "method_name": "_calc_hurst",
+            "method_code": """def _calc_hurst(self, prices, window=60):
+    def _h(w):
+        log_w = np.log(np.abs(w) + 1e-10)
+        lags = [l for l in [2, 4, 8, 16] if 2 * l < len(w)]
+        if not lags:
+            return 0.5
+        vs = [np.var(log_w[l:] - log_w[:-l]) for l in lags]
+        ll = np.log(lags)
+        lv = np.log([max(v, 1e-10) for v in vs])
+        return float(np.clip(np.polyfit(ll, lv, 1)[0] / 2, 0.0, 1.0))
+    return prices.rolling(window).apply(_h, raw=True).fillna(0.5)""",
+            "usage": "hurst = self._calc_hurst(self.data['Close'], window=60)",
+            "suitable_for": "regime",
+            "entry_hint": "Enter long only when Hurst > 0.55 (trending regime). Avoid mean-reversion noise when Hurst < 0.45.",
+        },
+        {
+            "name": "ZLEMA",
+            "full_name": "Zero-Lag Exponential Moving Average",
+            "description": "EMA with lag compensation: faster signal with minimal delay vs standard EMA",
+            "method_name": "_calc_zlema",
+            "method_code": """def _calc_zlema(self, prices, period=20):
+    lag = (period - 1) // 2
+    adjusted = prices + (prices - prices.shift(lag))
+    return adjusted.ewm(span=period, adjust=False).mean().bfill().fillna(0)""",
+            "usage": "zlema = self._calc_zlema(self.data['Close'], period=20)",
+            "suitable_for": "entry",
+            "entry_hint": "Buy when Close crosses above ZLEMA(20). Faster than EMA crossover with less whipsaw.",
+        },
+    ]
+
+    def propose(self, stats_report: str, known_indicators: list, llm) -> dict:
+        """Propose 2-3 new indicators with inline Python calculation code."""
+        # Extract overused section from analyst report for context
+        overused_section = ""
+        match = re.search(r'OVERUSED.*?(?=\nUNDEREXPLORED|\n\n)', stats_report, re.DOTALL)
+        if match:
+            overused_section = match.group()[:300]
+
+        prompt = f"""You are F, an External Researcher specializing in technical analysis.
+
+CURRENT INDICATOR POOL ({len(known_indicators)} indicators — DO NOT repropose these):
+{', '.join(known_indicators)}
+
+OVERUSED (especially avoid):
+{overused_section}
+
+TASK: Propose exactly 3 NEW technical indicators that are:
+1. NOT already in the pool above
+2. Suitable for TQQQ (3x leveraged ETF momentum)
+3. Implementable with pandas/numpy only (no TA-Lib, no yfinance, no imports)
+4. Each is a self-contained Python method
+
+Good candidates: KAMA, TEMA, CMO, Zero-Lag EMA, Fisher Transform, Laguerre RSI,
+McGinley Dynamic, KST, PVT, VIDYA, Hurst Exponent, Kalman RSI, Fractal Adaptive MA,
+Ehlers Instantaneous Trendline, Recursive Bands, Stochastic RSI smoothed, etc.
+(QQE, STC, KDJ, SMI, Squeeze_Pro are already in the pool — do NOT propose these)
+
+Output ONLY valid JSON:
+{{
+  "new_indicators": [
+    {{
+      "name": "SHORT_NAME",
+      "full_name": "Full Indicator Name",
+      "description": "1 sentence: what it measures and why useful for TQQQ",
+      "method_name": "_calc_shortname",
+      "method_code": "def _calc_shortname(self, prices, period=14):\\n    ...\\n    return result_series",
+      "usage": "varname = self._calc_shortname(self.data['Close'], period=14)",
+      "suitable_for": "regime|entry|exit",
+      "entry_hint": "Specific signal logic: e.g. 'Buy when X crosses above Y'"
+    }}
+  ]
+}}
+
+CRITICAL requirements for method_code:
+- Valid Python method (def _calc_xxx(self, prices, ...))
+- prices is a pd.Series; returns pd.Series of same length
+- Only use pd and np (already imported in strategy file)
+- Include .fillna(0) or .bfill() on output
+- NO external imports inside method body"""
+
+        raw = llm.generate(prompt, task="director")
+        return self._parse_and_validate(raw, known_indicators)
+
+    def _parse_and_validate(self, raw: Optional[str], known_indicators: list) -> dict:
+        """Parse JSON, exec-test each method, supplement with fallbacks if needed."""
+        data = _parse_llm_json(raw)
+        proposals = data.get("new_indicators", []) if data else []
+
+        # Filter out overlaps with known pool + exec-test each
+        validated = []
+        known_lower = {k.lower() for k in known_indicators}
+        for p in proposals:
+            name = p.get("name", "")
+            if name.lower() in known_lower:
+                print(f"   ⚠️ [F] {name} overlaps with existing pool, skipping")
+                continue
+            code = p.get("method_code", "")
+            mname = p.get("method_name", "")
+            if code and mname and self._test_method(code, mname):
+                validated.append(p)
+                print(f"   ✅ [F] {name}: code validated")
+            else:
+                print(f"   ⚠️ [F] {name}: code failed validation, skipping")
+
+        # Supplement with fallbacks if < 2 validated
+        if len(validated) < 2:
+            print(f"   🔄 [F] {len(validated)} valid, supplementing with fallbacks...")
+            existing = {p["name"] for p in validated}
+            for fb in self.FALLBACK_PROPOSALS:
+                if fb["name"] not in existing and len(validated) < 3:
+                    validated.append(fb)
+
+        return {"new_indicators": validated[:3]}
+
+    def _test_method(self, method_code: str, method_name: str) -> bool:
+        """Exec-test the method with 300 dummy price points. Returns True if valid."""
+        indented = "\n".join("    " + line for line in method_code.split("\n"))
+        test_src = f"""
+import pandas as pd
+import numpy as np
+
+class _T:
+{indented}
+
+_t = _T()
+_prices = pd.Series([float(100 + i * 0.1 + (i % 7) * 0.5) for i in range(300)])
+_result = _t.{method_name}(_prices)
+assert isinstance(_result, pd.Series)
+assert len(_result) == len(_prices)
+"""
+        try:
+            exec(test_src, {})
+            return True
+        except Exception:
+            return False
 
 
 # ═══════════════════════════════════════════════════════════════

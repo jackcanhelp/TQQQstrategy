@@ -38,7 +38,7 @@ from strategy_base import BaseStrategy
 from backtest import BacktestEngine
 from validator import StrategyValidator, LookAheadDetector
 from researcher import StrategySandbox
-from brief_system import InternalAnalyst, Secretary, SolutionResearcher, AnalysisValidator, ResultChecker
+from brief_system import InternalAnalyst, Secretary, SolutionResearcher, AnalysisValidator, ResultChecker, ExternalResearcher
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -455,6 +455,22 @@ Target exploration: {brief.get('exploration_target', '')}
 This brief synthesizes Director guidance + historical analysis. Follow it over generic mutation modes.
 """
 
+    # F agent: custom indicators section (new signal sources beyond self.data)
+    custom_inds = brief.get("custom_indicators", []) if brief else []
+    custom_section = ""
+    if custom_inds:
+        custom_section = """
+═══════════════════════════════════════════════════════════════
+🔭 NEW CUSTOM INDICATORS (F agent — call as helper methods in your class)
+═══════════════════════════════════════════════════════════════
+These indicators are NOT in self.data. Include the helper method and call it in init():
+"""
+        for ci in custom_inds[:3]:
+            custom_section += f"\n• {ci['name']} — {ci.get('description', '')}"
+            custom_section += f"\n  Usage: {ci.get('usage', '')}"
+            custom_section += f"\n  Signal: {ci.get('entry_hint', '')}\n"
+        custom_section += "\nUsing these gives genuinely NEW signal sources beyond self.data columns."
+
     return f"""You are a Quantitative Research Director designing TQQQ (3x Leveraged Nasdaq) strategies.
 
 {context}
@@ -462,6 +478,7 @@ This brief synthesizes Director guidance + historical analysis. Follow it over g
 {assignment_section}
 {director_section}
 {brief_section}
+{custom_section}
 {oos_section}
 
 ═══════════════════════════════════════════════════════════════
@@ -575,9 +592,22 @@ RESPOND WITH:
 Keep response concise and actionable."""
 
 
-def build_code_prompt(idea: str, strategy_id: int, indicator_menu: str) -> str:
+def build_code_prompt(idea: str, strategy_id: int, indicator_menu: str,
+                      custom_indicators=None) -> str:
     """Build the strategy code generation prompt with state machine patterns."""
     class_name = f"Strategy_Gen{strategy_id}"
+
+    helper_section = ""
+    if custom_indicators:
+        helper_section = """
+═══════════════════════════════════════════════════════════════
+🔭 HELPER METHODS (include in class if using custom indicators)
+═══════════════════════════════════════════════════════════════
+"""
+        for ci in custom_indicators:
+            helper_section += f"\n# {ci['name']}: {ci.get('description', '')}\n"
+            helper_section += ci.get("method_code", "") + "\n"
+        helper_section += "\nInclude the relevant method(s) in your class body if you use these."
 
     return f"""Write a Python trading strategy class with STATE MACHINE logic.
 
@@ -673,7 +703,7 @@ CRITICAL RULES:
   YC_Invert, YC2Y10Y, 2Y, 10Y, US_10Y, curve_2y10y, FedWatch, FedCutProb,
   CME_CutProb, CME_3mo_cut_prob, FedPiv, FedFunds, VIX, SPY, QQQ
   If the strategy idea mentions macro/yield curve → use Sim_VIX or ATR_Pct as proxy instead.
-
+{helper_section}
 OUTPUT ONLY PYTHON CODE. No markdown, no explanations."""
 
 
@@ -767,7 +797,12 @@ def run_iteration(
 
     # Step 2: Generate code
     print("   💻 Generating code...")
-    code_prompt = build_code_prompt(idea, strategy_id, indicator_menu)
+    all_custom = brief.get("custom_indicators", []) if brief else []
+    # Only inject method code for indicators explicitly mentioned in the idea
+    mentioned = [ci for ci in all_custom if ci.get("name", "") in idea]
+    custom_indicators = mentioned if mentioned else []
+    code_prompt = build_code_prompt(idea, strategy_id, indicator_menu,
+                                    custom_indicators=custom_indicators)
     raw_code = llm.generate(code_prompt, task="code")
     if not raw_code:
         result["error"] = "LLM failed to generate code"
@@ -1184,18 +1219,20 @@ DO NOT write code. ONLY provide strategic direction."""
 # Slow Path — full A→B→C1→C2 pipeline
 # ═══════════════════════════════════════════════════════════════
 def run_slow_path(analyst: InternalAnalyst, researcher: SolutionResearcher,
+                  external_researcher: ExternalResearcher,
                   validator: AnalysisValidator, secretary: Secretary,
                   llm: LLMClient, history: Dict,
                   director_advice: Optional[str]) -> tuple:
     """
-    Full A→B→C1→C2 pipeline. Returns (brief, execution_queue).
+    Full A→B→C1→C2→F pipeline. Returns (brief, execution_queue).
 
     A: analyze (pure Python) + explain (LLM, task=director)
     B: research proposals (LLM, task=director)
     C1: validate indicators (pure Python, LLM only if corrections needed)
     C2: secretary brief + execution_queue (LLM, task=secretary)
+    F: external researcher proposes new indicators (LLM, task=director)
 
-    Total LLM calls: ~3-4 (A.explain, B.research, [C1 correction], C2.brief)
+    Total LLM calls: ~4-5 (A.explain, B.research, [C1 correction], C2.brief, F.propose)
     """
     print("   🔍 [A] Problem Explorer: analyzing history...")
     stats_report = analyst.analyze(history)
@@ -1227,6 +1264,12 @@ def run_slow_path(analyst: InternalAnalyst, researcher: SolutionResearcher,
         researcher_proposals=c1_result.get("validated_proposals"),
         validator_result=c1_result,
     )
+
+    print("   🔭 [F] External Researcher: proposing new indicators...")
+    f_result = external_researcher.propose(stats_report, InternalAnalyst.KNOWN_INDICATORS, llm)
+    brief["custom_indicators"] = f_result.get("new_indicators", [])
+    n_custom = len(brief["custom_indicators"])
+    print(f"   🔭 [F] {n_custom} custom indicators ready for injection")
 
     eq = brief.get("execution_queue", [])
     print(f"   📋 Slow path complete — execution queue: {len(eq)} assignments")
@@ -1436,12 +1479,13 @@ def main():
     history = load_history()
     llm = LLMClient()
 
-    # ─── Multi-agent pipeline components (ABCDE) ───
-    analyst = InternalAnalyst()       # A: stats + narrative
-    researcher = SolutionResearcher() # B: concrete proposals
-    validator = AnalysisValidator()   # C1: indicator validation
-    secretary = Secretary()           # C2: brief + execution_queue
-    result_checker = ResultChecker()  # E: monitors iteration results
+    # ─── Multi-agent pipeline components (ABCDEF) ───
+    analyst = InternalAnalyst()           # A: stats + narrative
+    researcher = SolutionResearcher()     # B: concrete proposals
+    validator = AnalysisValidator()       # C1: indicator validation
+    secretary = Secretary()               # C2: brief + execution_queue
+    external_researcher = ExternalResearcher()  # F: new indicator proposals
+    result_checker = ResultChecker()      # E: monitors iteration results
 
     # ─── Execution queue state (from slow path C2 output) ───
     execution_queue: List[str] = []   # Directed assignments from C2
@@ -1472,7 +1516,7 @@ def main():
             print(f"\n   ⚠️ [停滯偵測] 已 {iters_since_improvement} 輪未突破，觸發慢速路徑 A→B→C1→C2")
             director_advice = get_director_advice(llm, history)
             current_brief, execution_queue = run_slow_path(
-                analyst, researcher, validator, secretary, llm, history, director_advice
+                analyst, researcher, external_researcher, validator, secretary, llm, history, director_advice
             )
             eq_idx = 0
             e_flag_count = 0
@@ -1492,7 +1536,7 @@ def main():
             print(f"\n   👔 [定期總監審查] 第 {i} 輪 — 觸發慢速路徑")
             director_advice = get_director_advice(llm, history)
             current_brief, execution_queue = run_slow_path(
-                analyst, researcher, validator, secretary, llm, history, director_advice
+                analyst, researcher, external_researcher, validator, secretary, llm, history, director_advice
             )
             eq_idx = 0
             e_flag_count = 0
@@ -1537,7 +1581,7 @@ def main():
                 print(f"   ⚠️ [E] Threshold reached — triggering slow path A→B→C1→C2")
                 director_advice = get_director_advice(llm, history)
                 current_brief, execution_queue = run_slow_path(
-                    analyst, researcher, validator, secretary, llm, history, director_advice
+                    analyst, researcher, external_researcher, validator, secretary, llm, history, director_advice
                 )
                 eq_idx = 0
                 e_flag_count = 0
@@ -1614,15 +1658,10 @@ def main():
                 f"[auto] report iter={strategy_id} ok={session_successes}",
                 files=[HISTORY_FILE, HALL_OF_FAME_FILE, Path("latest_report.txt")]
             )
-            # Refresh brief after periodic report (if Director hasn't done it this cycle)
-            if i % DIRECTOR_INTERVAL != 0:
-                print("   🔍 [內部分析師] 定期分析更新...")
-                analyst_report = analyst.analyze(history)
-                print("   📋 [秘書] 更新研究簡報...")
-                current_brief = secretary.create_brief(director_advice, analyst_report, llm)
-                if current_brief and args.notify == "telegram":
-                    brief_summary = current_brief.get("focus_theme", "")
-                    send_telegram(f"📋 【研究簡報更新】\n主題：{brief_summary[:200]}")
+            # Brief is refreshed by slow path (every 50 iters or stagnation/E-flag).
+            # Avoid calling secretary.create_brief() here — without researcher_proposals
+            # it would produce an inferior brief (empty execution_queue) that overwrites
+            # the valid brief from the last slow path.
 
         time.sleep(5)  # Pace API calls
 
