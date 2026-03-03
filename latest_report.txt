@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-03 10:12:42
+   2026-03-03 12:28:12
 =======================================================
 
 📈 Overall
-  Total iterations: 1357
-  Successful: 773 (57%)
+  Total iterations: 1401
+  Successful: 779 (56%)
   Best: Strategy_Gen1131 (Composite: 0.4137)
   Hall of Fame: 0 strategies
 
-  This session: 150 iters, 13 ok
-  Duration: 5:17:47
-  LLM calls: 436 (Groq: 359 [Groq: 359/436 ok, 5 keys | pools: idea=101, code=81, fix=58, director=7, secretary=9, overflow=103 | models: kimi-k2-instruct=105, llama-4-maverick-17b-128e-instruct=92, llama-3.1-8b-instant=66], GitHub: 77, Gemini: 0)
+  This session: 25 iters, 2 ok
+  Duration: 0:47:07
+  LLM calls: 88 (Groq: 75 [Groq: 75/88 ok, 5 keys | pools: idea=15, code=15, fix=11, director=6, secretary=2, overflow=26 | models: kimi-k2-instruct=30, llama-4-maverick-17b-128e-instruct=17, llama-3.1-8b-instant=11], GitHub: 0, Gemini: 13)
 
 🏆 Top 5 Strategies (by composite score)
 ───────────────────────────────────────────────────────
@@ -24,15 +24,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen1348: Strategy never enters the market (time_i
-  ❌ Strategy_Gen1349: ValueError: The truth value of a Series 
-  ❌ Strategy_Gen1350: Strategy never enters the market (time_i
-  ❌ Strategy_Gen1351: Strategy never enters the market (time_i
-  ❌ Strategy_Gen1352: Strategy never enters the market (time_i
+  ❌ Strategy_Gen1392: REJECTED: Exposure=4.4% below 5%
+  ❌ Strategy_Gen1393: REJECTED: MaxDD=-54.9% worse than -50%
+  ❌ Strategy_Gen1394: REJECTED: Sharpe=0.10 below 0.3
+  ❌ Strategy_Gen1395: REJECTED: MaxDD=-90.7% worse than -50%
+  ❌ Strategy_Gen1396: Class Strategy_Gen1396 not found in gene
+  ❌ Strategy_Gen1397: Strategy never enters the market (time_i
   ✅ Cross_RVI_State_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=1.27 CAGR=52.0% MaxDD=-40.3%
   ✅ Cross_RVI_State_RVI_Trans_RSI_OB: Comp=0.0000 Sharpe=1.22 CAGR=50.0% MaxDD=-39.2%
   ✅ Cross_RVI_State_MACD_Cross_RSI_OB: Comp=0.0000 Sharpe=1.14 CAGR=48.2% MaxDD=-46.1%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen1353: REJECTED: Exposure=4.8% below 5%
+  ❌ Strategy_Gen1398: AttributeError: 'numpy.float64' object h
 
 =======================================================
