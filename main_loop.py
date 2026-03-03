@@ -38,7 +38,7 @@ from strategy_base import BaseStrategy
 from backtest import BacktestEngine
 from validator import StrategyValidator, LookAheadDetector
 from researcher import StrategySandbox
-from brief_system import InternalAnalyst, Secretary
+from brief_system import InternalAnalyst, Secretary, SolutionResearcher, AnalysisValidator, ResultChecker
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -309,7 +309,8 @@ def record_result(history: Dict, strategy_id: int, name: str, idea: str,
 def build_idea_prompt(history: Dict, indicator_menu: str,
                       director_advice: Optional[str] = None,
                       oos_warning: Optional[str] = None,
-                      brief: Optional[Dict] = None) -> str:
+                      brief: Optional[Dict] = None,
+                      current_assignment: Optional[str] = None) -> str:
     """Build the strategy idea generation prompt with Champion DNA + mutation feedback."""
 
     # Context from history
@@ -412,6 +413,19 @@ Try a COMPLETELY DIFFERENT approach. Explore a new indicator combination."""
     ]
     champion_mutation = random.choice(mutation_modes)
 
+    # Directed assignment from execution queue (overrides random mutation mode when set)
+    assignment_section = ""
+    if current_assignment:
+        assignment_section = f"""
+═══════════════════════════════════════════════════════════════
+🎯 SPECIFIC ASSIGNMENT (HIGHEST PRIORITY — FOLLOW EXACTLY)
+═══════════════════════════════════════════════════════════════
+{current_assignment}
+
+This is a directed research assignment. Implement it precisely as described.
+Use the specified indicators for entry/exit/regime filter as instructed.
+"""
+
     # Director's strategic guidance (if available)
     director_section = ""
     if director_advice:
@@ -445,6 +459,7 @@ This brief synthesizes Director guidance + historical analysis. Follow it over g
 
 {context}
 {mutation}
+{assignment_section}
 {director_section}
 {brief_section}
 {oos_section}
@@ -516,7 +531,7 @@ WHY TRANSITIONS BEAT THRESHOLDS:
 - Transition: "buy when RSI crosses FROM below 50 TO above 50" = fewer, higher-quality signals
 - State machine: "buy when market STATE changes from neutral to bullish" = captures regime shifts
 
-YOUR TASK — {champion_mutation}
+YOUR TASK — {current_assignment if current_assignment else champion_mutation}
 
 {indicator_menu}
 
@@ -717,6 +732,7 @@ def run_iteration(
     oos_warning: Optional[str] = None,
     notify_method: str = "file",
     brief: Optional[Dict] = None,
+    current_assignment: Optional[str] = None,
 ) -> Dict:
     """Run a single strategy discovery iteration."""
 
@@ -742,7 +758,8 @@ def run_iteration(
     idea_prompt = build_idea_prompt(history, indicator_menu,
                                     director_advice=director_advice,
                                     oos_warning=oos_warning,
-                                    brief=brief)
+                                    brief=brief,
+                                    current_assignment=current_assignment)
     idea = llm.generate(idea_prompt, task="idea")
     if not idea:
         result["error"] = "LLM failed to generate idea"
@@ -1164,6 +1181,59 @@ DO NOT write code. ONLY provide strategic direction."""
 
 
 # ═══════════════════════════════════════════════════════════════
+# Slow Path — full A→B→C1→C2 pipeline
+# ═══════════════════════════════════════════════════════════════
+def run_slow_path(analyst: InternalAnalyst, researcher: SolutionResearcher,
+                  validator: AnalysisValidator, secretary: Secretary,
+                  llm: LLMClient, history: Dict,
+                  director_advice: Optional[str]) -> tuple:
+    """
+    Full A→B→C1→C2 pipeline. Returns (brief, execution_queue).
+
+    A: analyze (pure Python) + explain (LLM, task=director)
+    B: research proposals (LLM, task=director)
+    C1: validate indicators (pure Python, LLM only if corrections needed)
+    C2: secretary brief + execution_queue (LLM, task=secretary)
+
+    Total LLM calls: ~3-4 (A.explain, B.research, [C1 correction], C2.brief)
+    """
+    print("   🔍 [A] Problem Explorer: analyzing history...")
+    stats_report = analyst.analyze(history)
+
+    print("   🧠 [A] Generating LLM narrative (root cause analysis)...")
+    a_narrative = analyst.explain(stats_report, llm)
+    print(f"   🔍 [A] Narrative: {a_narrative[:120]}...")
+
+    print("   🔬 [B] Solution Researcher: proposing concrete approaches...")
+    b_proposals = researcher.research(
+        a_narrative, stats_report, InternalAnalyst.KNOWN_INDICATORS, llm
+    )
+    n_proposals = len(b_proposals.get("proposals", []))
+    print(f"   🔬 [B] {n_proposals} proposals generated")
+
+    print("   ✅ [C1] Validator: checking proposal indicator names...")
+    c1_result = validator.validate(
+        b_proposals, InternalAnalyst.KNOWN_INDICATORS, llm
+    )
+    if c1_result.get("approved"):
+        print("   ✅ [C1] All indicators valid — pure Python pass")
+    else:
+        corrections = len(c1_result.get("corrections", []))
+        print(f"   ⚠️ [C1] {corrections} corrections applied")
+
+    print("   📋 [C2] Secretary: creating execution brief...")
+    brief = secretary.create_brief(
+        director_advice, stats_report, llm,
+        researcher_proposals=c1_result.get("validated_proposals"),
+        validator_result=c1_result,
+    )
+
+    eq = brief.get("execution_queue", [])
+    print(f"   📋 Slow path complete — execution queue: {len(eq)} assignments")
+    return brief, eq
+
+
+# ═══════════════════════════════════════════════════════════════
 # Main Loop
 # ═══════════════════════════════════════════════════════════════
 def run_champion_baseline(engine: BacktestEngine, data: pd.DataFrame, history: Dict):
@@ -1366,9 +1436,18 @@ def main():
     history = load_history()
     llm = LLMClient()
 
-    # ─── Multi-agent pipeline components ───
-    analyst = InternalAnalyst()
-    secretary = Secretary()
+    # ─── Multi-agent pipeline components (ABCDE) ───
+    analyst = InternalAnalyst()       # A: stats + narrative
+    researcher = SolutionResearcher() # B: concrete proposals
+    validator = AnalysisValidator()   # C1: indicator validation
+    secretary = Secretary()           # C2: brief + execution_queue
+    result_checker = ResultChecker()  # E: monitors iteration results
+
+    # ─── Execution queue state (from slow path C2 output) ───
+    execution_queue: List[str] = []   # Directed assignments from C2
+    eq_idx: int = 0                   # Current position in queue
+    e_flag_count: int = 0             # E flags accumulated since last slow path
+    E_FLAG_THRESHOLD = 3              # Trigger slow path after N E-flag events
 
     # ─── Phase 0: Establish Champion baseline ───
     if not args.skip_baseline:
@@ -1387,39 +1466,43 @@ def main():
         strategy_id = history["total_iterations"] + 1
         print(f"\n[{i}/{args.iterations}] Iteration {strategy_id}")
 
-        # ─── Stagnation detection → early director call + brief refresh ───
+        # ─── Stagnation detection → early director call + slow path ───
         if (iters_since_improvement >= STAGNATION_THRESHOLD
                 and i % DIRECTOR_INTERVAL != 0):
-            print(f"\n   ⚠️ [停滯偵測] 已 {iters_since_improvement} 輪未突破，提前召喚總監+秘書")
+            print(f"\n   ⚠️ [停滯偵測] 已 {iters_since_improvement} 輪未突破，觸發慢速路徑 A→B→C1→C2")
             director_advice = get_director_advice(llm, history)
-            # Refresh brief: Analyst → Secretary
-            print("   🔍 [內部分析師] 分析歷史數據...")
-            analyst_report = analyst.analyze(history)
-            print("   📋 [秘書] 整合研究簡報...")
-            current_brief = secretary.create_brief(director_advice, analyst_report, llm)
+            current_brief, execution_queue = run_slow_path(
+                analyst, researcher, validator, secretary, llm, history, director_advice
+            )
+            eq_idx = 0
+            e_flag_count = 0
             if director_advice and args.notify == "telegram":
                 brief_summary = current_brief.get("focus_theme", "") if current_brief else ""
+                eq_count = len(execution_queue)
                 send_telegram(
                     f"⚠️ 【停滯警報：{iters_since_improvement} 代未突破】\n"
                     f"👔 總監緊急指導：\n{director_advice[:300]}\n"
-                    f"📋 研究簡報主題：{brief_summary[:150]}"
+                    f"📋 研究簡報主題：{brief_summary[:150]}\n"
+                    f"🎯 執行隊列：{eq_count} 項任務"
                 )
             iters_since_improvement = 0
 
-        # ─── Director review (every N iterations) + brief refresh ───
+        # ─── Director review (every N iterations) + slow path A→B→C1→C2 ───
         if i > 1 and i % DIRECTOR_INTERVAL == 0:
-            print(f"\n   👔 [定期總監審查] 第 {i} 輪")
+            print(f"\n   👔 [定期總監審查] 第 {i} 輪 — 觸發慢速路徑")
             director_advice = get_director_advice(llm, history)
-            # Refresh brief after director review
-            print("   🔍 [內部分析師] 分析歷史數據...")
-            analyst_report = analyst.analyze(history)
-            print("   📋 [秘書] 整合研究簡報...")
-            current_brief = secretary.create_brief(director_advice, analyst_report, llm)
+            current_brief, execution_queue = run_slow_path(
+                analyst, researcher, validator, secretary, llm, history, director_advice
+            )
+            eq_idx = 0
+            e_flag_count = 0
             if director_advice and args.notify == "telegram":
                 brief_summary = current_brief.get("focus_theme", "") if current_brief else ""
+                eq_count = len(execution_queue)
                 send_telegram(
                     f"👔 【第 {strategy_id} 代 — 總監戰術指導】\n{director_advice[:300]}\n"
-                    f"📋 研究簡報主題：{brief_summary[:150]}"
+                    f"📋 研究簡報主題：{brief_summary[:150]}\n"
+                    f"🎯 執行隊列：{eq_count} 項任務"
                 )
 
         # ─── Crossover round (every N iterations) ───
@@ -1430,12 +1513,41 @@ def main():
         if i > 1 and i % args.sweep_every == 0:
             run_param_sweep_round(data, history)
 
-        # ─── Normal LLM-generated strategy iteration ───
+        # ─── Consume next assignment from execution queue (fast path) ───
+        current_assignment = None
+        if execution_queue and eq_idx < len(execution_queue):
+            current_assignment = execution_queue[eq_idx]
+            eq_idx += 1
+            print(f"   🎯 Queue assignment [{eq_idx}/{len(execution_queue)}]: {current_assignment[:70]}...")
+
+        # ─── Normal LLM-generated strategy iteration (D) ───
         result = run_iteration(llm, engine, data, history, indicator_menu, strategy_id,
                                director_advice=director_advice,
                                oos_warning=oos_warning,
                                notify_method=args.notify,
-                               brief=current_brief)
+                               brief=current_brief,
+                               current_assignment=current_assignment)
+
+        # ─── E: Result checker — detect patterns, trigger slow path if needed ───
+        e_result = result_checker.check(result)
+        if e_result["trigger_slow_path"]:
+            e_flag_count += 1
+            print(f"   ⚡ [E] Flag detected: {e_result['summary']} (count={e_flag_count}/{E_FLAG_THRESHOLD})")
+            if e_flag_count >= E_FLAG_THRESHOLD:
+                print(f"   ⚠️ [E] Threshold reached — triggering slow path A→B→C1→C2")
+                director_advice = get_director_advice(llm, history)
+                current_brief, execution_queue = run_slow_path(
+                    analyst, researcher, validator, secretary, llm, history, director_advice
+                )
+                eq_idx = 0
+                e_flag_count = 0
+                if current_brief and args.notify == "telegram":
+                    brief_summary = current_brief.get("focus_theme", "")
+                    send_telegram(
+                        f"⚡ 【E 觸發慢速路徑】\n原因：{e_result['summary']}\n"
+                        f"📋 新簡報：{brief_summary[:150]}\n"
+                        f"🎯 執行隊列：{len(execution_queue)} 項任務"
+                    )
 
         # Consume OOS warning (only inject once)
         oos_warning = None

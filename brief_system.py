@@ -1,25 +1,34 @@
 """
-Multi-Agent Brief System — Phase 1
-====================================
-InternalAnalyst: Pure Python statistical analysis of history_of_thoughts.json
-Secretary: LLM-powered synthesizer → generates structured Brief JSON for next iterations
+Multi-Agent Brief System — ABCDE Pipeline
+==========================================
+A  (InternalAnalyst): Pure Python stats + LLM narrative WHY analysis
+B  (SolutionResearcher): Proposes concrete strategy approaches
+C1 (AnalysisValidator): Validates B's proposals for indicator correctness
+C2 (Secretary): Creates Brief JSON + execution_queue (3 directed assignments)
+E  (ResultChecker): Monitors iteration results, triggers slow path
 
-Pipeline: Director advice → InternalAnalyst report → Secretary Brief → idea prompts
+Pipeline:
+  Slow path: A.analyze → A.explain → B.research → C1.validate → C2.brief → execution_queue
+  Fast path: pop assignment → D (run_iteration) → E.check
 """
 
 import json
 import re
+from collections import Counter
 from typing import Dict, List, Optional
 from datetime import datetime
 
 
 # ═══════════════════════════════════════════════════════════════
-# InternalAnalyst — Pure Python, no LLM needed
+# InternalAnalyst (A) — Pure Python stats + LLM narrative
 # ═══════════════════════════════════════════════════════════════
 class InternalAnalyst:
     """
-    Analyzes history_of_thoughts.json to extract statistical insights.
-    No LLM required — pure computation for fast, deterministic analysis.
+    A: Analyzes history_of_thoughts.json to extract statistical insights,
+    then generates an LLM narrative explaining WHY the system is failing.
+
+    analyze() = pure Python stats (deterministic, fast, no LLM)
+    explain() = LLM root cause narrative (task="director")
     """
 
     # All known indicators for usage tracking
@@ -61,7 +70,7 @@ class InternalAnalyst:
     def analyze(self, history: Dict) -> str:
         """
         Perform statistical analysis of strategy history.
-        Returns a plain-text report string for the Secretary.
+        Returns a plain-text report string for use by explain() and Secretary.
         """
         strategies = history.get("strategies", [])
         if not strategies:
@@ -249,26 +258,233 @@ OVERUSED (dominant, may cause stagnation — try alternatives):"""
         report += "\n=== END ANALYST REPORT ==="
         return report
 
+    def explain(self, stats_report: str, llm) -> str:
+        """
+        A-LLM: Given the statistical analysis, generate an LLM narrative
+        explaining WHY the system is failing (root cause analysis).
+        Uses task="director" for kimi-k2 / K1,K2 pool.
+        """
+        prompt = f"""You are A, a Problem Explorer for a quantitative trading system (TQQQ 3x leveraged ETF).
+
+Here is a statistical analysis of strategy backtests:
+{stats_report}
+
+Provide a ROOT CAUSE analysis in 5-6 sentences:
+1. PRIMARY failure reason (not just "MaxDD too deep" — explain WHY strategies have high drawdown structurally)
+2. SECONDARY failure mode
+3. Why the system is STUCK (what pattern keeps repeating despite variations)
+4. What SPECIFIC structural change is needed (indicator logic, not just "try new indicators")
+5. One overlooked opportunity visible in the data
+
+Be specific and analytical. Mention exact indicator names. No generic advice."""
+        result = llm.generate(prompt, task="director")
+        return result or "Unable to generate narrative analysis."
+
 
 # ═══════════════════════════════════════════════════════════════
-# Secretary — LLM-powered Brief synthesizer
+# SolutionResearcher (B) — Proposes concrete strategy approaches
+# ═══════════════════════════════════════════════════════════════
+class SolutionResearcher:
+    """
+    B: Solution Researcher — proposes 3 concrete strategy approaches
+    that directly address A's identified root causes.
+    Uses task="director" for kimi-k2 / K1,K2 pool.
+    """
+
+    def research(self, a_narrative: str, stats_report: str,
+                 known_indicators: list, llm) -> dict:
+        """Propose 3 concrete strategy approaches addressing A's identified problems."""
+        indicator_sample = ", ".join(known_indicators[:40])
+        prompt = f"""You are B, a Solution Researcher for quantitative trading strategy development.
+
+PROBLEM ANALYSIS from A:
+{a_narrative}
+
+KEY STATISTICS:
+{stats_report[:800]}
+
+AVAILABLE INDICATORS (exact names only): {indicator_sample}...
+
+Propose exactly 3 concrete strategy approaches that DIRECTLY address the identified problems.
+For each, focus on novel combinations NOT relying on RVI (overused).
+
+Output ONLY valid JSON:
+{{
+  "proposals": [
+    {{
+      "name": "2-4 word strategy name",
+      "core_logic": "1 sentence describing entry + exit + regime filter",
+      "entry_indicator": "exact_column_name",
+      "exit_indicator": "exact_column_name",
+      "regime_indicator": "exact_column_name",
+      "rationale": "why this addresses A's identified problem"
+    }}
+  ]
+}}"""
+        raw = llm.generate(prompt, task="director")
+        return self._parse_json(raw, known_indicators)
+
+    def _parse_json(self, raw: Optional[str], known_indicators: list) -> dict:
+        """Parse JSON response and validate structure."""
+        if not raw:
+            return self._default_proposals()
+        try:
+            cleaned = raw.strip()
+            if cleaned.startswith("```"):
+                cleaned = re.sub(r'^```(?:json)?\s*', '', cleaned, flags=re.MULTILINE)
+                cleaned = re.sub(r'\s*```\s*$', '', cleaned)
+            match = re.search(r'\{[\s\S]+\}', cleaned)
+            if match:
+                cleaned = match.group()
+            data = json.loads(cleaned)
+            proposals = data.get("proposals", [])
+            if isinstance(proposals, list) and len(proposals) > 0:
+                return {"proposals": proposals}
+        except (json.JSONDecodeError, KeyError, ValueError):
+            pass
+        return self._default_proposals()
+
+    def _default_proposals(self) -> dict:
+        """Fallback proposals using underused indicators."""
+        return {
+            "proposals": [
+                {
+                    "name": "TSI Elder Combo",
+                    "core_logic": "TSI zero-cross for entry with Elder_Bull confirmation, exit on Elder_Bear dominance with ATR trailing stop",
+                    "entry_indicator": "TSI",
+                    "exit_indicator": "Elder_Bear",
+                    "regime_indicator": "Elder_Bull",
+                    "rationale": "Underused advanced momentum indicators break RVI over-dependence",
+                },
+                {
+                    "name": "Aroon Structure Filter",
+                    "core_logic": "Aroon_Osc trending signal with ZScore mean reversion entries, ADX regime filter",
+                    "entry_indicator": "Aroon_Osc",
+                    "exit_indicator": "ZScore",
+                    "regime_indicator": "ADX",
+                    "rationale": "Structure + trend quality combination rarely explored",
+                },
+                {
+                    "name": "VoV Volatility Regime",
+                    "core_logic": "VoV detects unstable regimes (cash), AO oscillator for entry in stable markets, ATR-based exit",
+                    "entry_indicator": "AO",
+                    "exit_indicator": "ATR",
+                    "regime_indicator": "VoV",
+                    "rationale": "Volatility-of-volatility filter directly addresses drawdown issues",
+                },
+            ]
+        }
+
+
+# ═══════════════════════════════════════════════════════════════
+# AnalysisValidator (C1) — Validates B's proposals
+# ═══════════════════════════════════════════════════════════════
+class AnalysisValidator:
+    """
+    C1: Checks B's proposals for valid indicator names against the known pool.
+    Pure Python first — LLM correction only if indicators are invalid (max 1 round).
+    """
+
+    def validate(self, b_proposals: dict, known_indicators: list, llm) -> dict:
+        """
+        Validate proposal indicator names against known pool.
+        Returns validated result dict. Only calls LLM if corrections needed.
+        """
+        proposals = b_proposals.get("proposals", [])
+        invalid = []
+
+        for p in proposals:
+            p_name = p.get("name", "?")
+            for field in ["entry_indicator", "exit_indicator", "regime_indicator"]:
+                val = p.get(field, "")
+                if val and val not in known_indicators:
+                    invalid.append(f"{p_name}.{field}: '{val}' not in pool")
+
+        if not invalid:
+            # All valid — pure Python pass, no LLM call
+            return {
+                "approved": True,
+                "validated_proposals": proposals,
+                "corrections": [],
+            }
+
+        # LLM correction round (max 1)
+        print(f"   ⚠️ [C1] {len(invalid)} invalid indicators — requesting correction...")
+        correction_prompt = f"""Fix these indicator names to valid column names from the pool:
+
+Invalid indicators:
+{chr(10).join(invalid[:10])}
+
+Valid column names: {', '.join(known_indicators)}
+
+Return corrected proposals as JSON only:
+{{
+  "proposals": [
+    {{
+      "name": "...",
+      "core_logic": "...",
+      "entry_indicator": "exact_valid_column_name",
+      "exit_indicator": "exact_valid_column_name",
+      "regime_indicator": "exact_valid_column_name",
+      "rationale": "..."
+    }}
+  ]
+}}"""
+        corrected_raw = llm.generate(correction_prompt, task="secretary")
+
+        if corrected_raw:
+            try:
+                cleaned = corrected_raw.strip()
+                if cleaned.startswith("```"):
+                    cleaned = re.sub(r'^```(?:json)?\s*', '', cleaned, flags=re.MULTILINE)
+                    cleaned = re.sub(r'\s*```\s*$', '', cleaned)
+                match = re.search(r'\{[\s\S]+\}', cleaned)
+                if match:
+                    data = json.loads(match.group())
+                    corrected = data.get("proposals", [])
+                    if corrected:
+                        return {
+                            "approved": True,
+                            "validated_proposals": corrected,
+                            "corrections": invalid,
+                        }
+            except (json.JSONDecodeError, KeyError, ValueError):
+                pass
+
+        # Correction failed — return originals with approved=False
+        return {
+            "approved": False,
+            "validated_proposals": proposals,
+            "corrections": invalid,
+        }
+
+
+# ═══════════════════════════════════════════════════════════════
+# Secretary (C2) — LLM-powered Brief synthesizer + execution_queue
 # ═══════════════════════════════════════════════════════════════
 class Secretary:
     """
-    Synthesizes Director advice + InternalAnalyst report into a structured Brief JSON.
+    C2: Synthesizes Director advice + InternalAnalyst report (+ B's proposals if available)
+    into a structured Brief JSON with an execution_queue of 3 directed assignments.
     Uses kimi-k2 via Groq K1/K2 pool (task="secretary").
     """
 
-    def create_brief(self, director_advice: Optional[str], analyst_report: str, llm) -> Dict:
+    def create_brief(self, director_advice: Optional[str], analyst_report: str, llm,
+                     researcher_proposals: Optional[list] = None,
+                     validator_result: Optional[dict] = None) -> Dict:
         """
         Call LLM to synthesize inputs into a validated Brief JSON.
 
+        When researcher_proposals are available (full slow path), output includes
+        execution_queue of 3 specific directed assignments.
+
         Returns dict with keys:
-          focus_theme: str — one-sentence strategic direction for next batch
-          required_indicators: list[str] — indicators to prioritize (from underexplored)
-          avoid_patterns: list[str] — failure patterns to avoid
-          exploration_target: str — specific novel combination to try
-          brief_text: str — compact prompt injection for idea generator
+          focus_theme: str
+          required_indicators: list[str]
+          avoid_patterns: list[str]
+          exploration_target: str
+          brief_text: str
+          execution_queue: list[str]  — 3 directed assignments (empty if no proposals)
         """
         director_section = (
             f"DIRECTOR'S STRATEGIC GUIDANCE:\n{director_advice}"
@@ -276,11 +492,41 @@ class Secretary:
             else "DIRECTOR'S GUIDANCE: None available — rely on analyst insights."
         )
 
-        prompt = f"""You are the Secretary of a quantitative research team. Your job is to synthesize research inputs into a structured strategy brief for the next batch of automated strategy iterations.
+        # B's validated proposals section (optional — only in full slow path)
+        proposals_section = ""
+        if researcher_proposals:
+            proposals_section = "\n\nSOLUTION RESEARCHER PROPOSALS (validated by C1):\n"
+            for idx, p in enumerate(researcher_proposals[:3], 1):
+                proposals_section += (
+                    f"  {idx}. {p.get('name', '')}: {p.get('core_logic', '')}\n"
+                    f"     Entry: {p.get('entry_indicator', '')} | "
+                    f"Exit: {p.get('exit_indicator', '')} | "
+                    f"Regime: {p.get('regime_indicator', '')}\n"
+                    f"     Rationale: {p.get('rationale', '')}\n"
+                )
+
+        # execution_queue JSON schema (only when proposals available)
+        has_proposals = bool(researcher_proposals)
+        eq_schema = ""
+        eq_rules = ""
+        if has_proposals:
+            eq_schema = """,
+  "execution_queue": [
+    "Assignment 1: [Complete sentence — which indicators for entry/exit/regime, key parameters, why]",
+    "Assignment 2: ...",
+    "Assignment 3: ..."
+  ]"""
+            eq_rules = (
+                "\n- execution_queue: 3 specific strategy assignments derived from Solution Researcher "
+                "proposals. Each is a complete actionable sentence specifying entry/exit/regime indicators "
+                "and key logic patterns."
+            )
+
+        prompt = f"""You are the Secretary (C2) of a quantitative research team. Your job is to synthesize research inputs into a structured strategy brief.
 
 {director_section}
 
-{analyst_report}
+{analyst_report}{proposals_section}
 
 Based on these inputs, create a concise research brief.
 Output ONLY valid JSON (no markdown, no explanation, no code blocks):
@@ -289,7 +535,7 @@ Output ONLY valid JSON (no markdown, no explanation, no code blocks):
   "required_indicators": ["IndicatorName1", "IndicatorName2"],
   "avoid_patterns": ["Pattern1 — reason", "Pattern2 — reason"],
   "exploration_target": "Specific 1-2 indicator combination to try next (e.g., 'TSI zero-cross with Elder_Bull confirmation')",
-  "brief_text": "2-3 sentence actionable directive for strategy generation. Be specific about logic patterns, not general advice."
+  "brief_text": "2-3 sentence actionable directive for strategy generation. Be specific about logic patterns, not general advice."{eq_schema}
 }}
 
 Rules:
@@ -297,7 +543,7 @@ Rules:
 - avoid_patterns: match the top 2-3 failure patterns from analyst report
 - exploration_target: name specific indicators from UNDEREXPLORED or LEAST-USED CATEGORY
 - brief_text: must reference specific indicator names and logic patterns (state transitions, ATR stops, etc.)
-- All indicator names must be exact column names (e.g., 'Vol_Ratio', not 'volume ratio'; 'HV_10', not 'historical volatility')"""
+- All indicator names must be exact column names (e.g., 'Vol_Ratio', not 'volume ratio'; 'HV_10', not 'historical volatility'){eq_rules}"""
 
         raw = llm.generate(prompt, task="secretary")
         if not raw:
@@ -319,6 +565,9 @@ Rules:
                              "exploration_target", "brief_text"]
             if all(k in brief for k in required_keys):
                 print(f"   📋 Secretary Brief: {brief['focus_theme'][:80]}")
+                eq = brief.get("execution_queue", [])
+                if eq:
+                    print(f"   🎯 Execution queue: {len(eq)} assignments ready")
                 return brief
             else:
                 missing = [k for k in required_keys if k not in brief]
@@ -361,6 +610,7 @@ Rules:
                 "Prioritize drawdown control with adaptive ATR stops. "
                 "Use state machine transitions, not raw threshold comparisons."
             ),
+            "execution_queue": [],  # Empty queue for default brief (no B proposals)
         }
 
     @staticmethod
@@ -377,3 +627,80 @@ Avoid: {avoid}
 Explore: {brief.get('exploration_target', '')}
 ---
 {brief.get('brief_text', '')}"""
+
+
+# ═══════════════════════════════════════════════════════════════
+# ResultChecker (E) — Monitors iteration results
+# ═══════════════════════════════════════════════════════════════
+class ResultChecker:
+    """
+    E: Result Checker — monitors each iteration result and signals when the
+    slow path (A→B→C1→C2) should be triggered.
+
+    Pure Python, no LLM calls. Detects:
+      - 4+ consecutive failures
+      - Same error type 3x in last 5 results
+      - OOS composite degrading (3+ successful iters with worsening test_composite)
+    """
+
+    def __init__(self):
+        self._recent: list = []   # Sliding window of last 10 results
+
+    def check(self, result: dict) -> dict:
+        """
+        Check result for patterns signaling need for slow path.
+        Returns dict with: flags (list), trigger_slow_path (bool), summary (str).
+        """
+        self._recent.append(result)
+        if len(self._recent) > 10:
+            self._recent.pop(0)
+
+        flags = []
+
+        # Flag 1: 4+ consecutive failures
+        consec = 0
+        for r in reversed(self._recent):
+            if not r.get("success"):
+                consec += 1
+            else:
+                break
+        if consec >= 4:
+            flags.append(f"consec_failures={consec}")
+
+        # Flag 2: same error type 3x in last 5 results
+        recent5 = self._recent[-5:]
+        error_types = [self._classify_error(r) for r in recent5 if not r.get("success")]
+        if error_types:
+            most_common, count = Counter(error_types).most_common(1)[0]
+            if count >= 3:
+                flags.append(f"repeated_error={most_common}(x{count})")
+
+        # Flag 3: OOS composite degrading across last 3 successful iterations
+        successful = [r for r in self._recent
+                      if r.get("success") and r.get("test_composite")]
+        if len(successful) >= 3:
+            composites = [r["test_composite"] for r in successful[-3:]]
+            if composites[2] < composites[0] * 0.7:
+                flags.append("oos_degrading")
+
+        trigger = len(flags) > 0
+        return {
+            "flags": flags,
+            "trigger_slow_path": trigger,
+            "summary": "; ".join(flags) if flags else "ok",
+        }
+
+    def _classify_error(self, result: dict) -> str:
+        """Classify the type of failure for pattern detection."""
+        err = result.get("error", "") or ""
+        if "MaxDD" in err:
+            return "maxdd"
+        if "Sharpe" in err:
+            return "sharpe"
+        if "trade" in err.lower():
+            return "trades"
+        if "Exposure" in err:
+            return "exposure"
+        if "KeyError" in err:
+            return "keyerror"
+        return "other"

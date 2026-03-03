@@ -1988,5 +1988,1621 @@
         "time_in_market": 0.08215438073963763
       }
     ]
+  },
+  {
+    "strategy": "ChampionRVI",
+    "timestamp": "2026-03-02T18:55:48.318899",
+    "total_tested": 10,
+    "top_results": [
+      {
+        "params": {
+          "stdev_length": 34,
+          "smooth_length": 20,
+          "buy_trigger": 59,
+          "sell_high": 76,
+          "sell_low": 42,
+          "volatility_factor": 1.8,
+          "atr_period": 14
+        },
+        "sharpe": 1.1619005088346406,
+        "cagr": 0.5548673980896397,
+        "max_dd": -0.4733708880653233,
+        "calmar": 1.1721620658959286,
+        "sortino": 1.4094932449725075,
+        "trades": 261,
+        "time_in_market": 0.6788899900891973
+      },
+      {
+        "params": {
+          "stdev_length": 20,
+          "smooth_length": 30,
+          "buy_trigger": 50,
+          "sell_high": 76,
+          "sell_low": 50,
+          "volatility_factor": 1.2,
+          "atr_period": 10
+        },
+        "sharpe": 0.9572468328180889,
+        "cagr": 0.36544468378307604,
+        "max_dd": -0.6597019800661106,
+        "calmar": 0.5539542017843478,
+        "sortino": 0.9581163708588685,
+        "trades": 348,
+        "time_in_market": 0.5785431119920713
+      },
+      {
+        "params": {
+          "stdev_length": 20,
+          "smooth_length": 26,
+          "buy_trigger": 50,
+          "sell_high": 80,
+          "sell_low": 50,
+          "volatility_factor": 1.2,
+          "atr_period": 14
+        },
+        "sharpe": 0.9403369485802658,
+        "cagr": 0.36750186479193814,
+        "max_dd": -0.5955596144622699,
+        "calmar": 0.6170698211693806,
+        "sortino": 0.9976708119588255,
+        "trades": 402,
+        "time_in_market": 0.6330525272547076
+      },
+      {
+        "params": {
+          "stdev_length": 26,
+          "smooth_length": 14,
+          "buy_trigger": 63,
+          "sell_high": 80,
+          "sell_low": 38,
+          "volatility_factor": 1.8,
+          "atr_period": 14
+        },
+        "sharpe": 0.8144144586554212,
+        "cagr": 0.3422145670468071,
+        "max_dd": -0.8236750169072878,
+        "calmar": 0.415472801799604,
+        "sortino": 0.9959721741974298,
+        "trades": 297,
+        "time_in_market": 0.7254707631318137
+      },
+      {
+        "params": {
+          "stdev_length": 26,
+          "smooth_length": 14,
+          "buy_trigger": 50,
+          "sell_high": 85,
+          "sell_low": 50,
+          "volatility_factor": 1.5,
+          "atr_period": 14
+        },
+        "sharpe": 0.8133856368795713,
+        "cagr": 0.296752663804414,
+        "max_dd": -0.6310739682926332,
+        "calmar": 0.47023436033540816,
+        "sortino": 0.8187293495937317,
+        "trades": 574,
+        "time_in_market": 0.5968780971258671
+      },
+      {
+        "params": {
+          "stdev_length": 26,
+          "smooth_length": 20,
+          "buy_trigger": 59,
+          "sell_high": 80,
+          "sell_low": 42,
+          "volatility_factor": 1.5,
+          "atr_period": 14
+        },
+        "sharpe": 0.8025613914442793,
+        "cagr": 0.32907760383234064,
+        "max_dd": -0.7543173266327187,
+        "calmar": 0.43625884255018627,
+        "sortino": 0.974982587185269,
+        "trades": 244,
+        "time_in_market": 0.748017839444995
+      },
+      {
+        "params": {
+          "stdev_length": 26,
+          "smooth_length": 14,
+          "buy_trigger": 50,
+          "sell_high": 80,
+          "sell_low": 50,
+          "volatility_factor": 1.8,
+          "atr_period": 14
+        },
+        "sharpe": 0.8012879300051102,
+        "cagr": 0.27900591272369724,
+        "max_dd": -0.6310739682926333,
+        "calmar": 0.4421128532342191,
+        "sortino": 0.752419019476286,
+        "trades": 574,
+        "time_in_market": 0.5074331020812686
+      },
+      {
+        "params": {
+          "stdev_length": 50,
+          "smooth_length": 14,
+          "buy_trigger": 50,
+          "sell_high": 80,
+          "sell_low": 38,
+          "volatility_factor": 2.0,
+          "atr_period": 20
+        },
+        "sharpe": 0.78234847090114,
+        "cagr": 0.3364426859230185,
+        "max_dd": -0.7254688656970291,
+        "calmar": 0.46375895897305675,
+        "sortino": 0.9607279352901188,
+        "trades": 285,
+        "time_in_market": 0.7755203171456888
+      },
+      {
+        "params": {
+          "stdev_length": 40,
+          "smooth_length": 30,
+          "buy_trigger": 55,
+          "sell_high": 85,
+          "sell_low": 46,
+          "volatility_factor": 1.2,
+          "atr_period": 14
+        },
+        "sharpe": 0.7811208916684212,
+        "cagr": 0.31707594007042417,
+        "max_dd": -0.4955875413886514,
+        "calmar": 0.6397980449265688,
+        "sortino": 0.9457655432833536,
+        "trades": 245,
+        "time_in_market": 0.7990584737363726
+      },
+      {
+        "params": {
+          "stdev_length": 50,
+          "smooth_length": 26,
+          "buy_trigger": 59,
+          "sell_high": 73,
+          "sell_low": 42,
+          "volatility_factor": 1.5,
+          "atr_period": 10
+        },
+        "sharpe": 0.7724043070940176,
+        "cagr": 0.3024627727020468,
+        "max_dd": -0.6442546602967997,
+        "calmar": 0.4694770427624166,
+        "sortino": 0.8693336750952421,
+        "trades": 218,
+        "time_in_market": 0.6645193260654113
+      }
+    ]
+  },
+  {
+    "strategy": "VolumeBreakout",
+    "timestamp": "2026-03-02T18:57:42.982582",
+    "total_tested": 10,
+    "top_results": [
+      {
+        "params": {
+          "ma_length": 30,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.20550814011331528,
+        "cagr": 0.03914999431234789,
+        "max_dd": -0.3229558624203704,
+        "calmar": 0.12122397784929793,
+        "sortino": 0.08614043988899853,
+        "trades": 132,
+        "time_in_market": 0.09291377601585729
+      },
+      {
+        "params": {
+          "ma_length": 15,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 1.5
+        },
+        "sharpe": 0.15638803718287592,
+        "cagr": 0.03163984389578922,
+        "max_dd": -0.2673627202727961,
+        "calmar": 0.11834052205747453,
+        "sortino": 0.0530443424483624,
+        "trades": 102,
+        "time_in_market": 0.07333994053518335
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 3.0,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.13712854058463075,
+        "cagr": 0.02881445597494947,
+        "max_dd": -0.5196562922971069,
+        "calmar": 0.05544906585769806,
+        "sortino": 0.060618390262031974,
+        "trades": 90,
+        "time_in_market": 0.12958374628344896
+      },
+      {
+        "params": {
+          "ma_length": 15,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 3.0,
+          "atr_sl_mult": 1.5
+        },
+        "sharpe": 0.1353553363375477,
+        "cagr": 0.029202048811942216,
+        "max_dd": -0.31970742861189305,
+        "calmar": 0.09133991330364698,
+        "sortino": 0.05632334352041168,
+        "trades": 92,
+        "time_in_market": 0.11248761149653122
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 2.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.11711419982230037,
+        "cagr": 0.025542091596450156,
+        "max_dd": -0.5196562922971069,
+        "calmar": 0.04915189515659091,
+        "sortino": 0.05042390598938602,
+        "trades": 94,
+        "time_in_market": 0.12661050545094152
+      },
+      {
+        "params": {
+          "ma_length": 15,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09871196650250223,
+        "cagr": 0.0244984808140718,
+        "max_dd": -0.32281626999985913,
+        "calmar": 0.07588985776362044,
+        "sortino": 0.03673522176070031,
+        "trades": 102,
+        "time_in_market": 0.08052527254707631
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 2.0,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09204106000955696,
+        "cagr": 0.022321527036252453,
+        "max_dd": -0.5196562922971067,
+        "calmar": 0.042954405377411284,
+        "sortino": 0.03577110987890581,
+        "trades": 94,
+        "time_in_market": 0.10356788899900891
+      },
+      {
+        "params": {
+          "ma_length": 50,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09184347839037528,
+        "cagr": 0.020513974382335265,
+        "max_dd": -0.35770636823556934,
+        "calmar": 0.05734864180227757,
+        "sortino": 0.04244776001291329,
+        "trades": 174,
+        "time_in_market": 0.1174430128840436
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09107620171249683,
+        "cagr": 0.02264796325139451,
+        "max_dd": -0.4970516226094693,
+        "calmar": 0.04556460983367293,
+        "sortino": 0.03192121361559218,
+        "trades": 98,
+        "time_in_market": 0.08102081268582755
+      },
+      {
+        "params": {
+          "ma_length": 30,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 1.5
+        },
+        "sharpe": 0.08926533322839363,
+        "cagr": 0.023152373077471644,
+        "max_dd": -0.3609251738169072,
+        "calmar": 0.06414729355846083,
+        "sortino": 0.03151281293419241,
+        "trades": 142,
+        "time_in_market": 0.08201189296333003
+      }
+    ]
+  },
+  {
+    "strategy": "ChampionRVI",
+    "timestamp": "2026-03-03T06:23:59.140668",
+    "total_tested": 10,
+    "top_results": [
+      {
+        "params": {
+          "stdev_length": 34,
+          "smooth_length": 20,
+          "buy_trigger": 59,
+          "sell_high": 76,
+          "sell_low": 42,
+          "volatility_factor": 1.8,
+          "atr_period": 20
+        },
+        "sharpe": 1.1833574090231052,
+        "cagr": 0.5701153753899,
+        "max_dd": -0.47692673763774546,
+        "calmar": 1.195394030986237,
+        "sortino": 1.4429164381974566,
+        "trades": 258,
+        "time_in_market": 0.6813676907829535
+      },
+      {
+        "params": {
+          "stdev_length": 34,
+          "smooth_length": 20,
+          "buy_trigger": 59,
+          "sell_high": 76,
+          "sell_low": 42,
+          "volatility_factor": 1.8,
+          "atr_period": 14
+        },
+        "sharpe": 1.1619005088346406,
+        "cagr": 0.5548673980896397,
+        "max_dd": -0.4733708880653233,
+        "calmar": 1.1721620658959286,
+        "sortino": 1.4094932449725075,
+        "trades": 261,
+        "time_in_market": 0.6788899900891973
+      },
+      {
+        "params": {
+          "stdev_length": 40,
+          "smooth_length": 26,
+          "buy_trigger": 55,
+          "sell_high": 80,
+          "sell_low": 42,
+          "volatility_factor": 1.2,
+          "atr_period": 14
+        },
+        "sharpe": 0.9098122034872045,
+        "cagr": 0.40400132529403265,
+        "max_dd": -0.592206315564417,
+        "calmar": 0.6821969213701969,
+        "sortino": 1.1154834538096625,
+        "trades": 176,
+        "time_in_market": 0.804013875123885
+      },
+      {
+        "params": {
+          "stdev_length": 26,
+          "smooth_length": 14,
+          "buy_trigger": 63,
+          "sell_high": 76,
+          "sell_low": 38,
+          "volatility_factor": 2.0,
+          "atr_period": 20
+        },
+        "sharpe": 0.9030746647352607,
+        "cagr": 0.39316805141622324,
+        "max_dd": -0.7007807035484498,
+        "calmar": 0.5610429188837401,
+        "sortino": 1.0674661116302935,
+        "trades": 339,
+        "time_in_market": 0.6580773042616452
+      },
+      {
+        "params": {
+          "stdev_length": 20,
+          "smooth_length": 30,
+          "buy_trigger": 50,
+          "sell_high": 85,
+          "sell_low": 50,
+          "volatility_factor": 1.5,
+          "atr_period": 14
+        },
+        "sharpe": 0.8773025292501215,
+        "cagr": 0.34965119096664243,
+        "max_dd": -0.6597019800661108,
+        "calmar": 0.5300138570625523,
+        "sortino": 0.9733099083846367,
+        "trades": 348,
+        "time_in_market": 0.7306739345887017
+      },
+      {
+        "params": {
+          "stdev_length": 40,
+          "smooth_length": 26,
+          "buy_trigger": 55,
+          "sell_high": 76,
+          "sell_low": 42,
+          "volatility_factor": 1.2,
+          "atr_period": 20
+        },
+        "sharpe": 0.8658954035888693,
+        "cagr": 0.3669942028339952,
+        "max_dd": -0.5718874470428643,
+        "calmar": 0.641724529418615,
+        "sortino": 1.0362694396898344,
+        "trades": 190,
+        "time_in_market": 0.7542120911793855
+      },
+      {
+        "params": {
+          "stdev_length": 40,
+          "smooth_length": 26,
+          "buy_trigger": 55,
+          "sell_high": 76,
+          "sell_low": 46,
+          "volatility_factor": 1.2,
+          "atr_period": 10
+        },
+        "sharpe": 0.8590619091879694,
+        "cagr": 0.3552668355958424,
+        "max_dd": -0.49833169851595055,
+        "calmar": 0.7129123767439229,
+        "sortino": 1.0128941418374502,
+        "trades": 319,
+        "time_in_market": 0.7056491575817642
+      },
+      {
+        "params": {
+          "stdev_length": 40,
+          "smooth_length": 26,
+          "buy_trigger": 59,
+          "sell_high": 73,
+          "sell_low": 42,
+          "volatility_factor": 1.5,
+          "atr_period": 10
+        },
+        "sharpe": 0.8582169116405223,
+        "cagr": 0.3449694004328039,
+        "max_dd": -0.6187210628989476,
+        "calmar": 0.5575523787997273,
+        "sortino": 0.9451624827470684,
+        "trades": 214,
+        "time_in_market": 0.6219028741328048
+      },
+      {
+        "params": {
+          "stdev_length": 26,
+          "smooth_length": 20,
+          "buy_trigger": 55,
+          "sell_high": 80,
+          "sell_low": 42,
+          "volatility_factor": 1.2,
+          "atr_period": 10
+        },
+        "sharpe": 0.8271039590596612,
+        "cagr": 0.3449324718374205,
+        "max_dd": -0.8047975251865395,
+        "calmar": 0.42859534360207,
+        "sortino": 0.9979826691695971,
+        "trades": 247,
+        "time_in_market": 0.7415758176412289
+      },
+      {
+        "params": {
+          "stdev_length": 20,
+          "smooth_length": 26,
+          "buy_trigger": 50,
+          "sell_high": 73,
+          "sell_low": 50,
+          "volatility_factor": 1.5,
+          "atr_period": 10
+        },
+        "sharpe": 0.803436618797467,
+        "cagr": 0.27469457171886447,
+        "max_dd": -0.5955596144622702,
+        "calmar": 0.4612377418621404,
+        "sortino": 0.7625418927532186,
+        "trades": 402,
+        "time_in_market": 0.48513379583746286
+      }
+    ]
+  },
+  {
+    "strategy": "VolumeBreakout",
+    "timestamp": "2026-03-03T06:27:34.006907",
+    "total_tested": 10,
+    "top_results": [
+      {
+        "params": {
+          "ma_length": 30,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.20550814011331528,
+        "cagr": 0.03914999431234789,
+        "max_dd": -0.3229558624203704,
+        "calmar": 0.12122397784929793,
+        "sortino": 0.08614043988899853,
+        "trades": 132,
+        "time_in_market": 0.09291377601585729
+      },
+      {
+        "params": {
+          "ma_length": 15,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 1.5
+        },
+        "sharpe": 0.15638803718287592,
+        "cagr": 0.03163984389578922,
+        "max_dd": -0.2673627202727961,
+        "calmar": 0.11834052205747453,
+        "sortino": 0.0530443424483624,
+        "trades": 102,
+        "time_in_market": 0.07333994053518335
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 3.0,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.13712854058463075,
+        "cagr": 0.02881445597494947,
+        "max_dd": -0.5196562922971069,
+        "calmar": 0.05544906585769806,
+        "sortino": 0.060618390262031974,
+        "trades": 90,
+        "time_in_market": 0.12958374628344896
+      },
+      {
+        "params": {
+          "ma_length": 15,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 3.0,
+          "atr_sl_mult": 1.5
+        },
+        "sharpe": 0.1353553363375477,
+        "cagr": 0.029202048811942216,
+        "max_dd": -0.31970742861189305,
+        "calmar": 0.09133991330364698,
+        "sortino": 0.05632334352041168,
+        "trades": 92,
+        "time_in_market": 0.11248761149653122
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 2.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.11711419982230037,
+        "cagr": 0.025542091596450156,
+        "max_dd": -0.5196562922971069,
+        "calmar": 0.04915189515659091,
+        "sortino": 0.05042390598938602,
+        "trades": 94,
+        "time_in_market": 0.12661050545094152
+      },
+      {
+        "params": {
+          "ma_length": 15,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09871196650250223,
+        "cagr": 0.0244984808140718,
+        "max_dd": -0.32281626999985913,
+        "calmar": 0.07588985776362044,
+        "sortino": 0.03673522176070031,
+        "trades": 102,
+        "time_in_market": 0.08052527254707631
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 2.0,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09204106000955696,
+        "cagr": 0.022321527036252453,
+        "max_dd": -0.5196562922971067,
+        "calmar": 0.042954405377411284,
+        "sortino": 0.03577110987890581,
+        "trades": 94,
+        "time_in_market": 0.10356788899900891
+      },
+      {
+        "params": {
+          "ma_length": 50,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09184347839037528,
+        "cagr": 0.020513974382335265,
+        "max_dd": -0.35770636823556934,
+        "calmar": 0.05734864180227757,
+        "sortino": 0.04244776001291329,
+        "trades": 174,
+        "time_in_market": 0.1174430128840436
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09107620171249683,
+        "cagr": 0.02264796325139451,
+        "max_dd": -0.4970516226094693,
+        "calmar": 0.04556460983367293,
+        "sortino": 0.03192121361559218,
+        "trades": 98,
+        "time_in_market": 0.08102081268582755
+      },
+      {
+        "params": {
+          "ma_length": 30,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 1.5
+        },
+        "sharpe": 0.08926533322839363,
+        "cagr": 0.023152373077471644,
+        "max_dd": -0.3609251738169072,
+        "calmar": 0.06414729355846083,
+        "sortino": 0.03151281293419241,
+        "trades": 142,
+        "time_in_market": 0.08201189296333003
+      }
+    ]
+  },
+  {
+    "strategy": "ChampionRVI",
+    "timestamp": "2026-03-03T08:14:02.757599",
+    "total_tested": 10,
+    "top_results": [
+      {
+        "params": {
+          "stdev_length": 34,
+          "smooth_length": 20,
+          "buy_trigger": 59,
+          "sell_high": 76,
+          "sell_low": 42,
+          "volatility_factor": 1.8,
+          "atr_period": 14
+        },
+        "sharpe": 1.1619005088346406,
+        "cagr": 0.5548673980896397,
+        "max_dd": -0.4733708880653233,
+        "calmar": 1.1721620658959286,
+        "sortino": 1.4094932449725075,
+        "trades": 261,
+        "time_in_market": 0.6788899900891973
+      },
+      {
+        "params": {
+          "stdev_length": 40,
+          "smooth_length": 20,
+          "buy_trigger": 59,
+          "sell_high": 76,
+          "sell_low": 42,
+          "volatility_factor": 1.8,
+          "atr_period": 20
+        },
+        "sharpe": 0.9060008176884763,
+        "cagr": 0.3930236198759862,
+        "max_dd": -0.6361635158599384,
+        "calmar": 0.6178028291118107,
+        "sortino": 1.081853835282072,
+        "trades": 279,
+        "time_in_market": 0.6994549058473737
+      },
+      {
+        "params": {
+          "stdev_length": 34,
+          "smooth_length": 20,
+          "buy_trigger": 63,
+          "sell_high": 80,
+          "sell_low": 42,
+          "volatility_factor": 1.8,
+          "atr_period": 20
+        },
+        "sharpe": 0.8871943704810829,
+        "cagr": 0.37806162561413204,
+        "max_dd": -0.46923450722027604,
+        "calmar": 0.8056986854051974,
+        "sortino": 1.0726631508607267,
+        "trades": 238,
+        "time_in_market": 0.7229930624380575
+      },
+      {
+        "params": {
+          "stdev_length": 40,
+          "smooth_length": 26,
+          "buy_trigger": 59,
+          "sell_high": 76,
+          "sell_low": 46,
+          "volatility_factor": 1.2,
+          "atr_period": 14
+        },
+        "sharpe": 0.8855206394718206,
+        "cagr": 0.3530475518441678,
+        "max_dd": -0.46642922043162355,
+        "calmar": 0.7569155970062622,
+        "sortino": 0.9945374921659501,
+        "trades": 304,
+        "time_in_market": 0.6387512388503469
+      },
+      {
+        "params": {
+          "stdev_length": 50,
+          "smooth_length": 30,
+          "buy_trigger": 59,
+          "sell_high": 73,
+          "sell_low": 35,
+          "volatility_factor": 1.5,
+          "atr_period": 10
+        },
+        "sharpe": 0.8653800946944926,
+        "cagr": 0.38342589626634194,
+        "max_dd": -0.7303673869037098,
+        "calmar": 0.5249767488822609,
+        "sortino": 1.00001911266759,
+        "trades": 95,
+        "time_in_market": 0.7777502477700694
+      },
+      {
+        "params": {
+          "stdev_length": 26,
+          "smooth_length": 30,
+          "buy_trigger": 59,
+          "sell_high": 76,
+          "sell_low": 46,
+          "volatility_factor": 1.5,
+          "atr_period": 20
+        },
+        "sharpe": 0.8452884779519696,
+        "cagr": 0.3396926615758076,
+        "max_dd": -0.6425039873328046,
+        "calmar": 0.5287012505338016,
+        "sortino": 0.9433298002931925,
+        "trades": 227,
+        "time_in_market": 0.6749256689791873
+      },
+      {
+        "params": {
+          "stdev_length": 26,
+          "smooth_length": 14,
+          "buy_trigger": 59,
+          "sell_high": 73,
+          "sell_low": 38,
+          "volatility_factor": 2.0,
+          "atr_period": 10
+        },
+        "sharpe": 0.8447407715627955,
+        "cagr": 0.36504190700952543,
+        "max_dd": -0.7153350054342491,
+        "calmar": 0.5103090219776456,
+        "sortino": 0.9498032405558438,
+        "trades": 362,
+        "time_in_market": 0.6340436075322101
+      },
+      {
+        "params": {
+          "stdev_length": 50,
+          "smooth_length": 20,
+          "buy_trigger": 55,
+          "sell_high": 76,
+          "sell_low": 42,
+          "volatility_factor": 1.2,
+          "atr_period": 14
+        },
+        "sharpe": 0.8441347322985342,
+        "cagr": 0.3526212435836209,
+        "max_dd": -0.8298334077648452,
+        "calmar": 0.42493016102280773,
+        "sortino": 0.9735158139181518,
+        "trades": 299,
+        "time_in_market": 0.6944995044598612
+      },
+      {
+        "params": {
+          "stdev_length": 30,
+          "smooth_length": 26,
+          "buy_trigger": 59,
+          "sell_high": 76,
+          "sell_low": 42,
+          "volatility_factor": 1.2,
+          "atr_period": 14
+        },
+        "sharpe": 0.8292883569082403,
+        "cagr": 0.33594977862776765,
+        "max_dd": -0.666713389493376,
+        "calmar": 0.5038893532392533,
+        "sortino": 0.9601325974262588,
+        "trades": 191,
+        "time_in_market": 0.7150644202180376
+      },
+      {
+        "params": {
+          "stdev_length": 50,
+          "smooth_length": 14,
+          "buy_trigger": 50,
+          "sell_high": 80,
+          "sell_low": 38,
+          "volatility_factor": 1.2,
+          "atr_period": 10
+        },
+        "sharpe": 0.8145972482138175,
+        "cagr": 0.3498843974416668,
+        "max_dd": -0.7409658245738572,
+        "calmar": 0.4722004522177411,
+        "sortino": 0.9715194976198235,
+        "trades": 321,
+        "time_in_market": 0.7371159563924677
+      }
+    ]
+  },
+  {
+    "strategy": "VolumeBreakout",
+    "timestamp": "2026-03-03T08:17:39.773185",
+    "total_tested": 10,
+    "top_results": [
+      {
+        "params": {
+          "ma_length": 30,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.20550814011331528,
+        "cagr": 0.03914999431234789,
+        "max_dd": -0.3229558624203704,
+        "calmar": 0.12122397784929793,
+        "sortino": 0.08614043988899853,
+        "trades": 132,
+        "time_in_market": 0.09291377601585729
+      },
+      {
+        "params": {
+          "ma_length": 15,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 1.5
+        },
+        "sharpe": 0.15638803718287592,
+        "cagr": 0.03163984389578922,
+        "max_dd": -0.2673627202727961,
+        "calmar": 0.11834052205747453,
+        "sortino": 0.0530443424483624,
+        "trades": 102,
+        "time_in_market": 0.07333994053518335
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 3.0,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.13712854058463075,
+        "cagr": 0.02881445597494947,
+        "max_dd": -0.5196562922971069,
+        "calmar": 0.05544906585769806,
+        "sortino": 0.060618390262031974,
+        "trades": 90,
+        "time_in_market": 0.12958374628344896
+      },
+      {
+        "params": {
+          "ma_length": 15,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 3.0,
+          "atr_sl_mult": 1.5
+        },
+        "sharpe": 0.1353553363375477,
+        "cagr": 0.029202048811942216,
+        "max_dd": -0.31970742861189305,
+        "calmar": 0.09133991330364698,
+        "sortino": 0.05632334352041168,
+        "trades": 92,
+        "time_in_market": 0.11248761149653122
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 2.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.11711419982230037,
+        "cagr": 0.025542091596450156,
+        "max_dd": -0.5196562922971069,
+        "calmar": 0.04915189515659091,
+        "sortino": 0.05042390598938602,
+        "trades": 94,
+        "time_in_market": 0.12661050545094152
+      },
+      {
+        "params": {
+          "ma_length": 15,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09871196650250223,
+        "cagr": 0.0244984808140718,
+        "max_dd": -0.32281626999985913,
+        "calmar": 0.07588985776362044,
+        "sortino": 0.03673522176070031,
+        "trades": 102,
+        "time_in_market": 0.08052527254707631
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 2.0,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09204106000955696,
+        "cagr": 0.022321527036252453,
+        "max_dd": -0.5196562922971067,
+        "calmar": 0.042954405377411284,
+        "sortino": 0.03577110987890581,
+        "trades": 94,
+        "time_in_market": 0.10356788899900891
+      },
+      {
+        "params": {
+          "ma_length": 50,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09184347839037528,
+        "cagr": 0.020513974382335265,
+        "max_dd": -0.35770636823556934,
+        "calmar": 0.05734864180227757,
+        "sortino": 0.04244776001291329,
+        "trades": 174,
+        "time_in_market": 0.1174430128840436
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09107620171249683,
+        "cagr": 0.02264796325139451,
+        "max_dd": -0.4970516226094693,
+        "calmar": 0.04556460983367293,
+        "sortino": 0.03192121361559218,
+        "trades": 98,
+        "time_in_market": 0.08102081268582755
+      },
+      {
+        "params": {
+          "ma_length": 30,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 1.5
+        },
+        "sharpe": 0.08926533322839363,
+        "cagr": 0.023152373077471644,
+        "max_dd": -0.3609251738169072,
+        "calmar": 0.06414729355846083,
+        "sortino": 0.03151281293419241,
+        "trades": 142,
+        "time_in_market": 0.08201189296333003
+      }
+    ]
+  },
+  {
+    "strategy": "ChampionRVI",
+    "timestamp": "2026-03-03T10:08:59.582414",
+    "total_tested": 10,
+    "top_results": [
+      {
+        "params": {
+          "stdev_length": 34,
+          "smooth_length": 20,
+          "buy_trigger": 59,
+          "sell_high": 76,
+          "sell_low": 42,
+          "volatility_factor": 1.8,
+          "atr_period": 14
+        },
+        "sharpe": 1.1619005088346406,
+        "cagr": 0.5548673980896397,
+        "max_dd": -0.4733708880653233,
+        "calmar": 1.1721620658959286,
+        "sortino": 1.4094932449725075,
+        "trades": 261,
+        "time_in_market": 0.6788899900891973
+      },
+      {
+        "params": {
+          "stdev_length": 30,
+          "smooth_length": 20,
+          "buy_trigger": 59,
+          "sell_high": 76,
+          "sell_low": 42,
+          "volatility_factor": 2.0,
+          "atr_period": 20
+        },
+        "sharpe": 0.9857336561937485,
+        "cagr": 0.4509125931442892,
+        "max_dd": -0.568801436902573,
+        "calmar": 0.7927416562091485,
+        "sortino": 1.2223077634894892,
+        "trades": 238,
+        "time_in_market": 0.7202675916749257
+      },
+      {
+        "params": {
+          "stdev_length": 34,
+          "smooth_length": 20,
+          "buy_trigger": 59,
+          "sell_high": 80,
+          "sell_low": 42,
+          "volatility_factor": 2.5,
+          "atr_period": 20
+        },
+        "sharpe": 0.88444421470449,
+        "cagr": 0.41845393863782365,
+        "max_dd": -0.48426420403882864,
+        "calmar": 0.8641025604367647,
+        "sortino": 1.1016324664155974,
+        "trades": 195,
+        "time_in_market": 0.8277998017839445
+      },
+      {
+        "params": {
+          "stdev_length": 50,
+          "smooth_length": 14,
+          "buy_trigger": 50,
+          "sell_high": 80,
+          "sell_low": 50,
+          "volatility_factor": 1.2,
+          "atr_period": 10
+        },
+        "sharpe": 0.8822970894003483,
+        "cagr": 0.3144606803979815,
+        "max_dd": -0.6469609932303751,
+        "calmar": 0.4860581761318116,
+        "sortino": 0.8288552989178055,
+        "trades": 578,
+        "time_in_market": 0.5146184340931615
+      },
+      {
+        "params": {
+          "stdev_length": 20,
+          "smooth_length": 30,
+          "buy_trigger": 50,
+          "sell_high": 85,
+          "sell_low": 50,
+          "volatility_factor": 1.8,
+          "atr_period": 14
+        },
+        "sharpe": 0.8773025292501215,
+        "cagr": 0.34965119096664243,
+        "max_dd": -0.6597019800661108,
+        "calmar": 0.5300138570625523,
+        "sortino": 0.9733099083846367,
+        "trades": 348,
+        "time_in_market": 0.7306739345887017
+      },
+      {
+        "params": {
+          "stdev_length": 20,
+          "smooth_length": 14,
+          "buy_trigger": 59,
+          "sell_high": 76,
+          "sell_low": 35,
+          "volatility_factor": 1.2,
+          "atr_period": 14
+        },
+        "sharpe": 0.8534529077173428,
+        "cagr": 0.35252925748342956,
+        "max_dd": -0.6381597568049612,
+        "calmar": 0.5524153689170531,
+        "sortino": 0.9533102741049987,
+        "trades": 306,
+        "time_in_market": 0.6461843409316155
+      },
+      {
+        "params": {
+          "stdev_length": 26,
+          "smooth_length": 14,
+          "buy_trigger": 55,
+          "sell_high": 85,
+          "sell_low": 38,
+          "volatility_factor": 1.2,
+          "atr_period": 14
+        },
+        "sharpe": 0.8513937037876694,
+        "cagr": 0.37131647561104164,
+        "max_dd": -0.8116002466385546,
+        "calmar": 0.4575115361890804,
+        "sortino": 1.0440511888028658,
+        "trades": 285,
+        "time_in_market": 0.7975718533201189
+      },
+      {
+        "params": {
+          "stdev_length": 40,
+          "smooth_length": 14,
+          "buy_trigger": 63,
+          "sell_high": 85,
+          "sell_low": 42,
+          "volatility_factor": 1.8,
+          "atr_period": 10
+        },
+        "sharpe": 0.8153318430531193,
+        "cagr": 0.34016052239005257,
+        "max_dd": -0.6657876132144329,
+        "calmar": 0.5109144652718188,
+        "sortino": 1.002542925966745,
+        "trades": 331,
+        "time_in_market": 0.7475222993062438
+      },
+      {
+        "params": {
+          "stdev_length": 40,
+          "smooth_length": 14,
+          "buy_trigger": 50,
+          "sell_high": 85,
+          "sell_low": 35,
+          "volatility_factor": 1.2,
+          "atr_period": 14
+        },
+        "sharpe": 0.7999733628820485,
+        "cagr": 0.35164304898388354,
+        "max_dd": -0.6895733256541361,
+        "calmar": 0.5099429399336343,
+        "sortino": 0.9930659956612858,
+        "trades": 212,
+        "time_in_market": 0.8384539147670962
+      },
+      {
+        "params": {
+          "stdev_length": 26,
+          "smooth_length": 30,
+          "buy_trigger": 50,
+          "sell_high": 85,
+          "sell_low": 46,
+          "volatility_factor": 1.5,
+          "atr_period": 20
+        },
+        "sharpe": 0.7939649082499515,
+        "cagr": 0.3419619754679111,
+        "max_dd": -0.7910283773557677,
+        "calmar": 0.4323005157046503,
+        "sortino": 0.9910510777861226,
+        "trades": 210,
+        "time_in_market": 0.8907333994053518
+      }
+    ]
+  },
+  {
+    "strategy": "VolumeBreakout",
+    "timestamp": "2026-03-03T10:12:36.811179",
+    "total_tested": 10,
+    "top_results": [
+      {
+        "params": {
+          "ma_length": 30,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.20550814011331528,
+        "cagr": 0.03914999431234789,
+        "max_dd": -0.3229558624203704,
+        "calmar": 0.12122397784929793,
+        "sortino": 0.08614043988899853,
+        "trades": 132,
+        "time_in_market": 0.09291377601585729
+      },
+      {
+        "params": {
+          "ma_length": 15,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 1.5
+        },
+        "sharpe": 0.15638803718287592,
+        "cagr": 0.03163984389578922,
+        "max_dd": -0.2673627202727961,
+        "calmar": 0.11834052205747453,
+        "sortino": 0.0530443424483624,
+        "trades": 102,
+        "time_in_market": 0.07333994053518335
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 3.0,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.13712854058463075,
+        "cagr": 0.02881445597494947,
+        "max_dd": -0.5196562922971069,
+        "calmar": 0.05544906585769806,
+        "sortino": 0.060618390262031974,
+        "trades": 90,
+        "time_in_market": 0.12958374628344896
+      },
+      {
+        "params": {
+          "ma_length": 15,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 3.0,
+          "atr_sl_mult": 1.5
+        },
+        "sharpe": 0.1353553363375477,
+        "cagr": 0.029202048811942216,
+        "max_dd": -0.31970742861189305,
+        "calmar": 0.09133991330364698,
+        "sortino": 0.05632334352041168,
+        "trades": 92,
+        "time_in_market": 0.11248761149653122
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 2.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.11711419982230037,
+        "cagr": 0.025542091596450156,
+        "max_dd": -0.5196562922971069,
+        "calmar": 0.04915189515659091,
+        "sortino": 0.05042390598938602,
+        "trades": 94,
+        "time_in_market": 0.12661050545094152
+      },
+      {
+        "params": {
+          "ma_length": 15,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09871196650250223,
+        "cagr": 0.0244984808140718,
+        "max_dd": -0.32281626999985913,
+        "calmar": 0.07588985776362044,
+        "sortino": 0.03673522176070031,
+        "trades": 102,
+        "time_in_market": 0.08052527254707631
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 2.0,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09204106000955696,
+        "cagr": 0.022321527036252453,
+        "max_dd": -0.5196562922971067,
+        "calmar": 0.042954405377411284,
+        "sortino": 0.03577110987890581,
+        "trades": 94,
+        "time_in_market": 0.10356788899900891
+      },
+      {
+        "params": {
+          "ma_length": 50,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09184347839037528,
+        "cagr": 0.020513974382335265,
+        "max_dd": -0.35770636823556934,
+        "calmar": 0.05734864180227757,
+        "sortino": 0.04244776001291329,
+        "trades": 174,
+        "time_in_market": 0.1174430128840436
+      },
+      {
+        "params": {
+          "ma_length": 10,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 2.0
+        },
+        "sharpe": 0.09107620171249683,
+        "cagr": 0.02264796325139451,
+        "max_dd": -0.4970516226094693,
+        "calmar": 0.04556460983367293,
+        "sortino": 0.03192121361559218,
+        "trades": 98,
+        "time_in_market": 0.08102081268582755
+      },
+      {
+        "params": {
+          "ma_length": 30,
+          "ma_type": "SMA",
+          "vol_length": 20,
+          "vol_multiplier": 1.5,
+          "exit_mode": "atr",
+          "tp_pct": 0.1,
+          "sl_pct": 0.05,
+          "atr_length": 14,
+          "atr_tp_mult": 1.5,
+          "atr_sl_mult": 1.5
+        },
+        "sharpe": 0.08926533322839363,
+        "cagr": 0.023152373077471644,
+        "max_dd": -0.3609251738169072,
+        "calmar": 0.06414729355846083,
+        "sortino": 0.03151281293419241,
+        "trades": 142,
+        "time_in_market": 0.08201189296333003
+      }
+    ]
   }
 ]

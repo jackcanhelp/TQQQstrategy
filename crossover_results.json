@@ -1270,5 +1270,715 @@
         "time_in_market": 0.5976669148672127
       }
     ]
+  },
+  {
+    "timestamp": "2026-03-02T18:29:29.675659",
+    "total_tested": 5,
+    "results": [
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.2712971792475978,
+        "cagr": 0.5195819521179426,
+        "max_dd": -0.40335447455861895,
+        "calmar": 1.2881521958731423,
+        "sortino": 1.3277686105808304,
+        "trades": 148,
+        "time_in_market": 0.5651635282457879
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
+        "sharpe": 1.2153444116548435,
+        "cagr": 0.4998668230123251,
+        "max_dd": -0.391888702547886,
+        "calmar": 1.2755326187318323,
+        "sortino": 1.3090099636227666,
+        "trades": 142,
+        "time_in_market": 0.5991080277502477
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_MACD_Cross_RSI_OB",
+        "sharpe": 1.1416077517988665,
+        "cagr": 0.48186928555297737,
+        "max_dd": -0.46057140493887616,
+        "calmar": 1.046242298991462,
+        "sortino": 1.2424742165379727,
+        "trades": 157,
+        "time_in_market": 0.6219028741328048
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_MACD_Cross_RVI_Extreme",
+        "sharpe": 1.0934016748469404,
+        "cagr": 0.45393150469894783,
+        "max_dd": -0.4605714049388761,
+        "calmar": 0.985583342411782,
+        "sortino": 1.1620055394658042,
+        "trades": 165,
+        "time_in_market": 0.6018334985133796
+      },
+      {
+        "regime": "Supertrend",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_Supertrend_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.0875462301157304,
+        "cagr": 0.40997015663470715,
+        "max_dd": -0.43366086566655176,
+        "calmar": 0.9453704244319321,
+        "sortino": 1.101558488008498,
+        "trades": 188,
+        "time_in_market": 0.5341922695738355
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-03-02T18:48:55.712431",
+    "total_tested": 5,
+    "results": [
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.2712971792475978,
+        "cagr": 0.5195819521179426,
+        "max_dd": -0.40335447455861895,
+        "calmar": 1.2881521958731423,
+        "sortino": 1.3277686105808304,
+        "trades": 148,
+        "time_in_market": 0.5651635282457879
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
+        "sharpe": 1.2153444116548435,
+        "cagr": 0.4998668230123251,
+        "max_dd": -0.391888702547886,
+        "calmar": 1.2755326187318323,
+        "sortino": 1.3090099636227666,
+        "trades": 142,
+        "time_in_market": 0.5991080277502477
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_MACD_Cross_RSI_OB",
+        "sharpe": 1.1416077517988665,
+        "cagr": 0.48186928555297737,
+        "max_dd": -0.46057140493887616,
+        "calmar": 1.046242298991462,
+        "sortino": 1.2424742165379727,
+        "trades": 157,
+        "time_in_market": 0.6219028741328048
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_MACD_Cross_RVI_Extreme",
+        "sharpe": 1.0934016748469404,
+        "cagr": 0.45393150469894783,
+        "max_dd": -0.4605714049388761,
+        "calmar": 0.985583342411782,
+        "sortino": 1.1620055394658042,
+        "trades": 165,
+        "time_in_market": 0.6018334985133796
+      },
+      {
+        "regime": "Supertrend",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_Supertrend_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.0875462301157304,
+        "cagr": 0.40997015663470715,
+        "max_dd": -0.43366086566655176,
+        "calmar": 0.9453704244319321,
+        "sortino": 1.101558488008498,
+        "trades": 188,
+        "time_in_market": 0.5341922695738355
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-03-02T19:18:33.124483",
+    "total_tested": 5,
+    "results": [
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.2712971792475978,
+        "cagr": 0.5195819521179426,
+        "max_dd": -0.40335447455861895,
+        "calmar": 1.2881521958731423,
+        "sortino": 1.3277686105808304,
+        "trades": 148,
+        "time_in_market": 0.5651635282457879
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
+        "sharpe": 1.2153444116548435,
+        "cagr": 0.4998668230123251,
+        "max_dd": -0.391888702547886,
+        "calmar": 1.2755326187318323,
+        "sortino": 1.3090099636227666,
+        "trades": 142,
+        "time_in_market": 0.5991080277502477
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_MACD_Cross_RSI_OB",
+        "sharpe": 1.1416077517988665,
+        "cagr": 0.48186928555297737,
+        "max_dd": -0.46057140493887616,
+        "calmar": 1.046242298991462,
+        "sortino": 1.2424742165379727,
+        "trades": 157,
+        "time_in_market": 0.6219028741328048
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_MACD_Cross_RVI_Extreme",
+        "sharpe": 1.0934016748469404,
+        "cagr": 0.45393150469894783,
+        "max_dd": -0.4605714049388761,
+        "calmar": 0.985583342411782,
+        "sortino": 1.1620055394658042,
+        "trades": 165,
+        "time_in_market": 0.6018334985133796
+      },
+      {
+        "regime": "Supertrend",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_Supertrend_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.0875462301157304,
+        "cagr": 0.40997015663470715,
+        "max_dd": -0.43366086566655176,
+        "calmar": 0.9453704244319321,
+        "sortino": 1.101558488008498,
+        "trades": 188,
+        "time_in_market": 0.5341922695738355
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-03-02T22:58:44.256989",
+    "total_tested": 5,
+    "results": [
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.2712971792475978,
+        "cagr": 0.5195819521179426,
+        "max_dd": -0.40335447455861895,
+        "calmar": 1.2881521958731423,
+        "sortino": 1.3277686105808304,
+        "trades": 148,
+        "time_in_market": 0.5651635282457879
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
+        "sharpe": 1.2153444116548435,
+        "cagr": 0.4998668230123251,
+        "max_dd": -0.391888702547886,
+        "calmar": 1.2755326187318323,
+        "sortino": 1.3090099636227666,
+        "trades": 142,
+        "time_in_market": 0.5991080277502477
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_MACD_Cross_RSI_OB",
+        "sharpe": 1.1416077517988665,
+        "cagr": 0.48186928555297737,
+        "max_dd": -0.46057140493887616,
+        "calmar": 1.046242298991462,
+        "sortino": 1.2424742165379727,
+        "trades": 157,
+        "time_in_market": 0.6219028741328048
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_MACD_Cross_RVI_Extreme",
+        "sharpe": 1.0934016748469404,
+        "cagr": 0.45393150469894783,
+        "max_dd": -0.4605714049388761,
+        "calmar": 0.985583342411782,
+        "sortino": 1.1620055394658042,
+        "trades": 165,
+        "time_in_market": 0.6018334985133796
+      },
+      {
+        "regime": "Supertrend",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_Supertrend_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.0875462301157304,
+        "cagr": 0.40997015663470715,
+        "max_dd": -0.43366086566655176,
+        "calmar": 0.9453704244319321,
+        "sortino": 1.101558488008498,
+        "trades": 188,
+        "time_in_market": 0.5341922695738355
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-03-03T05:32:05.566007",
+    "total_tested": 5,
+    "results": [
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.2712971792475978,
+        "cagr": 0.5195819521179426,
+        "max_dd": -0.40335447455861895,
+        "calmar": 1.2881521958731423,
+        "sortino": 1.3277686105808304,
+        "trades": 148,
+        "time_in_market": 0.5651635282457879
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
+        "sharpe": 1.2153444116548435,
+        "cagr": 0.4998668230123251,
+        "max_dd": -0.391888702547886,
+        "calmar": 1.2755326187318323,
+        "sortino": 1.3090099636227666,
+        "trades": 142,
+        "time_in_market": 0.5991080277502477
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_MACD_Cross_RSI_OB",
+        "sharpe": 1.1416077517988665,
+        "cagr": 0.48186928555297737,
+        "max_dd": -0.46057140493887616,
+        "calmar": 1.046242298991462,
+        "sortino": 1.2424742165379727,
+        "trades": 157,
+        "time_in_market": 0.6219028741328048
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_MACD_Cross_RVI_Extreme",
+        "sharpe": 1.0934016748469404,
+        "cagr": 0.45393150469894783,
+        "max_dd": -0.4605714049388761,
+        "calmar": 0.985583342411782,
+        "sortino": 1.1620055394658042,
+        "trades": 165,
+        "time_in_market": 0.6018334985133796
+      },
+      {
+        "regime": "Supertrend",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_Supertrend_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.0875462301157304,
+        "cagr": 0.40997015663470715,
+        "max_dd": -0.43366086566655176,
+        "calmar": 0.9453704244319321,
+        "sortino": 1.101558488008498,
+        "trades": 188,
+        "time_in_market": 0.5341922695738355
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-03-03T06:12:44.834594",
+    "total_tested": 5,
+    "results": [
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.2712971792475978,
+        "cagr": 0.5195819521179426,
+        "max_dd": -0.40335447455861895,
+        "calmar": 1.2881521958731423,
+        "sortino": 1.3277686105808304,
+        "trades": 148,
+        "time_in_market": 0.5651635282457879
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
+        "sharpe": 1.2153444116548435,
+        "cagr": 0.4998668230123251,
+        "max_dd": -0.391888702547886,
+        "calmar": 1.2755326187318323,
+        "sortino": 1.3090099636227666,
+        "trades": 142,
+        "time_in_market": 0.5991080277502477
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_MACD_Cross_RSI_OB",
+        "sharpe": 1.1416077517988665,
+        "cagr": 0.48186928555297737,
+        "max_dd": -0.46057140493887616,
+        "calmar": 1.046242298991462,
+        "sortino": 1.2424742165379727,
+        "trades": 157,
+        "time_in_market": 0.6219028741328048
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_MACD_Cross_RVI_Extreme",
+        "sharpe": 1.0934016748469404,
+        "cagr": 0.45393150469894783,
+        "max_dd": -0.4605714049388761,
+        "calmar": 0.985583342411782,
+        "sortino": 1.1620055394658042,
+        "trades": 165,
+        "time_in_market": 0.6018334985133796
+      },
+      {
+        "regime": "Supertrend",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_Supertrend_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.0875462301157304,
+        "cagr": 0.40997015663470715,
+        "max_dd": -0.43366086566655176,
+        "calmar": 0.9453704244319321,
+        "sortino": 1.101558488008498,
+        "trades": 188,
+        "time_in_market": 0.5341922695738355
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-03-03T07:12:09.075336",
+    "total_tested": 5,
+    "results": [
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.2712971792475978,
+        "cagr": 0.5195819521179426,
+        "max_dd": -0.40335447455861895,
+        "calmar": 1.2881521958731423,
+        "sortino": 1.3277686105808304,
+        "trades": 148,
+        "time_in_market": 0.5651635282457879
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
+        "sharpe": 1.2153444116548435,
+        "cagr": 0.4998668230123251,
+        "max_dd": -0.391888702547886,
+        "calmar": 1.2755326187318323,
+        "sortino": 1.3090099636227666,
+        "trades": 142,
+        "time_in_market": 0.5991080277502477
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_MACD_Cross_RSI_OB",
+        "sharpe": 1.1416077517988665,
+        "cagr": 0.48186928555297737,
+        "max_dd": -0.46057140493887616,
+        "calmar": 1.046242298991462,
+        "sortino": 1.2424742165379727,
+        "trades": 157,
+        "time_in_market": 0.6219028741328048
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_MACD_Cross_RVI_Extreme",
+        "sharpe": 1.0934016748469404,
+        "cagr": 0.45393150469894783,
+        "max_dd": -0.4605714049388761,
+        "calmar": 0.985583342411782,
+        "sortino": 1.1620055394658042,
+        "trades": 165,
+        "time_in_market": 0.6018334985133796
+      },
+      {
+        "regime": "Supertrend",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_Supertrend_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.0875462301157304,
+        "cagr": 0.40997015663470715,
+        "max_dd": -0.43366086566655176,
+        "calmar": 0.9453704244319321,
+        "sortino": 1.101558488008498,
+        "trades": 188,
+        "time_in_market": 0.5341922695738355
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-03-03T08:02:50.370308",
+    "total_tested": 5,
+    "results": [
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.2712971792475978,
+        "cagr": 0.5195819521179426,
+        "max_dd": -0.40335447455861895,
+        "calmar": 1.2881521958731423,
+        "sortino": 1.3277686105808304,
+        "trades": 148,
+        "time_in_market": 0.5651635282457879
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
+        "sharpe": 1.2153444116548435,
+        "cagr": 0.4998668230123251,
+        "max_dd": -0.391888702547886,
+        "calmar": 1.2755326187318323,
+        "sortino": 1.3090099636227666,
+        "trades": 142,
+        "time_in_market": 0.5991080277502477
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_MACD_Cross_RSI_OB",
+        "sharpe": 1.1416077517988665,
+        "cagr": 0.48186928555297737,
+        "max_dd": -0.46057140493887616,
+        "calmar": 1.046242298991462,
+        "sortino": 1.2424742165379727,
+        "trades": 157,
+        "time_in_market": 0.6219028741328048
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_MACD_Cross_RVI_Extreme",
+        "sharpe": 1.0934016748469404,
+        "cagr": 0.45393150469894783,
+        "max_dd": -0.4605714049388761,
+        "calmar": 0.985583342411782,
+        "sortino": 1.1620055394658042,
+        "trades": 165,
+        "time_in_market": 0.6018334985133796
+      },
+      {
+        "regime": "Supertrend",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_Supertrend_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.0875462301157304,
+        "cagr": 0.40997015663470715,
+        "max_dd": -0.43366086566655176,
+        "calmar": 0.9453704244319321,
+        "sortino": 1.101558488008498,
+        "trades": 188,
+        "time_in_market": 0.5341922695738355
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-03-03T09:07:44.098919",
+    "total_tested": 5,
+    "results": [
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.2712971792475978,
+        "cagr": 0.5195819521179426,
+        "max_dd": -0.40335447455861895,
+        "calmar": 1.2881521958731423,
+        "sortino": 1.3277686105808304,
+        "trades": 148,
+        "time_in_market": 0.5651635282457879
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
+        "sharpe": 1.2153444116548435,
+        "cagr": 0.4998668230123251,
+        "max_dd": -0.391888702547886,
+        "calmar": 1.2755326187318323,
+        "sortino": 1.3090099636227666,
+        "trades": 142,
+        "time_in_market": 0.5991080277502477
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_MACD_Cross_RSI_OB",
+        "sharpe": 1.1416077517988665,
+        "cagr": 0.48186928555297737,
+        "max_dd": -0.46057140493887616,
+        "calmar": 1.046242298991462,
+        "sortino": 1.2424742165379727,
+        "trades": 157,
+        "time_in_market": 0.6219028741328048
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_MACD_Cross_RVI_Extreme",
+        "sharpe": 1.0934016748469404,
+        "cagr": 0.45393150469894783,
+        "max_dd": -0.4605714049388761,
+        "calmar": 0.985583342411782,
+        "sortino": 1.1620055394658042,
+        "trades": 165,
+        "time_in_market": 0.6018334985133796
+      },
+      {
+        "regime": "Supertrend",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_Supertrend_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.0875462301157304,
+        "cagr": 0.40997015663470715,
+        "max_dd": -0.43366086566655176,
+        "calmar": 0.9453704244319321,
+        "sortino": 1.101558488008498,
+        "trades": 188,
+        "time_in_market": 0.5341922695738355
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-03-03T09:57:29.656676",
+    "total_tested": 5,
+    "results": [
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.2712971792475978,
+        "cagr": 0.5195819521179426,
+        "max_dd": -0.40335447455861895,
+        "calmar": 1.2881521958731423,
+        "sortino": 1.3277686105808304,
+        "trades": 148,
+        "time_in_market": 0.5651635282457879
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "RVI_Trans",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
+        "sharpe": 1.2153444116548435,
+        "cagr": 0.4998668230123251,
+        "max_dd": -0.391888702547886,
+        "calmar": 1.2755326187318323,
+        "sortino": 1.3090099636227666,
+        "trades": 142,
+        "time_in_market": 0.5991080277502477
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RSI_OB",
+        "name": "Cross_RVI_State_MACD_Cross_RSI_OB",
+        "sharpe": 1.1416077517988665,
+        "cagr": 0.48186928555297737,
+        "max_dd": -0.46057140493887616,
+        "calmar": 1.046242298991462,
+        "sortino": 1.2424742165379727,
+        "trades": 157,
+        "time_in_market": 0.6219028741328048
+      },
+      {
+        "regime": "RVI_State",
+        "entry": "MACD_Cross",
+        "exit": "RVI_Extreme",
+        "name": "Cross_RVI_State_MACD_Cross_RVI_Extreme",
+        "sharpe": 1.0934016748469404,
+        "cagr": 0.45393150469894783,
+        "max_dd": -0.4605714049388761,
+        "calmar": 0.985583342411782,
+        "sortino": 1.1620055394658042,
+        "trades": 165,
+        "time_in_market": 0.6018334985133796
+      },
+      {
+        "regime": "Supertrend",
+        "entry": "RVI_Trans",
+        "exit": "RVI_Extreme",
+        "name": "Cross_Supertrend_RVI_Trans_RVI_Extreme",
+        "sharpe": 1.0875462301157304,
+        "cagr": 0.40997015663470715,
+        "max_dd": -0.43366086566655176,
+        "calmar": 0.9453704244319321,
+        "sortino": 1.101558488008498,
+        "trades": 188,
+        "time_in_market": 0.5341922695738355
+      }
+    ]
   }
 ]
