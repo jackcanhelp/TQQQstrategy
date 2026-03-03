@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-04 03:02:47
+   2026-03-04 04:36:56
 =======================================================
 
 📈 Overall
-  Total iterations: 1624
-  Successful: 822 (51%)
+  Total iterations: 1653
+  Successful: 828 (50%)
   Best: Strategy_Gen1131 (Composite: 0.4137)
   Hall of Fame: 0 strategies
 
-  This session: 125 iters, 14 ok
-  Duration: 5:00:48
-  LLM calls: 528 (Groq: 442 [Groq: 442/528 ok, 5 keys | pools: idea=68, code=72, fix=45, director=62, secretary=16, overflow=179 | models: kimi-k2-instruct=203, llama-4-scout-17b-16e-instruct=86, llama-4-maverick-17b-128e-instruct=66 | cooling: 2 keys], GitHub: 56, Gemini: 30)
+  This session: 150 iters, 16 ok
+  Duration: 6:34:57
+  LLM calls: 637 (Groq: 537 [Groq: 537/637 ok, 5 keys | pools: idea=79, code=88, fix=54, director=82, secretary=22, overflow=212 | models: kimi-k2-instruct=244, llama-4-scout-17b-16e-instruct=111, llama-4-maverick-17b-128e-instruct=81], GitHub: 56, Gemini: 44)
 
 🏆 Top 5 Strategies (by composite score)
 ───────────────────────────────────────────────────────
@@ -24,15 +24,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen1615: REJECTED: MaxDD=-95.5% worse than -50%
-  ❌ Strategy_Gen1616: REJECTED: Exposure=3.6% below 5%
-  ❌ Strategy_Gen1617: Strategy never enters the market (time_i
-  ❌ Strategy_Gen1618: REJECTED: MaxDD=-58.1% worse than -50%
-  ❌ Strategy_Gen1619: Strategy never enters the market (time_i
-  ❌ Strategy_Gen1620: Strategy never enters the market (time_i
+  ❌ Strategy_Gen1644: Strategy never enters the market (time_i
+  ❌ Strategy_Gen1645: Strategy never enters the market (time_i
+  ❌ Strategy_Gen1646: REJECTED: Exposure=2.7% below 5%
+  ❌ Strategy_Gen1647: REJECTED: MaxDD=-62.4% worse than -50%
+  ✅ Strategy_Gen1648: Comp=0.2989 Sharpe=0.68 CAGR=21.6% MaxDD=-43.8%
   ✅ Cross_RVI_State_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=1.28 CAGR=52.7% MaxDD=-40.3%
   ✅ Cross_RVI_State_RVI_Trans_RSI_OB: Comp=0.0000 Sharpe=1.22 CAGR=50.4% MaxDD=-39.2%
   ✅ Cross_RVI_State_MACD_Cross_RSI_OB: Comp=0.0000 Sharpe=1.15 CAGR=48.4% MaxDD=-46.1%
-  ❌ Strategy_Gen1621: REJECTED: MaxDD=-75.3% worse than -50%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen1649: REJECTED: Exposure=1.1% below 5%
 
 =======================================================
