@@ -67,7 +67,7 @@ class GroqClient:
     # secretary: K1,K2 (index 0,1) — shares idea pool (infrequent, structured output)
     KEY_POOLS = {
         "idea":      [0, 1],
-        "code":      [2, 3],
+        "code":      [2, 3, 5],   # K3, K4, K6 — code generation is the bottleneck
         "fix":       [4],
         "director":  [0, 1],
         "secretary": [0, 1],
@@ -79,7 +79,7 @@ class GroqClient:
     def __init__(self):
         # Collect all available keys (up to 5)
         self.keys: List[str] = []
-        for i in range(1, 6):
+        for i in range(1, 7):
             env_name = "GROQ_API_KEY" if i == 1 else f"GROQ_API_KEY_{i}"
             key = os.getenv(env_name, "").strip().strip('"')
             if key:

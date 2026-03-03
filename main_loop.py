@@ -469,6 +469,7 @@ These indicators are NOT in self.data. Include the helper method and call it in 
             custom_section += f"\n• {ci['name']} — {ci.get('description', '')}"
             custom_section += f"\n  Usage: {ci.get('usage', '')}"
             custom_section += f"\n  Signal: {ci.get('entry_hint', '')}\n"
+        custom_section += "\n⚠️ NOT in self.data — call as methods: kama = self._calc_kama(self.data['Close'])"
         custom_section += "\nUsing these gives genuinely NEW signal sources beyond self.data columns."
 
     return f"""You are a Quantitative Research Director designing TQQQ (3x Leveraged Nasdaq) strategies.
@@ -601,13 +602,19 @@ def build_code_prompt(idea: str, strategy_id: int, indicator_menu: str,
     if custom_indicators:
         helper_section = """
 ═══════════════════════════════════════════════════════════════
-🔭 HELPER METHODS (include in class if using custom indicators)
+🔭 CUSTOM HELPER METHODS — CRITICAL USAGE RULES
 ═══════════════════════════════════════════════════════════════
+⚠️  These indicators are NOT columns in self.data — self.data['KAMA'] will KeyError!
+⚠️  You MUST copy the method into your class body and call it as a method:
+    e.g.  kama = self._calc_kama(self.data['Close'])   # ✅ correct
+          self.data['KAMA']                             # ❌ KeyError!
 """
         for ci in custom_indicators:
+            usage = ci.get("usage", "")
             helper_section += f"\n# {ci['name']}: {ci.get('description', '')}\n"
+            helper_section += f"# Usage: {usage}\n"
             helper_section += ci.get("method_code", "") + "\n"
-        helper_section += "\nInclude the relevant method(s) in your class body if you use these."
+        helper_section += "\nCopy the method(s) above into your class body. Call them in __init__ to pre-compute."
 
     return f"""Write a Python trading strategy class with STATE MACHINE logic.
 
