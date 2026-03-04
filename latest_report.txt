@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-04 14:12:34
+   2026-03-04 15:30:10
 =======================================================
 
 📈 Overall
-  Total iterations: 1876
-  Successful: 865 (46%)
+  Total iterations: 1904
+  Successful: 869 (46%)
   Best: Strategy_Gen1131 (Composite: 0.4137)
   Hall of Fame: 0 strategies
 
-  This session: 150 iters, 12 ok
-  Duration: 7:17:20
-  LLM calls: 632 (Groq: 554 [Groq: 554/632 ok, 6 keys | pools: idea=75, code=111, fix=65, director=77, secretary=23, overflow=203 | models: kimi-k2-instruct=221, llama-4-scout-17b-16e-instruct=137, llama-3.1-8b-instant=77], GitHub: 48, Gemini: 23)
+  This session: 175 iters, 13 ok
+  Duration: 8:34:56
+  LLM calls: 740 (Groq: 648 [Groq: 648/740 ok, 6 keys | pools: idea=88, code=130, fix=74, director=96, secretary=31, overflow=229 | models: kimi-k2-instruct=257, llama-4-scout-17b-16e-instruct=166, llama-3.1-8b-instant=86], GitHub: 48, Gemini: 23)
 
 🏆 Top 5 Strategies (by composite score)
 ───────────────────────────────────────────────────────
@@ -24,16 +24,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen1867: LLM failed to generate code
-  ❌ Strategy_Gen1868: NameError: name 'np' is not defined
-Trac
-  ❌ Strategy_Gen1869: REJECTED: MaxDD=-52.3% worse than -50%
-  ❌ Strategy_Gen1870: LLM failed to generate code
-  ❌ Strategy_Gen1871: REJECTED: MaxDD=-93.4% worse than -50%
+  ❌ Strategy_Gen1895: Class Strategy_Gen1895 not found in gene
+  ❌ Strategy_Gen1896: REJECTED: Sharpe=0.08 below 0.3
+  ❌ Strategy_Gen1897: Class Strategy_Gen1897 not found in gene
+  ❌ Strategy_Gen1898: Strategy never enters the market (time_i
+  ❌ Strategy_Gen1899: LLM failed to generate code
+  ❌ Strategy_Gen1900: REJECTED: Exposure=1.6% below 5%
   ✅ Cross_RVI_State_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=1.28 CAGR=52.7% MaxDD=-40.3%
   ✅ Cross_RVI_State_RVI_Trans_RSI_OB: Comp=0.0000 Sharpe=1.22 CAGR=50.4% MaxDD=-39.2%
   ✅ Cross_RVI_State_MACD_Cross_RSI_OB: Comp=0.0000 Sharpe=1.15 CAGR=48.4% MaxDD=-46.1%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen1872: REJECTED: MaxDD=-91.2% worse than -50%
+  ❌ Strategy_Gen1901: Strategy never enters the market (time_i
 
 =======================================================
