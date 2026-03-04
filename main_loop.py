@@ -130,6 +130,22 @@ def hard_filter(bt) -> Optional[str]:
     return None
 
 
+def is_duplicate_result(bt, history: dict, tol: float = 1e-4) -> bool:
+    """
+    Return True if backtest metrics are functionally identical to any existing
+    strategy in history (within tolerance). Prevents recording RVI clones.
+    """
+    sharpe = round(bt.sharpe_ratio, 4)
+    cagr   = round(bt.cagr, 4)
+    max_dd = round(bt.max_drawdown, 4)
+    for s in history.get("strategies", []):
+        if (abs(s.get("sharpe", -999) - sharpe) < tol and
+                abs(s.get("cagr",   -999) - cagr)   < tol and
+                abs(s.get("max_dd", -999) - max_dd) < tol):
+            return True
+    return False
+
+
 # ═══════════════════════════════════════════════════════════════
 # LLM Client — unified interface
 # ═══════════════════════════════════════════════════════════════
@@ -898,6 +914,17 @@ def run_iteration(
             record_result(history, strategy_id, result["name"], idea,
                           bt.sharpe_ratio, bt.cagr, bt.max_drawdown, bt.calmar_ratio,
                           f"REJECTED: {rejection}", False)
+            return result
+
+        # Duplicate detection — reject functionally identical strategies (RVI clones)
+        if is_duplicate_result(bt, history):
+            msg = (f"Duplicate: Sharpe={bt.sharpe_ratio:.4f} CAGR={bt.cagr:.4f} "
+                   f"MaxDD={bt.max_drawdown:.4f} already exists in history")
+            print(f"   ⚠️ [DUP] {msg}")
+            result["error"] = f"Duplicate result: {msg}"
+            record_result(history, strategy_id, result["name"], idea,
+                          bt.sharpe_ratio, bt.cagr, bt.max_drawdown, bt.calmar_ratio,
+                          f"REJECTED: duplicate_strategy", False)
             return result
 
         # Runtime look-ahead detection for promising strategies

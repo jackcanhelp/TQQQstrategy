@@ -129,6 +129,8 @@ class InternalAnalyst:
                 failure_patterns["look_ahead_bias"] = failure_patterns.get("look_ahead_bias", 0) + 1
             elif "failed to generate" in reason.lower() or "LLM" in reason:
                 failure_patterns["llm_failure"] = failure_patterns.get("llm_failure", 0) + 1
+            elif "duplicate" in reason.lower():
+                failure_patterns["duplicate_strategy"] = failure_patterns.get("duplicate_strategy", 0) + 1
             else:
                 failure_patterns["other"] = failure_patterns.get("other", 0) + 1
 
@@ -272,6 +274,14 @@ OVERUSED (dominant, may cause stagnation — try alternatives):"""
             recommendations.append(
                 "NOTE: Low exposure failures — regime filter too conservative. "
                 "Reduce strictness or widen the 'bull' state threshold."
+            )
+        if failure_patterns.get("duplicate_strategy", 0) > 0:
+            dup_count = failure_patterns["duplicate_strategy"]
+            recommendations.append(
+                f"CRITICAL: {dup_count} strategies were EXACT DUPLICATES of existing ones (same Sharpe/CAGR/MaxDD). "
+                "The LLM is generating functionally identical RVI code despite different descriptions. "
+                "MANDATE: next strategies MUST NOT use RVI/RVI_Refined/RVI_State as primary entry signal. "
+                "Force use of: HMM_Regime, QQE, STC, KDJ_J, CTI, GARCH_Vol, or CP_Distance instead."
             )
         if score_trend == "STAGNATING":
             recommendations.append(
