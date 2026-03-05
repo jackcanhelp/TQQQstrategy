@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-06 03:24:37
+   2026-03-06 04:07:21
 =======================================================
 
 📈 Overall
-  Total iterations: 3125
-  Successful: 872 (28%)
+  Total iterations: 3152
+  Successful: 878 (28%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 0 strategies
 
-  This session: 275 iters, 21 ok
-  Duration: 5:19:50
-  LLM calls: 1169 (Groq: 1157 [Groq: 1157/1169 ok, 10 keys | pools: idea=203, code=191, fix=182, director=289, secretary=88, overflow=204 | models: kimi-k2-instruct=260, qwen3-32b=244, llama-4-scout-17b-16e-instruct=208 | cooling: 13 keys], GitHub: 12, Gemini: 0)
+  This session: 300 iters, 25 ok
+  Duration: 6:02:34
+  LLM calls: 1276 (Groq: 1258 [Groq: 1258/1276 ok, 10 keys | pools: idea=215, code=210, fix=203, director=314, secretary=96, overflow=220 | models: kimi-k2-instruct=288, qwen3-32b=266, llama-4-scout-17b-16e-instruct=219 | cooling: 2 keys], GitHub: 18, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -24,16 +24,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen3116: REJECTED: MaxDD=-59.2% worse than -50%
-  ❌ Strategy_Gen3117: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3118: REJECTED: MaxDD=-63.9% worse than -50%
-  ❌ Strategy_Gen3119: ValueError: The truth value of a Series 
-  ❌ Strategy_Gen3120: REJECTED: MaxDD=-98.3% worse than -50%
-  ❌ Strategy_Gen3121: REJECTED: MaxDD=-54.7% worse than -50%
-  ❌ Strategy_Gen3122: REJECTED: MaxDD=-51.4% worse than -50%
-  ✅ Cross_RVI_State_RVI_Trans_ZScore_OB: Comp=0.0000 Sharpe=1.00 CAGR=37.6% MaxDD=-43.7%
-  ✅ Cross_RVI_State_MACD_Cross_ATR_Spike: Comp=0.0000 Sharpe=0.99 CAGR=43.3% MaxDD=-49.3%
-  ❌ Strategy_Gen3123: KeyError: 'Hurst'
-Traceback (most recent
+  ❌ Strategy_Gen3143: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3144: REJECTED: Sharpe=-0.58 below 0.3
+  ❌ Strategy_Gen3145: REJECTED: Sharpe=-0.14 below 0.3
+  ❌ Strategy_Gen3146: REJECTED: Exposure=2.1% below 5%
+  ❌ Strategy_Gen3147: KeyError: 'Vol'
+Traceback (most recent c
+  ✅ Strategy_Gen3148: Comp=0.3375 Sharpe=0.92 CAGR=35.6% MaxDD=-43.7%
+  ❌ Strategy_Gen3149: ValueError: The truth value of a Series 
+  ✅ Cross_RVI_State_BB_Squeeze_RSI_OB: Comp=0.0000 Sharpe=0.89 CAGR=31.9% MaxDD=-44.8%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen3150: Strategy never enters the market (time_i
 
 =======================================================
