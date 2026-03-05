@@ -312,7 +312,7 @@ def record_result(history: Dict, strategy_id: int, name: str, idea: str,
     })
     if (composite > history.get("best_composite", 0)
             and sharpe > RANK_MIN_SHARPE and cagr > RANK_MIN_CAGR):
-        history["best_sharpe"] = calmar  # 向下相容
+        history["best_sharpe"] = sharpe
         history["best_calmar"] = calmar
         history["best_composite"] = composite
         history["best_strategy"] = name
@@ -1049,9 +1049,9 @@ def run_iteration(
                       test_sharpe=test_sharpe, test_cagr=test_cagr,
                       test_max_dd=test_max_dd, test_composite=test_composite)
 
-        # Check hall of fame
-        check_hall_of_fame(result["name"], bt.sharpe_ratio, bt.max_drawdown,
-                          bt.cagr, bt.calmar_ratio, idea)
+        # Check hall of fame — use result[] values (may be swept, higher than bt)
+        check_hall_of_fame(result["name"], result["sharpe"], result["max_dd"],
+                          result["cagr"], result["calmar"], idea)
 
         # Instant Telegram + git push on new record (composite score)
         if composite > history.get("best_composite", 0):

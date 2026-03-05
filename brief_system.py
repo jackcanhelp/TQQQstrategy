@@ -154,8 +154,8 @@ class InternalAnalyst:
             half = len(recent_successful) // 2
             first_half = recent_successful[:half]
             second_half = recent_successful[half:]
-            avg_early = sum(s.get("composite", 0) for s in first_half) / len(first_half)
-            avg_late = sum(s.get("composite", 0) for s in second_half) / len(second_half)
+            avg_early = sum(s.get("sharpe", 0) for s in first_half) / len(first_half)
+            avg_late = sum(s.get("sharpe", 0) for s in second_half) / len(second_half)
             score_trend = "IMPROVING" if avg_late > avg_early * 1.02 else "STAGNATING"
             trend_detail = f" (early_avg={avg_early:.4f} → recent_avg={avg_late:.4f})"
         else:
