@@ -409,6 +409,23 @@ def save_history(history: Dict):
         json.dump(history, f, indent=2, default=str)
 
 
+def backfill_fingerprints(history: Dict):
+    """
+    Backfill indicator_fingerprint for recent strategies that have idea text
+    but no fingerprint stored (from runs before Plan C was added).
+    Only processes the last 100 strategies to keep startup fast.
+    """
+    strategies = history.get("strategies", [])
+    updated = 0
+    for s in strategies[-100:]:
+        if "indicator_fingerprint" not in s and s.get("idea"):
+            s["indicator_fingerprint"] = compute_fingerprint(s["idea"])
+            updated += 1
+    if updated:
+        print(f"   🔄 Backfilled fingerprints for {updated} strategies")
+        save_history(history)
+
+
 def record_result(history: Dict, strategy_id: int, name: str, idea: str,
                   sharpe: float, cagr: float, max_dd: float, calmar: float,
                   analysis: str, success: bool,
@@ -1014,7 +1031,8 @@ def run_iteration(
     if not raw_code:
         result["error"] = "LLM failed to generate code"
         record_result(history, strategy_id, result["name"], idea,
-                      0, 0, 0, 0, result["error"], False)
+                      0, 0, 0, 0, result["error"], False,
+                      mode_used=result["mode_used"], indicator_fingerprint=result["indicator_fingerprint"])
         return result
 
     code = clean_code(raw_code)
@@ -1026,7 +1044,8 @@ def run_iteration(
     if not is_valid:
         result["error"] = "Look-ahead bias in code"
         record_result(history, strategy_id, result["name"], idea,
-                      0, 0, 0, 0, result["error"], False)
+                      0, 0, 0, 0, result["error"], False,
+                      mode_used=result["mode_used"], indicator_fingerprint=result["indicator_fingerprint"])
         return result
 
     # Step 4: Save, load, and test
@@ -1075,7 +1094,8 @@ def run_iteration(
     if not success:
         result["error"] = err[:100] if 'err' in dir() else "Load failed"
         record_result(history, strategy_id, result["name"], idea,
-                      0, 0, 0, 0, result["error"], False)
+                      0, 0, 0, 0, result["error"], False,
+                      mode_used=result["mode_used"], indicator_fingerprint=result["indicator_fingerprint"])
         return result
 
     # Step 5: Backtest (full + OOS train/test split)
@@ -1088,7 +1108,8 @@ def run_iteration(
         if not valid:
             result["error"] = "Unrealistic results (possible bug)"
             record_result(history, strategy_id, result["name"], idea,
-                          0, 0, 0, 0, result["error"], False)
+                          0, 0, 0, 0, result["error"], False,
+                          mode_used=result["mode_used"], indicator_fingerprint=result["indicator_fingerprint"])
             return result
 
         # Hard filter — reject strategies that don't meet minimum thresholds
@@ -1097,7 +1118,8 @@ def run_iteration(
             result["error"] = f"Hard filter: {rejection}"
             record_result(history, strategy_id, result["name"], idea,
                           bt.sharpe_ratio, bt.cagr, bt.max_drawdown, bt.calmar_ratio,
-                          f"REJECTED: {rejection}", False)
+                          f"REJECTED: {rejection}", False,
+                          mode_used=result["mode_used"], indicator_fingerprint=result["indicator_fingerprint"])
             return result
 
         # Duplicate detection — reject functionally identical strategies (RVI clones)
@@ -1108,7 +1130,8 @@ def run_iteration(
             result["error"] = f"Duplicate result: {msg}"
             record_result(history, strategy_id, result["name"], idea,
                           bt.sharpe_ratio, bt.cagr, bt.max_drawdown, bt.calmar_ratio,
-                          f"REJECTED: duplicate_strategy", False)
+                          f"REJECTED: duplicate_strategy", False,
+                          mode_used=result["mode_used"], indicator_fingerprint=result["indicator_fingerprint"])
             return result
 
         # Runtime look-ahead detection for promising strategies
@@ -1125,7 +1148,8 @@ def run_iteration(
                     print(f"   {stat_msg}")
                     result["error"] = f"Statistical look-ahead: {stat_msg}"
                     record_result(history, strategy_id, result["name"], idea,
-                                  0, 0, 0, 0, result["error"], False)
+                                  0, 0, 0, 0, result["error"], False,
+                                  mode_used=result["mode_used"], indicator_fingerprint=result["indicator_fingerprint"])
                     return result
 
                 # Online consistency test: do signals change with more data?
@@ -1136,7 +1160,8 @@ def run_iteration(
                 if not la_valid:
                     result["error"] = f"Look-ahead bias detected: {la_msg}"
                     record_result(history, strategy_id, result["name"], idea,
-                                  0, 0, 0, 0, result["error"], False)
+                                  0, 0, 0, 0, result["error"], False,
+                                  mode_used=result["mode_used"], indicator_fingerprint=result["indicator_fingerprint"])
                     return result
             except Exception as e:
                 print(f"   ⚠️ Look-ahead test error (continuing): {str(e)[:60]}")
@@ -1255,7 +1280,8 @@ def run_iteration(
     except Exception as e:
         result["error"] = str(e)[:100]
         record_result(history, strategy_id, result["name"], idea,
-                      0, 0, 0, 0, f"Backtest error: {result['error']}", False)
+                      0, 0, 0, 0, f"Backtest error: {result['error']}", False,
+                      mode_used=result["mode_used"], indicator_fingerprint=result["indicator_fingerprint"])
 
     return result
 
@@ -1746,6 +1772,7 @@ def main():
     indicator_menu = get_indicator_menu()
     engine = BacktestEngine(data)
     history = load_history()
+    backfill_fingerprints(history)  # Plan C: populate missing fingerprints from stored ideas
     llm = LLMClient()
 
     # ─── Multi-agent pipeline components (ABCDEF) ───
