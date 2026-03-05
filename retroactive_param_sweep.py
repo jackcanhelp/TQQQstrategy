@@ -430,6 +430,15 @@ def main():
                     s.get("sharpe", 0) >= args.min_sharpe]
         print(f"Filter: Sharpe >= {args.min_sharpe}")
 
+    # Deduplicate by name — keep highest Sharpe per strategy name
+    seen_names: Dict[str, dict] = {}
+    for s in rankable:
+        name = s.get("name", "")
+        if name not in seen_names or s.get("sharpe", 0) > seen_names[name].get("sharpe", 0):
+            seen_names[name] = s
+    rankable = list(seen_names.values())
+    print(f"Unique strategies after dedup: {len(rankable)}")
+
     # Pick targets
     if args.name:
         targets = [s for s in strategies if s["name"] == args.name]
