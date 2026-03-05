@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-06 06:59:55
+   2026-03-06 07:48:06
 =======================================================
 
 📈 Overall
-  Total iterations: 3255
-  Successful: 899 (28%)
+  Total iterations: 3302
+  Successful: 903 (27%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 0 strategies
 
-  This session: 400 iters, 43 ok
-  Duration: 8:55:09
-  LLM calls: 1651 (Groq: 1629 [Groq: 1629/1651 ok, 10 keys | pools: idea=297, code=294, fix=257, director=389, secretary=118, overflow=274 | models: kimi-k2-instruct=383, qwen3-32b=332, llama-4-scout-17b-16e-instruct=279], GitHub: 22, Gemini: 0)
+  This session: 25 iters, 4 ok
+  Duration: 0:29:51
+  LLM calls: 103 (Groq: 88 [Groq: 88/103 ok, 10 keys | pools: idea=18, code=10, fix=17, director=16, secretary=4, overflow=23 | models: kimi-k2-instruct=33, llama-4-scout-17b-16e-instruct=22, qwen3-32b=18 | cooling: 9 keys], GitHub: 15, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -24,15 +24,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen3246: REJECTED: Exposure=2.2% below 5%
-  ❌ Strategy_Gen3247: REJECTED: MaxDD=-71.1% worse than -50%
-  ❌ Strategy_Gen3248: Look-ahead bias in code
-  ❌ Strategy_Gen3249: UnboundLocalError: cannot access local v
-  ❌ Strategy_Gen3250: AttributeError: 'numpy.float64' object h
-  ❌ Strategy_Gen3251: REJECTED: MaxDD=-68.9% worse than -50%
-  ❌ Strategy_Gen3252: REJECTED: MaxDD=-75.4% worse than -50%
-  ❌ Strategy_Gen3253: Strategy never enters the market (time_i
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen3254: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3293: REJECTED: Sharpe=0.08 below 0.3
+  ❌ Strategy_Gen3294: REJECTED: MaxDD=-83.6% worse than -50%
+  ❌ Strategy_Gen3295: REJECTED: Only 2 trades (min=10)
+  ❌ Strategy_Gen3296: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3297: KeyError: 'Vol'
+Traceback (most recent c
+  ❌ Strategy_Gen3298: REJECTED: Sharpe=-0.06 below 0.3
+  ❌ Strategy_Gen3299: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3300: REJECTED: MaxDD=-81.7% worse than -50%
+  ✅ Strategy_Gen3301: Comp=0.2560 Sharpe=0.50 CAGR=12.0% MaxDD=-49.1%
+  ❌ Strategy_Gen3302: REJECTED: MaxDD=-52.8% worse than -50%
 
 =======================================================
