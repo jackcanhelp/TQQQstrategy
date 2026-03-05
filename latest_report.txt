@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-06 02:02:41
+   2026-03-06 02:23:56
 =======================================================
 
 📈 Overall
-  Total iterations: 3047
+  Total iterations: 3072
   Successful: 864 (28%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 0 strategies
 
-  This session: 200 iters, 16 ok
-  Duration: 3:57:55
-  LLM calls: 850 (Groq: 850 [Groq: 850/850 ok, 10 keys | pools: idea=144, code=143, fix=132, director=211, secretary=63, overflow=157 | models: kimi-k2-instruct=194, qwen3-32b=181, llama-4-scout-17b-16e-instruct=143 | cooling: 2 keys], GitHub: 0, Gemini: 0)
+  This session: 225 iters, 16 ok
+  Duration: 4:19:09
+  LLM calls: 966 (Groq: 966 [Groq: 966/966 ok, 10 keys | pools: idea=163, code=161, fix=151, director=241, secretary=72, overflow=178 | models: kimi-k2-instruct=216, qwen3-32b=206, llama-4-scout-17b-16e-instruct=168 | cooling: 19 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -24,16 +24,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen3038: Syntax error in generated code: invalid 
-  ❌ Strategy_Gen3039: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3040: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3041: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3042: REJECTED: Exposure=1.7% below 5%
-  ❌ Strategy_Gen3043: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3044: Strategy never enters the market (time_i
-  ✅ Cross_SMA_Trend_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=0.92 CAGR=28.3% MaxDD=-39.2%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen3045: KeyError: 'HighVolatility'
-Traceback (mo
+  ❌ Strategy_Gen3063: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3064: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3065: REJECTED: Sharpe=0.27 below 0.3
+  ❌ Strategy_Gen3066: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3067: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3068: REJECTED: Only 6 trades (min=10)
+  ❌ Strategy_Gen3069: AttributeError: 'Strategy_Gen3069' objec
+  ❌ Strategy_Gen3070: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3071: REJECTED: MaxDD=-67.2% worse than -50%
+  ❌ Strategy_Gen3072: REJECTED: MaxDD=-100.0% worse than -50%
 
 =======================================================
