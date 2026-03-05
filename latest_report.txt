@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-06 01:09:14
+   2026-03-06 01:29:13
 =======================================================
 
 📈 Overall
-  Total iterations: 2995
+  Total iterations: 3020
   Successful: 862 (29%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 0 strategies
 
-  This session: 150 iters, 16 ok
-  Duration: 3:04:28
-  LLM calls: 609 (Groq: 609 [Groq: 609/609 ok, 10 keys | pools: idea=107, code=114, fix=93, director=146, secretary=44, overflow=105 | models: kimi-k2-instruct=136, qwen3-32b=125, llama-4-scout-17b-16e-instruct=105], GitHub: 0, Gemini: 0)
+  This session: 175 iters, 16 ok
+  Duration: 3:24:26
+  LLM calls: 723 (Groq: 723 [Groq: 723/723 ok, 10 keys | pools: idea=126, code=132, fix=110, director=178, secretary=54, overflow=123 | models: kimi-k2-instruct=163, qwen3-32b=148, llama-4-scout-17b-16e-instruct=127 | cooling: 26 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -24,16 +24,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen2986: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2987: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2988: Strategy never enters the market (time_i
-  ✅ Strategy_Gen2989: Comp=0.3030 Sharpe=0.75 CAGR=25.7% MaxDD=-46.8%
-  ❌ Strategy_Gen2990: REJECTED: MaxDD=-67.4% worse than -50%
-  ❌ Strategy_Gen2991: KeyError: 'State'
-Traceback (most recent
-  ❌ Strategy_Gen2992: AttributeError: 'numpy.int64' object has
-  ✅ Strategy_Gen2993: Comp=0.3307 Sharpe=0.88 CAGR=23.5% MaxDD=-37.7%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen2994: REJECTED: Only 4 trades (min=10)
+  ❌ Strategy_Gen3011: REJECTED: MaxDD=-81.7% worse than -50%
+  ❌ Strategy_Gen3012: TypeError: Cannot perform 'rand_' with a
+  ❌ Strategy_Gen3013: REJECTED: MaxDD=-65.3% worse than -50%
+  ❌ Strategy_Gen3014: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3015: REJECTED: MaxDD=-65.5% worse than -50%
+  ❌ Strategy_Gen3016: REJECTED: MaxDD=-97.8% worse than -50%
+  ❌ Strategy_Gen3017: UnboundLocalError: cannot access local v
+  ❌ Strategy_Gen3018: REJECTED: MaxDD=-62.9% worse than -50%
+  ❌ Strategy_Gen3019: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3020: REJECTED: MaxDD=-52.1% worse than -50%
 
 =======================================================
