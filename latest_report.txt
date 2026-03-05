@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-06 00:31:32
+   2026-03-06 01:09:14
 =======================================================
 
 📈 Overall
-  Total iterations: 2969
-  Successful: 859 (29%)
+  Total iterations: 2995
+  Successful: 862 (29%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 0 strategies
 
-  This session: 125 iters, 14 ok
-  Duration: 2:26:45
-  LLM calls: 501 (Groq: 501 [Groq: 501/501 ok, 10 keys | pools: idea=94, code=98, fix=77, director=121, secretary=35, overflow=76 | models: kimi-k2-instruct=105, qwen3-32b=101, llama-4-scout-17b-16e-instruct=93 | cooling: 4 keys], GitHub: 0, Gemini: 0)
+  This session: 150 iters, 16 ok
+  Duration: 3:04:28
+  LLM calls: 609 (Groq: 609 [Groq: 609/609 ok, 10 keys | pools: idea=107, code=114, fix=93, director=146, secretary=44, overflow=105 | models: kimi-k2-instruct=136, qwen3-32b=125, llama-4-scout-17b-16e-instruct=105], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -24,17 +24,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen2960: REJECTED: Sharpe=0.27 below 0.3
-  ❌ Strategy_Gen2961: REJECTED: MaxDD=-51.3% worse than -50%
-  ❌ Strategy_Gen2962: REJECTED: Sharpe=0.16 below 0.3
-  ✅ Strategy_Gen2963: Comp=0.3049 Sharpe=0.69 CAGR=18.3% MaxDD=-38.1%
-  ❌ Strategy_Gen2964: REJECTED: MaxDD=-58.4% worse than -50%
-  ❌ Strategy_Gen2965: REJECTED: Only 6 trades (min=10)
-  ❌ Strategy_Gen2966: KeyError: 'Vol'
-Traceback (most recent c
-  ❌ Strategy_Gen2967: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2968: KeyError: 'Hurst'
+  ❌ Strategy_Gen2986: Strategy never enters the market (time_i
+  ❌ Strategy_Gen2987: Strategy never enters the market (time_i
+  ❌ Strategy_Gen2988: Strategy never enters the market (time_i
+  ✅ Strategy_Gen2989: Comp=0.3030 Sharpe=0.75 CAGR=25.7% MaxDD=-46.8%
+  ❌ Strategy_Gen2990: REJECTED: MaxDD=-67.4% worse than -50%
+  ❌ Strategy_Gen2991: KeyError: 'State'
 Traceback (most recent
-  ❌ Strategy_Gen2969: Strategy never enters the market (time_i
+  ❌ Strategy_Gen2992: AttributeError: 'numpy.int64' object has
+  ✅ Strategy_Gen2993: Comp=0.3307 Sharpe=0.88 CAGR=23.5% MaxDD=-37.7%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen2994: REJECTED: Only 4 trades (min=10)
 
 =======================================================
