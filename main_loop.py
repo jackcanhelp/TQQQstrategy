@@ -590,6 +590,15 @@ RULES:
 - Cash (0 exposure) is a valid and powerful position
 - Signals: -1.0 (short) to 1.0 (long), 0.0 = cash
 
+⚠️ ENTRY FREQUENCY RULE (CRITICAL — most common failure):
+Your entry condition MUST fire on at least 5% of trading days.
+FORBIDDEN pattern (fires almost NEVER):
+  bad:  RSI > 65 AND MACD > 0 AND Volume > 2.5x AND Aroon > 75  ← 4 ANDs = near-zero frequency
+REQUIRED pattern (fires regularly):
+  good: (RSI > 55 AND MACD > 0) OR (Volume > 1.5x AND Close > SMA20)  ← use OR between groups
+  good: single strong condition + 1 regime filter  ← simpler is better
+Rule of thumb: each AND halves your entry frequency. Max 2 AND conditions per entry signal.
+
 ⛔ ABSOLUTELY FORBIDDEN — these columns DO NOT EXIST in self.data:
   Yield curve: YC_Invert, YC2Y10Y, 2Y-10Y, 2Y, 10Y, US_10Y, curve_2y10y, YC_2Y10Y
   Fed/macro: FedWatch, FedCutProb, CME_CutProb, CME_3mo_cut_prob, FedPiv, FedFunds
@@ -738,6 +747,33 @@ OUTPUT ONLY PYTHON CODE. No markdown, no explanations."""
 
 def build_fix_prompt(code: str, error: str, strategy_id: int) -> str:
     class_name = f"Strategy_Gen{strategy_id}"
+
+    # Special guidance for time_in_market=0 (never enters market)
+    entry_fix_section = ""
+    if "time_in_market=0" in error or "time_in_market" in error.lower():
+        entry_fix_section = """
+⚠️ ROOT CAUSE: Strategy NEVER ENTERS THE MARKET (time_in_market=0).
+Your entry condition evaluates to False on EVERY single trading day.
+
+DIAGNOSE & FIX — pick the applicable cause:
+1. TOO MANY AND CONDITIONS — each AND halves frequency:
+   bad:  (RSI > 65) & (MACD > 0) & (Vol > 2x) & (Aroon > 75)  → fires <1% of days
+   fix:  (RSI > 52) & (MACD > 0)  OR  (Vol > 1.5x) & (Close > SMA_20)
+
+2. THRESHOLDS TOO EXTREME — loosen them:
+   bad:  RSI > 75, Volume > 3.0x, ZScore < -2.5, ATR_Pct > 5%
+   fix:  RSI > 55, Volume > 1.3x, ZScore < -1.5, ATR_Pct > 1%
+
+3. TRANSITION LOGIC BUG — shift(1) fills NaN on first row:
+   bad:  (signal > 0) & (signal.shift(1) == 0)  → NaN comparison always False
+   fix:  (signal > 0) & (signal.shift(1).fillna(0) == 0)
+
+4. INDICATOR NAME TYPO — use exact column names from self.data:
+   Always do: entry_mask = self.data['EXACT_COLUMN_NAME'] > threshold
+
+REQUIRED: after fixing, your entry_mask.sum() must be > 20 (fires on 20+ days).
+"""
+
     return f"""Fix this broken Python trading strategy.
 
 BROKEN CODE:
@@ -745,7 +781,7 @@ BROKEN CODE:
 
 ERROR:
 {error}
-
+{entry_fix_section}
 REQUIREMENTS:
 1. Class name: {class_name}
 2. Inherit from BaseStrategy
