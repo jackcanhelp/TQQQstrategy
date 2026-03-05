@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-06 04:29:29
+   2026-03-06 05:49:59
 =======================================================
 
 📈 Overall
-  Total iterations: 3177
-  Successful: 884 (28%)
+  Total iterations: 3204
+  Successful: 891 (28%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 0 strategies
 
-  This session: 325 iters, 31 ok
-  Duration: 6:24:43
-  LLM calls: 1365 (Groq: 1347 [Groq: 1347/1365 ok, 10 keys | pools: idea=233, code=230, fix=216, director=330, secretary=101, overflow=237 | models: kimi-k2-instruct=309, qwen3-32b=284, llama-4-scout-17b-16e-instruct=231 | cooling: 11 keys], GitHub: 18, Gemini: 0)
+  This session: 350 iters, 36 ok
+  Duration: 7:45:13
+  LLM calls: 1462 (Groq: 1444 [Groq: 1444/1462 ok, 10 keys | pools: idea=258, code=252, fix=232, director=354, secretary=108, overflow=240 | models: kimi-k2-instruct=334, qwen3-32b=290, llama-4-scout-17b-16e-instruct=256 | cooling: 9 keys], GitHub: 18, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -24,15 +24,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen3168: REJECTED: Exposure=1.5% below 5%
-  ❌ Strategy_Gen3169: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3170: TypeError: Strategy_Gen3170.init() takes
-  ✅ Strategy_Gen3171: Comp=0.3959 Sharpe=1.21 CAGR=48.8% MaxDD=-40.3%
-  ❌ Strategy_Gen3172: REJECTED: MaxDD=-59.3% worse than -50%
-  ❌ Strategy_Gen3173: REJECTED: Sharpe=0.14 below 0.3
-  ✅ Strategy_Gen3174: Comp=0.3879 Sharpe=1.21 CAGR=41.8% MaxDD=-38.4%
-  ✅ Strategy_Gen3175: Comp=0.3088 Sharpe=0.92 CAGR=39.5% MaxDD=-57.4%
-  ✅ Strategy_Gen3176: Comp=0.3285 Sharpe=0.87 CAGR=27.5% MaxDD=-40.4%
-  ❌ Strategy_Gen3177: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3195: REJECTED: MaxDD=-67.8% worse than -50%
+  ❌ Strategy_Gen3196: REJECTED: MaxDD=-75.8% worse than -50%
+  ❌ Strategy_Gen3197: REJECTED: Sharpe=0.20 below 0.3
+  ❌ Strategy_Gen3198: REJECTED: Sharpe=-0.03 below 0.3
+  ✅ Strategy_Gen3199: Comp=0.3145 Sharpe=0.81 CAGR=23.6% MaxDD=-41.6%
+  ❌ Strategy_Gen3200: Failed to load strategy: Can't instantia
+  ✅ Strategy_Gen3201: Comp=0.3154 Sharpe=0.37 CAGR=4.9% MaxDD=-10.3%
+  ✅ Cross_RVI_State_RVI_Trans_TSI_Neg: Comp=0.0000 Sharpe=0.92 CAGR=35.6% MaxDD=-43.7%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen3202: Strategy never enters the market (time_i
 
 =======================================================
