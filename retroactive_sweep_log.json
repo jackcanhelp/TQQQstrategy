@@ -1,0 +1,373 @@
+[
+  {
+    "run_at": "2026-03-05T09:48:07.881230",
+    "targets": 5,
+    "improved": 0,
+    "entries": [
+      {
+        "name": "Strategy_Gen983",
+        "original_composite": 0.7330751610887262,
+        "original_sharpe": 0.7912615362109625,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen995",
+        "original_composite": 0.6406664451649691,
+        "original_sharpe": 0.3175982003888808,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen980",
+        "original_composite": 0.6132646391285299,
+        "original_sharpe": 0.8595137214224282,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen971",
+        "original_composite": 0.4710986309718839,
+        "original_sharpe": 0.7286757397732683,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1920",
+        "original_composite": 0.4163,
+        "original_sharpe": 1.2832151736408899,
+        "status": "no_improvement"
+      }
+    ]
+  },
+  {
+    "run_at": "2026-03-05T09:50:05.590095",
+    "targets": 5,
+    "improved": 0,
+    "entries": [
+      {
+        "name": "Strategy_Gen983",
+        "original_composite": 0.7330751610887262,
+        "original_sharpe": 0.7912615362109625,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen995",
+        "original_composite": 0.6406664451649691,
+        "original_sharpe": 0.3175982003888808,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen980",
+        "original_composite": 0.6132646391285299,
+        "original_sharpe": 0.8595137214224282,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen971",
+        "original_composite": 0.4710986309718839,
+        "original_sharpe": 0.7286757397732683,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1920",
+        "original_composite": 0.4163,
+        "original_sharpe": 1.2832151736408899,
+        "status": "no_improvement"
+      }
+    ]
+  },
+  {
+    "run_at": "2026-03-05T11:49:49.609840",
+    "targets": 15,
+    "improved": 4,
+    "entries": [
+      {
+        "name": "Strategy_Gen983",
+        "original_composite": 0.7330751610887262,
+        "original_sharpe": 0.7912615362109625,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_59": 48,
+            "thresh_76": 76,
+            "window_20": 20,
+            "window_34": 34
+          },
+          "sharpe": 0.8746879558741797,
+          "cagr": 0.21596662682978418,
+          "max_dd": -0.3132190109855345,
+          "calmar": 0.6895067644529349,
+          "composite": 0.349
+        }
+      },
+      {
+        "name": "Strategy_Gen995",
+        "original_composite": 0.6406664451649691,
+        "original_sharpe": 0.3175982003888808,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen980",
+        "original_composite": 0.6132646391285299,
+        "original_sharpe": 0.8595137214224282,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen971",
+        "original_composite": 0.4710986309718839,
+        "original_sharpe": 0.7286757397732683,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1920",
+        "original_composite": 0.4163,
+        "original_sharpe": 1.2832151736408899,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2117",
+        "original_composite": 0.4163,
+        "original_sharpe": 1.2832151736408899,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2300",
+        "original_composite": 0.4163,
+        "original_sharpe": 1.1375656063468158,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1131",
+        "original_composite": 0.4137,
+        "original_sharpe": 1.2742769191131091,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1381",
+        "original_composite": 0.4137,
+        "original_sharpe": 1.270626714563683,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_10": 10,
+            "thresh_25": 15,
+            "thresh_42": 42,
+            "thresh_59": 59
+          },
+          "sharpe": 1.3128721533577974,
+          "cagr": 0.5425397598945048,
+          "max_dd": -0.4033545621781566,
+          "calmar": 1.3450691048707462,
+          "composite": 0.422
+        }
+      },
+      {
+        "name": "Strategy_Gen2113",
+        "original_composite": 0.4085,
+        "original_sharpe": 1.1931162242214668,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2343",
+        "original_composite": 0.3914,
+        "original_sharpe": 0.9256063028238596,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1766",
+        "original_composite": 0.3911,
+        "original_sharpe": 1.0707385983186528,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2083",
+        "original_composite": 0.37,
+        "original_sharpe": 1.1188003361265357,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_1.5": 2.1,
+            "thresh_35": 49,
+            "thresh_42": 42,
+            "thresh_59": 59
+          },
+          "sharpe": 1.195017680136848,
+          "cagr": 0.4351778585815709,
+          "max_dd": -0.40783322407653144,
+          "calmar": 1.0670485700789991,
+          "composite": 0.3919
+        }
+      },
+      {
+        "name": "Strategy_Gen2289",
+        "original_composite": 0.3691,
+        "original_sharpe": 1.0709455760826256,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1230",
+        "original_composite": 0.3669,
+        "original_sharpe": 0.8868922497563367,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 42,
+            "thresh_59": 59,
+            "thresh_76": 76
+          },
+          "sharpe": 0.9576531168018529,
+          "cagr": 0.19265287630286365,
+          "max_dd": -0.24982249159603576,
+          "calmar": 0.7711590540630118,
+          "composite": 0.3779
+        }
+      }
+    ]
+  },
+  {
+    "run_at": "2026-03-05T12:06:14.277114",
+    "targets": 15,
+    "improved": 4,
+    "entries": [
+      {
+        "name": "Strategy_Gen983",
+        "original_composite": 0.7330751610887262,
+        "original_sharpe": 0.7912615362109625,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_59": 59,
+            "thresh_76": 76,
+            "window_20": 20,
+            "window_34": 44
+          },
+          "sharpe": 0.8308508339849965,
+          "cagr": 0.16673762104798806,
+          "max_dd": -0.2101139660896693,
+          "calmar": 0.793558011164428,
+          "composite": 0.3664
+        }
+      },
+      {
+        "name": "Strategy_Gen995",
+        "original_composite": 0.6406664451649691,
+        "original_sharpe": 0.3175982003888808,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen980",
+        "original_composite": 0.6132646391285299,
+        "original_sharpe": 0.8595137214224282,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen971",
+        "original_composite": 0.4710986309718839,
+        "original_sharpe": 0.7286757397732683,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 50,
+            "thresh_58": 58,
+            "thresh_76": 76,
+            "window_200": 80
+          },
+          "sharpe": 0.8400928922150059,
+          "cagr": 0.2040907604596267,
+          "max_dd": -0.36814803292836223,
+          "calmar": 0.5543714544288781,
+          "composite": 0.327
+        }
+      },
+      {
+        "name": "Strategy_Gen1920",
+        "original_composite": 0.4163,
+        "original_sharpe": 1.2832151736408899,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2117",
+        "original_composite": 0.4163,
+        "original_sharpe": 1.2832151736408899,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2300",
+        "original_composite": 0.4163,
+        "original_sharpe": 1.1375656063468158,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1131",
+        "original_composite": 0.4137,
+        "original_sharpe": 1.2742769191131091,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1381",
+        "original_composite": 0.4137,
+        "original_sharpe": 1.270626714563683,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_10": 8,
+            "thresh_25": 15,
+            "thresh_42": 42,
+            "thresh_59": 59
+          },
+          "sharpe": 1.3128721533577974,
+          "cagr": 0.5425397598945048,
+          "max_dd": -0.4033545621781566,
+          "calmar": 1.3450691048707462,
+          "composite": 0.422
+        }
+      },
+      {
+        "name": "Strategy_Gen2113",
+        "original_composite": 0.4085,
+        "original_sharpe": 1.1931162242214668,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2343",
+        "original_composite": 0.3914,
+        "original_sharpe": 0.9256063028238596,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1766",
+        "original_composite": 0.3911,
+        "original_sharpe": 1.0707385983186528,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2083",
+        "original_composite": 0.37,
+        "original_sharpe": 1.1188003361265357,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_1.5": 0.9,
+            "thresh_35": 49,
+            "thresh_42": 42,
+            "thresh_59": 59
+          },
+          "sharpe": 1.1594752842278921,
+          "cagr": 0.3751479608379522,
+          "max_dd": -0.35231505512715994,
+          "calmar": 1.0648082032786004,
+          "composite": 0.3954
+        }
+      },
+      {
+        "name": "Strategy_Gen2289",
+        "original_composite": 0.3691,
+        "original_sharpe": 1.0709455760826256,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1230",
+        "original_composite": 0.3669,
+        "original_sharpe": 0.8868922497563367,
+        "status": "no_improvement"
+      }
+    ]
+  }
+]
