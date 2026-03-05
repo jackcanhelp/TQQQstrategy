@@ -262,7 +262,7 @@ def sweep_generated_strategy(
     results = run_sweep(
         strategy_class, data, base_params,
         metric="sharpe_ratio",
-        max_combos=300,
+        max_combos=60,   # keep inline-sweep fast (≤60 combos per iteration)
     )
 
     _save_sweep_results(strategy_class.__name__, results)
