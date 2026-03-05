@@ -640,7 +640,7 @@ STRATEGY IDEA:
 {indicator_menu}
 
 ═══════════════════════════════════════════════════════════════
-🧬 CHAMPION CODE PATTERN — FOLLOW THIS STRUCTURE
+🧬 REQUIRED CODE STRUCTURE — MUST FOLLOW EXACTLY
 ═══════════════════════════════════════════════════════════════
 ```
 from strategy_base import BaseStrategy
@@ -648,52 +648,55 @@ import pandas as pd
 import numpy as np
 
 class {class_name}(BaseStrategy):
+    # REQUIRED: __init__ with 3-5 KEY tunable parameters (thresholds, periods, multipliers)
+    # Choose parameters that most affect THIS strategy's entry/exit/regime logic
+    def __init__(self, bull_threshold=59.0, bear_threshold=42.0, atr_mult=1.5, rsi_period=14):
+        super().__init__()
+        self.bull_threshold = bull_threshold   # example: RVI bull level
+        self.bear_threshold = bear_threshold   # example: RVI bear level
+        self.atr_mult = atr_mult               # example: ATR stop multiplier
+        self.rsi_period = rsi_period           # example: RSI lookback period
+
+    # REQUIRED: get_params() — enables automatic parameter sweep
+    def get_params(self) -> dict:
+        return {{
+            'bull_threshold': self.bull_threshold,
+            'bear_threshold': self.bear_threshold,
+            'atr_mult': self.atr_mult,
+            'rsi_period': self.rsi_period,
+        }}
+
     def init(self, data: pd.DataFrame):
         self.data = data
-        # All indicators are PRE-CALCULATED in self.data
-        # Available: self.data['RVI'], self.data['RVI_Refined'], self.data['RVI_State']
-        # Plus: RSI, ATR, MACD, SMA_50, SMA_200, ADX, Supertrend, BB_width, etc.
+        # All indicators PRE-CALCULATED in self.data
+        # Use self.bull_threshold etc. instead of hardcoded numbers!
 
     def _get_state(self) -> pd.Series:
-        \"\"\"Define market states using indicators.\"\"\"
-        # Example using RVI:
         state = pd.Series('neutral', index=self.data.index)
-        state[self.data['RVI_Refined'] > 59] = 'bull'
-        state[self.data['RVI_Refined'] < 42] = 'bear'
+        state[self.data['RVI_Refined'] > self.bull_threshold] = 'bull'  # use self.param!
+        state[self.data['RVI_Refined'] < self.bear_threshold] = 'bear'
         return state
 
     def generate_signals(self) -> pd.Series:
-        \"\"\"Use state TRANSITIONS for signals. Range: -1.0 to 1.0.\"\"\"
         state = self._get_state()
         prev_state = state.shift(1).fillna('unknown')
         signals = pd.Series(0.0, index=self.data.index)
-
-        # IMPORTANT: Use a loop to track position state properly
-        position = 0  # 0=cash, 1=long, -1=short
+        position = 0
         for i in range(len(self.data)):
             curr = state.iloc[i]
             prev = prev_state.iloc[i]
-
-            # Entry: state TRANSITION (not just level!)
             if prev in ('neutral', 'bear') and curr == 'bull':
                 position = 1
-            # Exit conditions
             elif position == 1 and <exit_condition>:
                 position = 0
-            # Short entry (optional)
-            elif prev == 'neutral' and curr == 'bear':
-                position = -1
-            # Short exit
-            elif position == -1 and <short_exit_condition>:
-                position = 0
-
             signals.iloc[i] = float(position)
-
         return signals.clip(-1, 1)
 
     def get_description(self) -> str:
-        return "Description of strategy"
+        return f"Description — thresholds: {self.bull_threshold}/{self.bear_threshold}"
 ```
+⚠️ ADAPT the parameter names/defaults to YOUR strategy's actual logic.
+   Use self.your_param everywhere instead of hardcoded numbers.
 
 ═══════════════════════════════════════════════════════════════
 ⚡ KEY PATTERNS TO USE
@@ -716,6 +719,9 @@ RVI STATE (pre-calculated):
 CRITICAL RULES:
 - Class name MUST be: {class_name}
 - Inherit from BaseStrategy
+- __init__ MUST have named parameters with defaults (3-5 key params)
+- get_params() MUST return dict of all __init__ parameters
+- Use self.param_name throughout — NEVER hardcode threshold numbers
 - Indicators are ALREADY in self.data — do NOT recalculate them
 - NO look-ahead: no shift(-1), no iloc[i+1], no future data
 - Handle NaN with .fillna(0) or .bfill()
@@ -1003,9 +1009,41 @@ def run_iteration(
         result["test_composite"] = test_composite
         result["idea"] = idea[:200]
 
+        # ── Auto param sweep if strategy exposes get_params() ──
+        if hasattr(strategy, 'get_params') and callable(strategy.get_params):
+            try:
+                from param_sweep import sweep_generated_strategy
+                base_params = strategy.get_params()
+                print(f"   🔬 Auto-sweep: {len(base_params)} params {list(base_params.keys())}")
+                sweep_results = sweep_generated_strategy(strategy.__class__, data, base_params)
+                if sweep_results and sweep_results[0]['sharpe'] > bt.sharpe_ratio + 0.05:
+                    best = sweep_results[0]
+                    print(f"   🏆 Sweep improved: Sharpe {bt.sharpe_ratio:.2f}→{best['sharpe']:.2f} "
+                          f"CAGR {bt.cagr:.1%}→{best['cagr']:.1%} | params={best['params']}")
+                    # Promote swept result
+                    bt_sharpe = best['sharpe']
+                    bt_cagr = best['cagr']
+                    bt_maxdd = best['max_dd']
+                    bt_calmar = best['calmar']
+                    swept_composite = calculate_composite_score(
+                        bt_sharpe, bt_calmar, best.get('sortino', bt_sharpe),
+                        bt_maxdd, best.get('profit_factor', 1.0)
+                    )
+                    result["sharpe"] = bt_sharpe
+                    result["cagr"] = bt_cagr
+                    result["max_dd"] = bt_maxdd
+                    result["calmar"] = bt_calmar
+                    result["composite"] = swept_composite
+                    result["swept_params"] = best['params']
+                    composite = swept_composite
+                else:
+                    print(f"   ✅ Sweep done — base params already near-optimal")
+            except Exception as _se:
+                print(f"   ⚠️ Auto-sweep failed: {_se}")
+
         analysis = bt.get_failure_analysis()
         record_result(history, strategy_id, result["name"], idea,
-                      bt.sharpe_ratio, bt.cagr, bt.max_drawdown, bt.calmar_ratio,
+                      result["sharpe"], result["cagr"], result["max_dd"], result["calmar"],
                       analysis, True,
                       composite=composite,
                       test_sharpe=test_sharpe, test_cagr=test_cagr,
