@@ -693,7 +693,7 @@ class {class_name}(BaseStrategy):
         return signals.clip(-1, 1)
 
     def get_description(self) -> str:
-        return f"Description — thresholds: {self.bull_threshold}/{self.bear_threshold}"
+        return f"Description — thresholds: {{self.bull_threshold}}/{{self.bear_threshold}}"
 ```
 ⚠️ ADAPT the parameter names/defaults to YOUR strategy's actual logic.
    Use self.your_param everywhere instead of hardcoded numbers.
