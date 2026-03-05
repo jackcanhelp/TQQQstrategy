@@ -51,7 +51,7 @@ GENERATED_DIR.mkdir(exist_ok=True)
 
 # Hall of Fame thresholds
 HOF_SHARPE_MIN = 1.2
-HOF_MAX_DD_MIN = -0.30  # Max drawdown must be better (less negative) than -30%
+HOF_MAX_DD_MIN = -0.42  # Max drawdown must be better (less negative) than -42%
 
 # Minimum thresholds for ranking — filter out "do nothing" strategies
 RANK_MIN_SHARPE = 0.0   # Must beat risk-free rate
@@ -78,6 +78,41 @@ COMPOSITE_WEIGHTS = {
     "max_dd": 0.15,
     "profit_factor": 0.10,
 }
+
+# ── Mutation modes (Plan B: UCB1 bandit selects among these) ──
+MUTATION_MODES = [
+    "MUTATE the REGIME FILTER: keep the entry/exit logic similar to Champion, but use a DIFFERENT regime detector (e.g., ADX, Ichimoku cloud, Bollinger squeeze instead of RVI).",
+    "MUTATE the ENTRY SIGNAL: keep RVI-based regime filter, but use a DIFFERENT entry trigger (e.g., RSI divergence, MACD crossover, Stochastic bounce instead of RVI state transition).",
+    "MUTATE the EXIT LOGIC: keep RVI regime + transition entry, but use a DIFFERENT exit method (e.g., trailing ATR stop, Chandelier exit, Donchian breakout instead of fixed RVI levels).",
+    "COMBINE: use RVI_State for regime, add a MOMENTUM CONFIRMATION from a different category (RSI, MFI, CCI), and use ATR-based trailing stop for exits.",
+    "HYBRID: create a strategy that blends RVI transitions with SMA trend direction and volume confirmation (OBV, CMF). Use state transitions for entry timing.",
+    "IMPROVE SHORT SELLING: keep long-side RVI logic, but design a BETTER short-selling module using ADX, Supertrend, or Bollinger Band breakdown with tighter ATR stops.",
+    "VOLUME BREAKOUT HYBRID: use Volume Surge (Vol_Ratio > 2.0 + Close > SMA) for entry timing, combined with RVI regime filter. Use ATR-based TP/SL for exits.",
+    "VOLUME + MOMENTUM COMBO: combine volume breakout signals (Vol_Ratio) with momentum indicators (RSI, MFI, CCI) for multi-confirmation entries. Exit with trailing ATR stop.",
+    "VOLUME REGIME FILTER: use volume patterns as regime filter (Vol_Ratio > 1.0 for trending, < 0.5 for quiet), combined with traditional trend entry signals.",
+    "MEAN REVERSION: use ZScore for entry (buy when ZScore < -2, sell when > 2), with Aroon or ADX as trend confirmation to avoid catching falling knives.",
+    "DI DIRECTIONAL: use DI_Plus/DI_Minus crossover for entry, ADX > 25 for regime filter. This captures strong directional moves early.",
+    "BB SQUEEZE BREAKOUT: detect BB_Squeeze periods (low volatility), enter on squeeze release with volume confirmation, exit on ATR spike or ZScore extreme.",
+    "MARKET STRUCTURE: use Drawdown + Days_Down for crash avoidance, Days_Up for momentum entry, Gap_Pct for event detection.",
+    "MULTI-TIMEFRAME MOMENTUM: combine fast (ROC_5, RSI_7) and slow (ROC_20, TSI) momentum for signal confirmation. Enter when both align, exit when they diverge.",
+    "ELDER RAY POWER: use Elder_Bull/Elder_Bear power to measure bull/bear strength. Enter when Bull Power turns positive with trend, exit when Bear Power dominates.",
+]
+
+# ── Diversity enforcement constants (Plans A + C) ──
+DIVERSITY_BAN_WINDOW = 25       # Analyze last N successful strategies for overuse
+DIVERSITY_BAN_THRESHOLD = 0.50  # Ban indicator if used in > 50% of recent successes
+DIVERSITY_CLONE_WARNING = 0.80  # Warn if Jaccard similarity > 80% (near-clone)
+DIVERSITY_TRACKED_INDS = [      # Indicators to monitor for monoculture
+    "RVI", "RVI_Refined", "RVI_State",
+    "RSI", "MACD", "ATR", "BB", "SMA", "EMA",
+    "Volume", "Vol_Ratio", "OBV", "CMF",
+    "ADX", "DI_Plus", "DI_Minus",
+    "Stoch", "CCI", "Aroon", "TRIX",
+    "TSI", "Elder_Bull", "Elder_Bear",
+    "HMM_Regime", "GARCH_Vol", "CP_Distance",
+    "QQE", "STC", "KDJ", "SMI", "CTI",
+    "ZScore", "Drawdown", "Days_Up", "Days_Down",
+]
 
 
 def is_rankable(s: Dict) -> bool:
@@ -144,6 +179,94 @@ def is_duplicate_result(bt, history: dict, tol: float = 1e-4) -> bool:
                 abs(s.get("max_dd", -999) - max_dd) < tol):
             return True
     return False
+
+
+# ── Plan A: Dynamic indicator ban rotation ──
+def get_banned_indicators(history: Dict) -> List[str]:
+    """
+    Return indicators used in > DIVERSITY_BAN_THRESHOLD of recent successes.
+    Dynamically bans RVI (or others) when they dominate recent successful strategies.
+    """
+    strategies = history.get("strategies", [])
+    recent_successes = [s for s in strategies[-50:] if s.get("success")][-DIVERSITY_BAN_WINDOW:]
+    if len(recent_successes) < 5:
+        return []  # Not enough data to determine bans
+    usage: Dict[str, int] = {}
+    for s in recent_successes:
+        fp = s.get("indicator_fingerprint", [])
+        for ind in fp:
+            usage[ind] = usage.get(ind, 0) + 1
+    n = len(recent_successes)
+    banned = [ind for ind, cnt in usage.items() if cnt / n > DIVERSITY_BAN_THRESHOLD]
+    return banned
+
+
+# ── Plan B: UCB1 multi-armed bandit for mutation mode selection ──
+def ucb_select_mutation(history: Dict) -> tuple:
+    """
+    UCB1 bandit selects the best mutation mode to explore.
+    Returns (mode_index, mode_text).
+    mode_stats in history: {"0": {"wins": 3, "trials": 10}, ...}
+    """
+    import math
+    mode_stats = history.get("mode_stats", {})
+    n_modes = len(MUTATION_MODES)
+    total_trials = sum(v.get("trials", 0) for v in mode_stats.values())
+
+    # Exploration phase: ensure every mode tried at least once
+    if total_trials < n_modes:
+        tried = {int(k) for k in mode_stats if mode_stats[k].get("trials", 0) > 0}
+        untried = [i for i in range(n_modes) if i not in tried]
+        if untried:
+            idx = random.choice(untried)
+            return idx, MUTATION_MODES[idx]
+
+    # UCB1 selection
+    best_idx, best_ucb = 0, -1.0
+    for i in range(n_modes):
+        stats = mode_stats.get(str(i), {"wins": 0, "trials": 0})
+        trials = stats.get("trials", 0)
+        wins = stats.get("wins", 0)
+        if trials == 0:
+            return i, MUTATION_MODES[i]
+        mu = wins / trials
+        ucb = mu + math.sqrt(2 * math.log(max(total_trials, 1)) / trials)
+        if ucb > best_ucb:
+            best_ucb = ucb
+            best_idx = i
+    return best_idx, MUTATION_MODES[best_idx]
+
+
+# ── Plan C: Diversity fingerprinting ──
+def compute_fingerprint(idea_text: str) -> List[str]:
+    """Extract indicator names from idea text to create a diversity fingerprint."""
+    idea_lower = idea_text.lower()
+    return [ind for ind in DIVERSITY_TRACKED_INDS if ind.lower() in idea_lower]
+
+
+def check_diversity(fingerprint: List[str], history: Dict) -> Optional[str]:
+    """
+    Check if new idea is too similar to recent successes (Jaccard similarity).
+    Returns warning string if similarity >= DIVERSITY_CLONE_WARNING, else None.
+    """
+    if not fingerprint:
+        return None
+    fp_set = frozenset(fingerprint)
+    strategies = history.get("strategies", [])
+    recent = [s for s in strategies[-20:] if s.get("success") and s.get("indicator_fingerprint")]
+    warnings = []
+    for s in recent[-5:]:
+        prev = frozenset(s.get("indicator_fingerprint", []))
+        if not prev:
+            continue
+        union = len(fp_set | prev)
+        if union > 0:
+            jaccard = len(fp_set & prev) / union
+            if jaccard >= DIVERSITY_CLONE_WARNING:
+                warnings.append(f"{s['name']} (J={jaccard:.2f})")
+    if warnings:
+        return f"Clone warning: similar to {', '.join(warnings)}"
+    return None
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -291,7 +414,8 @@ def record_result(history: Dict, strategy_id: int, name: str, idea: str,
                   analysis: str, success: bool,
                   composite: float = 0.0,
                   test_sharpe: float = 0.0, test_cagr: float = 0.0,
-                  test_max_dd: float = 0.0, test_composite: float = 0.0):
+                  test_max_dd: float = 0.0, test_composite: float = 0.0,
+                  mode_used: int = -1, indicator_fingerprint: List[str] = None):
     history["total_iterations"] += 1
     history["strategies"].append({
         "id": strategy_id,
@@ -309,6 +433,8 @@ def record_result(history: Dict, strategy_id: int, name: str, idea: str,
         "failure_analysis": analysis,
         "success": success,
         "timestamp": datetime.now().isoformat(),
+        "mode_used": mode_used,
+        "indicator_fingerprint": indicator_fingerprint or [],
     })
     if (composite > history.get("best_composite", 0)
             and sharpe > RANK_MIN_SHARPE and cagr > RANK_MIN_CAGR):
@@ -326,7 +452,9 @@ def build_idea_prompt(history: Dict, indicator_menu: str,
                       director_advice: Optional[str] = None,
                       oos_warning: Optional[str] = None,
                       brief: Optional[Dict] = None,
-                      current_assignment: Optional[str] = None) -> str:
+                      current_assignment: Optional[str] = None,
+                      banned_indicators: List[str] = None,
+                      preset_mutation: str = None) -> str:
     """Build the strategy idea generation prompt with Champion DNA + mutation feedback."""
 
     # Context from history
@@ -409,25 +537,20 @@ Try a COMPLETELY DIFFERENT approach. Explore a new indicator combination."""
 
     forced_str = "\n".join(forced_indicators)
 
-    # Randomly choose a mutation mode for champion DNA
-    mutation_modes = [
-        "MUTATE the REGIME FILTER: keep the entry/exit logic similar to Champion, but use a DIFFERENT regime detector (e.g., ADX, Ichimoku cloud, Bollinger squeeze instead of RVI).",
-        "MUTATE the ENTRY SIGNAL: keep RVI-based regime filter, but use a DIFFERENT entry trigger (e.g., RSI divergence, MACD crossover, Stochastic bounce instead of RVI state transition).",
-        "MUTATE the EXIT LOGIC: keep RVI regime + transition entry, but use a DIFFERENT exit method (e.g., trailing ATR stop, Chandelier exit, Donchian breakout instead of fixed RVI levels).",
-        "COMBINE: use RVI_State for regime, add a MOMENTUM CONFIRMATION from a different category (RSI, MFI, CCI), and use ATR-based trailing stop for exits.",
-        "HYBRID: create a strategy that blends RVI transitions with SMA trend direction and volume confirmation (OBV, CMF). Use state transitions for entry timing.",
-        "IMPROVE SHORT SELLING: keep long-side RVI logic, but design a BETTER short-selling module using ADX, Supertrend, or Bollinger Band breakdown with tighter ATR stops.",
-        "VOLUME BREAKOUT HYBRID: use Volume Surge (Vol_Ratio > 2.0 + Close > SMA) for entry timing, combined with RVI regime filter. Use ATR-based TP/SL for exits.",
-        "VOLUME + MOMENTUM COMBO: combine volume breakout signals (Vol_Ratio) with momentum indicators (RSI, MFI, CCI) for multi-confirmation entries. Exit with trailing ATR stop.",
-        "VOLUME REGIME FILTER: use volume patterns as regime filter (Vol_Ratio > 1.0 for trending, < 0.5 for quiet), combined with traditional trend entry signals.",
-        "MEAN REVERSION: use ZScore for entry (buy when ZScore < -2, sell when > 2), with Aroon or ADX as trend confirmation to avoid catching falling knives.",
-        "DI DIRECTIONAL: use DI_Plus/DI_Minus crossover for entry, ADX > 25 for regime filter. This captures strong directional moves early.",
-        "BB SQUEEZE BREAKOUT: detect BB_Squeeze periods (low volatility), enter on squeeze release with volume confirmation, exit on ATR spike or ZScore extreme.",
-        "MARKET STRUCTURE: use Drawdown + Days_Down for crash avoidance, Days_Up for momentum entry, Gap_Pct for event detection.",
-        "MULTI-TIMEFRAME MOMENTUM: combine fast (ROC_5, RSI_7) and slow (ROC_20, TSI) momentum for signal confirmation. Enter when both align, exit when they diverge.",
-        "ELDER RAY POWER: use Elder_Bull/Elder_Bear power to measure bull/bear strength. Enter when Bull Power turns positive with trend, exit when Bear Power dominates.",
-    ]
-    champion_mutation = random.choice(mutation_modes)
+    # Plan B: UCB1 selects mutation mode (preset_mutation passed from run_iteration)
+    champion_mutation = preset_mutation if preset_mutation else random.choice(MUTATION_MODES)
+
+    # Plan A: Dynamic indicator ban section
+    ban_section = ""
+    if banned_indicators:
+        ban_list = ", ".join(banned_indicators)
+        ban_section = f"""⛔ OVERUSE BAN (Plan A — diversity enforcement):
+The following indicators appear in >{DIVERSITY_BAN_THRESHOLD:.0%} of recent successful strategies.
+DO NOT use them as primary signals — explore something NEW instead:
+  BANNED: {ban_list}
+(You may still use them as secondary confirmation if absolutely necessary, but NOT as the main regime/entry indicator.)
+
+"""
 
     # Directed assignment from execution queue (overrides random mutation mode when set)
     assignment_section = ""
@@ -590,7 +713,7 @@ RULES:
 - Cash (0 exposure) is a valid and powerful position
 - Signals: -1.0 (short) to 1.0 (long), 0.0 = cash
 
-⚠️ ENTRY FREQUENCY RULE (CRITICAL — most common failure):
+{ban_section}⚠️ ENTRY FREQUENCY RULE (CRITICAL — most common failure):
 Your entry condition MUST fire on at least 5% of trading days.
 FORBIDDEN pattern (fires almost NEVER):
   bad:  RSI > 65 AND MACD > 0 AND Volume > 2.5x AND Aroon > 75  ← 4 ANDs = near-zero frequency
@@ -846,7 +969,17 @@ def run_iteration(
         "test_composite": 0.0,
         "error": None,
         "oos_warning": None,
+        "mode_used": -1,
+        "indicator_fingerprint": [],
     }
+
+    # Plan A+B: compute banned indicators + UCB mutation mode before idea generation
+    banned_indicators = get_banned_indicators(history)
+    mode_idx, preset_mutation = ucb_select_mutation(history)
+    result["mode_used"] = mode_idx
+    if banned_indicators:
+        print(f"   🚫 [PlanA] Banned (overused): {', '.join(banned_indicators)}")
+    print(f"   🎲 [PlanB] Mutation mode #{mode_idx}: {preset_mutation[:60]}...")
 
     # Step 1: Generate idea
     print("   💡 Generating idea...")
@@ -854,11 +987,20 @@ def run_iteration(
                                     director_advice=director_advice,
                                     oos_warning=oos_warning,
                                     brief=brief,
-                                    current_assignment=current_assignment)
+                                    current_assignment=current_assignment,
+                                    banned_indicators=banned_indicators,
+                                    preset_mutation=preset_mutation)
     idea = llm.generate(idea_prompt, task="idea")
     if not idea:
         result["error"] = "LLM failed to generate idea"
         return result
+
+    # Plan C: Compute fingerprint + diversity check
+    fingerprint = compute_fingerprint(idea)
+    result["indicator_fingerprint"] = fingerprint
+    diversity_warning = check_diversity(fingerprint, history)
+    if diversity_warning:
+        print(f"   🔁 [PlanC] {diversity_warning}")
 
     # Step 2: Generate code
     print("   💻 Generating code...")
@@ -1083,7 +1225,9 @@ def run_iteration(
                       analysis, True,
                       composite=composite,
                       test_sharpe=test_sharpe, test_cagr=test_cagr,
-                      test_max_dd=test_max_dd, test_composite=test_composite)
+                      test_max_dd=test_max_dd, test_composite=test_composite,
+                      mode_used=result["mode_used"],
+                      indicator_fingerprint=result["indicator_fingerprint"])
 
         # Check hall of fame — use result[] values (may be swept, higher than bt)
         check_hall_of_fame(result["name"], result["sharpe"], result["max_dd"],
@@ -1720,6 +1864,16 @@ def main():
 
         # Consume OOS warning (only inject once)
         oos_warning = None
+
+        # Plan B: Update mode_stats (UCB1 reward tracking)
+        mode_idx = result.get("mode_used", -1)
+        if mode_idx >= 0:
+            if "mode_stats" not in history:
+                history["mode_stats"] = {}
+            ms = history["mode_stats"].setdefault(str(mode_idx), {"wins": 0, "trials": 0})
+            ms["trials"] += 1
+            if result["success"]:
+                ms["wins"] += 1
 
         if result["success"]:
             composite = result.get("composite", 0)
