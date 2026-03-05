@@ -1,14 +1,23 @@
 """
 Retroactive Parameter Sweep
 ============================
-Sweeps existing generated strategies that have NO get_params().
-Uses regex substitution to vary numeric constants (thresholds, spans, multipliers)
-found in the strategy source code, then backtests all variants.
+Sweeps existing generated strategies — both old (regex) and new (get_params) formats.
 
 Usage:
+    # Sweep top 15 by Sharpe (default)
     PYTHONIOENCODING=utf-8 PYTHONUTF8=1 py -3.14 retroactive_param_sweep.py
-    PYTHONIOENCODING=utf-8 PYTHONUTF8=1 py -3.14 retroactive_param_sweep.py --top 20
-    PYTHONIOENCODING=utf-8 PYTHONUTF8=1 py -3.14 retroactive_param_sweep.py --name Strategy_Gen983
+
+    # Sweep ALL strategies with Sharpe >= 0.4 (40 combos each)
+    PYTHONIOENCODING=utf-8 PYTHONUTF8=1 py -3.14 retroactive_param_sweep.py \
+        --all --min-sharpe 0.4 --max-combos 40
+
+    # Deep-sweep top 30 (200 combos, re-sweep already swept)
+    PYTHONIOENCODING=utf-8 PYTHONUTF8=1 py -3.14 retroactive_param_sweep.py \
+        --top 30 --min-sharpe 0.4 --max-combos 200 --force
+
+    # Sweep a specific strategy by name
+    PYTHONIOENCODING=utf-8 PYTHONUTF8=1 py -3.14 retroactive_param_sweep.py \
+        --name Strategy_Gen2323 --max-combos 20
 """
 
 import re
@@ -33,7 +42,7 @@ RETRO_LOG_FILE = Path("retroactive_sweep_log.json")
 
 
 # ─────────────────────────────────────────────────────────────
-# Numeric constant extraction
+# Numeric constant extraction (regex path)
 # ─────────────────────────────────────────────────────────────
 
 def extract_sweep_params(code: str) -> Dict[str, List]:
@@ -122,7 +131,7 @@ def _make_float_range(base: float, pct: float, n_steps: int) -> List[float]:
 
 
 # ─────────────────────────────────────────────────────────────
-# Code substitution + dynamic class loading
+# Code substitution + dynamic class loading (regex path)
 # ─────────────────────────────────────────────────────────────
 
 def make_variant_class(original_code: str, class_name: str,
@@ -160,21 +169,80 @@ def make_variant_class(original_code: str, class_name: str,
 
 
 # ─────────────────────────────────────────────────────────────
-# Main sweep logic
+# Sweep — new-style strategies (get_params path)
 # ─────────────────────────────────────────────────────────────
 
-def sweep_strategy_retroactively(
+def _sweep_with_get_params(
+    strategy_name: str,
+    code: str,
+    data: pd.DataFrame,
+    max_combos: int,
+) -> Optional[Dict]:
+    """
+    For strategies that have `get_params()`: exec the code, instantiate the
+    class, call get_params() to get base params, then use run_sweep().
+    Much more precise than regex substitution.
+    """
+    namespace = {}
+    try:
+        exec(code, namespace)               # nosec — controlled internal use
+    except Exception as e:
+        print(f"   ❌ exec failed: {e}")
+        return None
+
+    cls = namespace.get(strategy_name)
+    if cls is None:
+        print(f"   ❌ Class '{strategy_name}' not found after exec")
+        return None
+
+    # Get base params
+    try:
+        inst = cls()
+        inst.init(data)
+        base_params = inst.get_params()
+    except Exception as e:
+        print(f"   ❌ get_params() failed: {e}")
+        return None
+
+    from param_sweep import run_sweep
+    results = run_sweep(
+        cls, data, base_params=base_params,
+        metric="sharpe_ratio", max_combos=max_combos,
+    )
+    if not results:
+        return None
+
+    best = results[0]
+    return {
+        "params": best["params"],
+        "sharpe": best["sharpe"],
+        "cagr":   best["cagr"],
+        "max_dd": best["max_dd"],
+        "calmar": best["calmar"],
+        "composite": calculate_composite_score(
+            best["sharpe"], best["calmar"],
+            best.get("sortino", best["sharpe"]),
+            best["max_dd"], best.get("profit_factor", 1.0),
+        ),
+    }
+
+
+# ─────────────────────────────────────────────────────────────
+# Sweep — old-style strategies (regex path)
+# ─────────────────────────────────────────────────────────────
+
+def _sweep_with_regex(
     strategy_name: str,
     code: str,
     data: pd.DataFrame,
     history: dict,
-    max_combos: int = 200,
+    max_combos: int,
 ) -> Optional[Dict]:
     """
-    Sweep a single strategy by varying its numeric constants.
+    Sweep a single old-style strategy by varying its numeric constants via regex.
     Returns best result dict if improved, else None.
     """
-    class_name = strategy_name.replace('Strategy_', 'Strategy_')
+    class_name = strategy_name  # already e.g. "Strategy_Gen983"
     sweep_params = extract_sweep_params(code)
 
     if not sweep_params:
@@ -226,12 +294,67 @@ def sweep_strategy_retroactively(
         print(f"   ❌ No valid variants found")
         return None
 
-    results.sort(key=lambda r: r['composite'], reverse=True)
+    results.sort(key=lambda r: r['sharpe'], reverse=True)
     best = results[0]
     print(f"   🏆 Best: Sharpe={best['sharpe']:.2f} CAGR={best['cagr']:.1%} "
           f"MaxDD={best['max_dd']:.1%} Comp={best['composite']:.4f}")
     print(f"          Params: {best['params']}")
     return best
+
+
+# ─────────────────────────────────────────────────────────────
+# Unified sweep dispatcher
+# ─────────────────────────────────────────────────────────────
+
+def sweep_strategy_retroactively(
+    strategy_name: str,
+    code: str,
+    data: pd.DataFrame,
+    history: dict,
+    max_combos: int = 200,
+) -> Optional[Dict]:
+    """
+    Dispatch to the appropriate sweep path based on strategy format.
+    New-style (has get_params): use run_sweep() for precision.
+    Old-style: use regex substitution.
+    """
+    if 'def get_params' in code:
+        print(f"   → New-style strategy: using get_params() path")
+        return _sweep_with_get_params(strategy_name, code, data, max_combos)
+    else:
+        print(f"   → Old-style strategy: using regex path")
+        return _sweep_with_regex(strategy_name, code, data, history, max_combos)
+
+
+# ─────────────────────────────────────────────────────────────
+# Write best params back to .py __init__ defaults
+# ─────────────────────────────────────────────────────────────
+
+def update_py_file_defaults(fpath: Path, best_params: Dict):
+    """
+    Write swept best params as new __init__ defaults in the .py file.
+    Only applied to new-style strategies (those with get_params).
+    Uses targeted regex substitution on the __init__ signature.
+    """
+    code = fpath.read_text(encoding='utf-8', errors='ignore')
+    changed = []
+    for param_name, param_value in best_params.items():
+        # Format value: drop .0 suffix for whole numbers
+        if isinstance(param_value, float) and param_value == int(param_value):
+            new_str = str(int(param_value))
+        else:
+            new_str = str(param_value)
+        # Match: param_name=OLD_VAL inside __init__ signature
+        pattern = rf'(\b{re.escape(param_name)}\s*=\s*)[^\s,)]*'
+        new_code, n = re.subn(pattern, rf'\g<1>{new_str}', code, count=1)
+        if n:
+            changed.append(f"{param_name}={param_value}")
+            code = new_code
+    if changed:
+        fpath.write_text(code, encoding='utf-8')
+        print(f"   ✏️  Updated __init__ defaults: {', '.join(changed)}")
+    else:
+        print(f"   ⚠️  No __init__ defaults updated (params not found in signature)")
 
 
 # ─────────────────────────────────────────────────────────────
@@ -242,15 +365,15 @@ def update_history_with_swept_result(history: dict, strategy_name: str, best: Di
     """Overwrite the strategy's metrics in history with the swept best result."""
     for s in history.get("strategies", []):
         if s["name"] == strategy_name:
-            old_comp = s.get("composite", 0)
-            s["sharpe"]    = best["sharpe"]
-            s["cagr"]      = best["cagr"]
-            s["max_dd"]    = best["max_dd"]
-            s["calmar"]    = best["calmar"]
-            s["composite"] = best["composite"]
+            old_sharpe = s.get("sharpe", 0)
+            s["sharpe"]       = best["sharpe"]
+            s["cagr"]         = best["cagr"]
+            s["max_dd"]       = best["max_dd"]
+            s["calmar"]       = best["calmar"]
+            s["composite"]    = best["composite"]
             s["swept_params"] = best["params"]
-            s["swept_at"]  = datetime.now().isoformat()
-            print(f"   ✅ History updated: Comp {old_comp:.4f} → {best['composite']:.4f}")
+            s["swept_at"]     = datetime.now().isoformat()
+            print(f"   ✅ History updated: Sharpe {old_sharpe:.2f} → {best['sharpe']:.2f}")
             return
     print(f"   ⚠️ {strategy_name} not found in history")
 
@@ -261,11 +384,29 @@ def update_history_with_swept_result(history: dict, strategy_name: str, best: Di
 
 def main():
     parser = argparse.ArgumentParser(description="Retroactive param sweep for existing strategies")
-    parser.add_argument('--top',  type=int, default=15, help='Sweep top N strategies by composite score')
-    parser.add_argument('--name', type=str, default=None, help='Sweep a specific strategy by name')
-    parser.add_argument('--min-composite', type=float, default=0.25, help='Min composite score to include')
-    parser.add_argument('--max-combos', type=int, default=200, help='Max param combinations per strategy')
+    parser.add_argument('--top',  type=int, default=15,
+                        help='Sweep top N strategies by Sharpe (ignored if --all)')
+    parser.add_argument('--all',  action='store_true',
+                        help='Sweep ALL qualifying strategies (not just top N)')
+    parser.add_argument('--name', type=str, default=None,
+                        help='Sweep a specific strategy by name')
+    parser.add_argument('--min-sharpe',    type=float, default=0.40,
+                        help='Min Sharpe to qualify (default: 0.40)')
+    parser.add_argument('--min-composite', type=float, default=None,
+                        help='(Legacy) Min composite score — overrides --min-sharpe if set')
+    parser.add_argument('--max-combos',    type=int,   default=200,
+                        help='Max param combinations per strategy')
+    parser.add_argument('--update-file',   action='store_true', default=True,
+                        help='Write best params back to .py __init__ defaults (new-style only)')
+    parser.add_argument('--no-update-file', action='store_true',
+                        help='Disable writing best params back to .py files')
+    parser.add_argument('--force', action='store_true',
+                        help='Re-sweep strategies already swept (otherwise skipped)')
     args = parser.parse_args()
+
+    # --no-update-file overrides --update-file
+    if args.no_update_file:
+        args.update_file = False
 
     print("=" * 60)
     print("🔬 Retroactive Parameter Sweep")
@@ -277,23 +418,38 @@ def main():
         history = json.load(f)
 
     strategies = history.get("strategies", [])
-    rankable   = [s for s in strategies if s.get("success") and
-                  s.get("composite", 0) >= args.min_composite]
+
+    # Filter qualifying strategies
+    if args.min_composite is not None:
+        # Legacy composite-based filter
+        rankable = [s for s in strategies if s.get("success") and
+                    s.get("composite", 0) >= args.min_composite]
+        print(f"Filter: composite >= {args.min_composite} (legacy mode)")
+    else:
+        rankable = [s for s in strategies if s.get("success") and
+                    s.get("sharpe", 0) >= args.min_sharpe]
+        print(f"Filter: Sharpe >= {args.min_sharpe}")
 
     # Pick targets
     if args.name:
-        targets = [s for s in rankable if s["name"] == args.name]
+        targets = [s for s in strategies if s["name"] == args.name]
         if not targets:
-            print(f"❌ Strategy '{args.name}' not found or below threshold")
+            print(f"❌ Strategy '{args.name}' not found in history")
             return
+    elif args.all:
+        targets = sorted(rankable, key=lambda x: x.get("sharpe", 0), reverse=True)
+        print(f"Mode: ALL ({len(targets)} strategies)")
     else:
-        targets = sorted(rankable, key=lambda x: x.get("composite", 0), reverse=True)[:args.top]
+        targets = sorted(rankable, key=lambda x: x.get("sharpe", 0), reverse=True)[:args.top]
+        print(f"Mode: top {args.top}")
 
-    print(f"Targets: {len(targets)} strategies | max_combos={args.max_combos}")
+    print(f"Targets: {len(targets)} strategies | max_combos={args.max_combos} | "
+          f"update_file={args.update_file} | force={args.force}")
     print()
 
     log_entries = []
     improved    = 0
+    skipped     = 0
 
     for rank, s in enumerate(targets, 1):
         name = s["name"]
@@ -305,13 +461,15 @@ def main():
 
         if not fpath.exists():
             print(f"   ⚠️ .py file not found, skipping")
+            skipped += 1
             continue
 
         code = fpath.read_text(encoding='utf-8', errors='ignore')
 
-        # Skip already-swept strategies (params already optimal)
-        if 'swept_params' in s:
-            print(f"   ⏭ Already swept ({s['swept_params']}), skipping")
+        # Skip already-swept strategies unless --force
+        if 'swept_at' in s and not args.force:
+            print(f"   ⏭ Already swept at {s['swept_at'][:10]}, skipping (use --force to re-sweep)")
+            skipped += 1
             continue
 
         best = sweep_strategy_retroactively(name, code, data, history,
@@ -319,14 +477,16 @@ def main():
 
         entry = {
             "name": name,
+            "original_sharpe":    s.get("sharpe", 0),
             "original_composite": s.get("composite", 0),
-            "original_sharpe": s.get("sharpe", 0),
         }
 
-        # Compare on Sharpe (in-sample) — composites are not comparable because
-        # history composites use OOS-weighted scoring while sweep runs IS only.
+        # Improvement threshold: +0.02 Sharpe
         if best and best["sharpe"] > s.get("sharpe", 0) + 0.02:
             update_history_with_swept_result(history, name, best)
+            # Write best params back to .py file (new-style only)
+            if args.update_file and 'def get_params' in code:
+                update_py_file_defaults(fpath, best["params"])
             entry.update({"status": "improved", "best": best})
             improved += 1
         else:
@@ -347,16 +507,17 @@ def main():
         with open(RETRO_LOG_FILE, encoding='utf-8') as f:
             existing_log = json.load(f)
     existing_log.append({
-        "run_at": datetime.now().isoformat(),
-        "targets": len(targets),
+        "run_at":   datetime.now().isoformat(),
+        "targets":  len(targets),
         "improved": improved,
-        "entries": log_entries,
+        "skipped":  skipped,
+        "entries":  log_entries,
     })
     with open(RETRO_LOG_FILE, 'w', encoding='utf-8') as f:
         json.dump(existing_log, f, indent=2, default=str)
 
     print("=" * 60)
-    print(f"✅ Done: {improved}/{len(targets)} strategies improved")
+    print(f"✅ Done: {improved}/{len(targets)} improved, {skipped} skipped")
     print("=" * 60)
 
 
