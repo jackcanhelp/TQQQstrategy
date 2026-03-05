@@ -467,6 +467,7 @@ class {class_name}(BaseStrategy):
         entry = self._get_entry_signal()
         exit_signal = self._get_exit_signal()
         return (regime * entry * (1 - exit_signal)).clip(0, 1)
+        # ↑ Use (1 - exit_signal) NOT ~exit_signal — float signals don't support ~
 
     def get_description(self) -> str:
         return "{class_name}: <brief description>"
@@ -484,6 +485,14 @@ SCALE CHECK — indicators have different value ranges:
   • ATR: dollar value per bar → compare to close * 0.02 (2% of price) or use percentile
   • BB_Width, Normalized indicators: 0–1 range → compare to 0.02, 0.05, etc.
   • Williams %R: –100 to 0 → compare to –80 (oversold) or –20 (overbought)
+
+BOOL vs FLOAT signal rules (pandas 2.x strict):
+  • Bool Series (True/False): use `~cond` for NOT, `cond1 & cond2` for AND — OK in .where()
+  • Float signals (0.0/1.0): use `(1 - signal)` for NOT, `np.minimum(a, b)` for AND
+  ❌ WRONG: ~exit_signal          ← TypeError if exit_signal is float
+  ❌ WRONG: state.where((1 - bool_cond), val)  ← ValueError: not int64 in .where()
+  ✅ RIGHT:  (1 - float_signal)   ← for float 0/1 arithmetic inversion
+  ✅ RIGHT:  state.where(~bool_cond, val)  ← ~ on bool Series is always safe
 
 COLUMN RESTRICTION — self.data ONLY has these 5 columns:
   ✅ 'Open', 'High', 'Low', 'Close', 'Volume'
@@ -805,9 +814,16 @@ OUTPUT ONLY THE FIXED PYTHON CODE. NO MARKDOWN."""
 
         # Fix TypeError: bad operand type for unary ~: 'float'
         # LLM writes `~exit_signal` (bitwise NOT) but signal is float 0.0/1.0.
-        # Replace `~(expr)` → `(1 - (expr))` and `~var` → `(1 - var)`
-        code = re.sub(r'~\s*\(([^)]+)\)', r'(1 - (\1))', code)
-        code = re.sub(r'~\s*([a-zA-Z_]\w*)\b', r'(1 - \1)', code)
+        # ONLY replace `~var` when clearly in arithmetic context (multiply/add/subtract),
+        # NOT in .where(cond) context where bool dtype is required.
+        # Safe fix: `~var` → `(~np.asarray(var, dtype=bool))` is complex; instead use:
+        # `(1 - var)` but only when var likely a float signal (named signal/exit/entry/regime)
+        # For general bool Series (used in .where), keep `~var` as is → correct pandas behavior.
+        #
+        # Approach: Replace `~(expr)` (complex expressions, usually float context)
+        # But do NOT replace simple `~var` — it may be a bool Series that pandas handles fine.
+        # If float-signal `~` error occurs, it will be caught by sandbox and fix_strategy_code handles it.
+        code = re.sub(r'~\s*\(([^)]+)\)', r'(1.0 - (\1))', code)
 
         # Fix bitwise OR/AND type errors on floats: `float | series` or `series | float`
         # LLM sometimes writes `position | series` where position is a float — invalid in Python

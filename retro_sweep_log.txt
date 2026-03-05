@@ -1,0 +1,117 @@
+C:\Users\Jack Chang\OneDrive\桌面\TQQQstrategy\researcher.py:17: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+============================================================
+🔬 Retroactive Parameter Sweep
+============================================================
+📊 Loaded cached enriched data: 4039 rows, 91 columns
+Targets: 15 strategies | max_combos=100
+
+[1/15] Strategy_Gen983  Sharpe=0.79 Comp=0.7331
+   🔍 Sweep params: {'thresh_59': 5, 'thresh_76': 5, 'window_20': 4, 'window_34': 4}
+   🔢 Testing 100 combinations...
+   🏆 Best: Sharpe=0.83 CAGR=16.7% MaxDD=-21.0% Comp=0.3664
+          Params: {'thresh_59': 59, 'thresh_76': 76, 'window_20': 20, 'window_34': 44}
+   ✅ History updated: Comp 0.7331 → 0.3664
+
+[2/15] Strategy_Gen995  Sharpe=0.32 Comp=0.6407
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5, 'mult_0.92': 4}
+   🔢 Testing 100 combinations...
+   ❌ No valid variants found
+   — No improvement over base Sharpe=0.32
+
+[3/15] Strategy_Gen980  Sharpe=0.86 Comp=0.6133
+   ⚠️ No sweepable params found in Strategy_Gen980
+   — No improvement over base Sharpe=0.86
+
+[4/15] Strategy_Gen971  Sharpe=0.73 Comp=0.4711
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_58': 5, 'thresh_76': 5, 'window_200': 4}
+   🔢 Testing 100 combinations...
+   🏆 Best: Sharpe=0.84 CAGR=20.4% MaxDD=-36.8% Comp=0.3270
+          Params: {'thresh_42': 50, 'thresh_58': 58, 'thresh_76': 76, 'window_200': 80}
+   ✅ History updated: Comp 0.4711 → 0.3270
+
+[5/15] Strategy_Gen1920  Sharpe=1.28 Comp=0.4163
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5, 'mult_1.5': 4}
+   🔢 Testing 100 combinations...
+   🏆 Best: Sharpe=1.29 CAGR=53.0% MaxDD=-40.3% Comp=0.4176
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76, 'mult_1.5': 1.05}
+   — No improvement over base Sharpe=1.28
+
+[6/15] Strategy_Gen2117  Sharpe=1.28 Comp=0.4163
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 100 combinations...
+   🏆 Best: Sharpe=1.29 CAGR=53.0% MaxDD=-40.3% Comp=0.4176
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.28
+
+[7/15] Strategy_Gen2300  Sharpe=1.14 Comp=0.4163
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 100 combinations...
+   🏆 Best: Sharpe=1.14 CAGR=33.5% MaxDD=-26.9% Comp=0.4163
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.14
+
+[8/15] Strategy_Gen1131  Sharpe=1.27 Comp=0.4137
+   🔍 Sweep params: {'thresh_24': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 100 combinations...
+   🏆 Best: Sharpe=1.29 CAGR=52.8% MaxDD=-40.3% Comp=0.4174
+          Params: {'thresh_24': 16, 'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.27
+
+[9/15] Strategy_Gen1381  Sharpe=1.27 Comp=0.4137
+   🔍 Sweep params: {'thresh_10': 5, 'thresh_25': 5, 'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 100 combinations...
+   🏆 Best: Sharpe=1.31 CAGR=54.3% MaxDD=-40.3% Comp=0.4220
+          Params: {'thresh_10': 8, 'thresh_25': 15, 'thresh_42': 42, 'thresh_59': 59}
+   ✅ History updated: Comp 0.4137 → 0.4220
+
+[10/15] Strategy_Gen2113  Sharpe=1.19 Comp=0.4085
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 100 combinations...
+   🏆 Best: Sharpe=1.19 CAGR=46.5% MaxDD=-36.2% Comp=0.4117
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.19
+
+[11/15] Strategy_Gen2343  Sharpe=0.93 Comp=0.3914
+   ⚠️ No sweepable params found in Strategy_Gen2343
+   — No improvement over base Sharpe=0.93
+
+[12/15] Strategy_Gen1766  Sharpe=1.07 Comp=0.3911
+   🔍 Sweep params: {'thresh_30': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_70': 5}
+   🔢 Testing 100 combinations...
+   🏆 Best: Sharpe=1.06 CAGR=40.4% MaxDD=-36.5% Comp=0.3882
+          Params: {'thresh_30': 24, 'thresh_42': 42, 'thresh_59': 59, 'thresh_70': 70}
+   — No improvement over base Sharpe=1.07
+
+[13/15] Strategy_Gen2083  Sharpe=1.12 Comp=0.3700
+   🔍 Sweep params: {'thresh_1.5': 5, 'thresh_35': 5, 'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 100 combinations...
+   🏆 Best: Sharpe=1.16 CAGR=37.5% MaxDD=-35.2% Comp=0.3954
+          Params: {'thresh_1.5': 0.9, 'thresh_35': 49, 'thresh_42': 42, 'thresh_59': 59}
+   ✅ History updated: Comp 0.3700 → 0.3954
+
+[14/15] Strategy_Gen2289  Sharpe=1.07 Comp=0.3691
+   🔍 Sweep params: {'thresh_30': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 100 combinations...
+   🏆 Best: Sharpe=1.07 CAGR=40.3% MaxDD=-41.9% Comp=0.3691
+          Params: {'thresh_30': 30, 'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.07
+
+[15/15] Strategy_Gen1230  Sharpe=0.89 Comp=0.3669
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 100 combinations...
+   🏆 Best: Sharpe=0.72 CAGR=15.9% MaxDD=-31.3% Comp=0.3262
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 91}
+   — No improvement over base Sharpe=0.89
+
+💾 History saved.
+============================================================
+✅ Done: 4/15 strategies improved
+============================================================
