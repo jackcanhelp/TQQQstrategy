@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-05 18:44:23
+   2026-03-05 19:11:37
 =======================================================
 
 📈 Overall
-  Total iterations: 2608
-  Successful: 820 (31%)
+  Total iterations: 2635
+  Successful: 822 (31%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 0 strategies
 
-  This session: 75 iters, 10 ok
-  Duration: 1:15:35
-  LLM calls: 306 (Groq: 306 [Groq: 306/306 ok, 10 keys | pools: idea=75, code=75, fix=57, director=76, secretary=23 | models: kimi-k2-instruct=157, llama-3.1-8b-instant=57, llama-4-maverick-17b-128e-instruct=41 | cooling: 9 keys], GitHub: 0, Gemini: 0)
+  This session: 100 iters, 10 ok
+  Duration: 1:42:49
+  LLM calls: 424 (Groq: 424 [Groq: 424/424 ok, 10 keys | pools: idea=100, code=100, fix=70, director=120, secretary=34 | models: kimi-k2-instruct=163, llama-4-scout-17b-16e-instruct=91, llama-3.1-8b-instant=70], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -24,15 +24,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen2599: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2600: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2601: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2602: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2603: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2604: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2605: REJECTED: MaxDD=-61.8% worse than -50%
-  ❌ Strategy_Gen2606: REJECTED: MaxDD=-73.2% worse than -50%
-  ✅ Cross_RVI_State_TSI_Cross_RVI_Extreme: Comp=0.0000 Sharpe=0.83 CAGR=24.1% MaxDD=-41.6%
-  ❌ Strategy_Gen2607: REJECTED: MaxDD=-67.8% worse than -50%
+  ❌ Strategy_Gen2626: REJECTED: MaxDD=-56.2% worse than -50%
+  ❌ Strategy_Gen2627: REJECTED: MaxDD=-56.8% worse than -50%
+  ❌ Strategy_Gen2628: Strategy never enters the market (time_i
+  ❌ Strategy_Gen2629: ValueError: The truth value of a Series 
+  ❌ Strategy_Gen2630: REJECTED: Exposure=1.0% below 5%
+  ❌ Strategy_Gen2631: REJECTED: Exposure=4.9% below 5%
+  ❌ Strategy_Gen2632: Strategy never enters the market (time_i
+  ✅ Cross_RVI_State_MACD_Cross_Aroon_Flip: Comp=0.0000 Sharpe=0.94 CAGR=37.4% MaxDD=-44.3%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen2633: Strategy never enters the market (time_i
 
 =======================================================
