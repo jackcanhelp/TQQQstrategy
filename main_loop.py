@@ -345,7 +345,7 @@ def build_idea_prompt(history: Dict, indicator_menu: str,
     context += f"Hall of Fame entries: {len(hof)}\n\n"
 
     if top3:
-        context += "🏆 TOP 3 STRATEGIES (by composite score):\n"
+        context += "🏆 TOP 3 STRATEGIES (by Sharpe ratio):\n"
         for s in top3:
             cs = s.get('composite', 0)
             context += (f"  {s['name']}: Composite={cs:.4f}, Sharpe={s['sharpe']:.2f}, "
@@ -1068,7 +1068,7 @@ def run_iteration(
                 send_telegram(record_msg)
             strategy_file = GENERATED_DIR / f"strategy_gen_{strategy_id}.py"
             git_push(
-                f"[record] {result['name']}: Comp={composite:.4f} Sharpe={bt.sharpe_ratio:.2f} CAGR={bt.cagr:.1%}",
+                f"[record] {result['name']}: Comp={composite:.4f} Sharpe={result['sharpe']:.2f} CAGR={result['cagr']:.1%}",
                 files=[strategy_file, HISTORY_FILE, HALL_OF_FAME_FILE]
             )
 
@@ -1433,10 +1433,25 @@ def run_crossover_round(data: pd.DataFrame, history: Dict):
     try:
         from strategy_crossover import run_crossover
 
-        results = run_crossover(data, top_n=5)
+        results = run_crossover(data, top_n=5, max_combos=300)
 
         for r in results[:3]:
             name = r["name"]
+            # Skip if already in history (crossover runs every 25 iters)
+            if any(s.get("name") == name for s in history.get("strategies", [])):
+                print(f"   ⏭ {name} already recorded, skipping")
+                continue
+            # Apply same quality gates as LLM-generated strategies
+            from backtest import BacktestResult
+            _bt_mock = type('_BT', (), {
+                'sharpe_ratio': r["sharpe"], 'cagr': r["cagr"],
+                'max_drawdown': r["max_dd"], 'calmar_ratio': r["calmar"],
+                'total_trades': r.get("trades", 99),
+                'time_in_market': r.get("time_in_market", 0.5),
+            })()
+            if hard_filter(_bt_mock):
+                print(f"   ⚠️ {name} failed hard filter, skipping")
+                continue
             record_result(history, 0, name,
                           f"Crossover: {r['regime']}×{r['entry']}×{r['exit']}",
                           r["sharpe"], r["cagr"], r["max_dd"], r["calmar"],

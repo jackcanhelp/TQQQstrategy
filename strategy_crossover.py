@@ -461,6 +461,7 @@ def run_crossover(
     entry_keys: Optional[List[str]] = None,
     exit_keys: Optional[List[str]] = None,
     top_n: int = 10,
+    max_combos: int = 0,
 ) -> List[Dict]:
     """
     Test all permutations of regime × entry × exit modules.
@@ -483,6 +484,9 @@ def run_crossover(
         exit_keys = list(EXIT_MODULES.keys())
 
     combos = list(itertools.product(regime_keys, entry_keys, exit_keys))
+    if max_combos and len(combos) > max_combos:
+        import random
+        combos = random.sample(combos, max_combos)
     total = len(combos)
 
     print(f"═══════════════════════════════════════════")
