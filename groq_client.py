@@ -1,8 +1,8 @@
 """
-Groq Unified Client — Primary LLM Engine (5-Key Pool Edition)
+Groq Unified Client — Primary LLM Engine (10-Key Pool Edition)
 ===============================================================
-5 Key pool-based allocation + task-based model selection.
-Pool design: idea=K1,K2 | code=K3,K4 | fix=K5 + cross-pool overflow.
+10 Key pool-based allocation + task-based model selection.
+Pool design: idea=K1,K2,K7,K8 | code=K3,K4,K6,K9,K10 | fix=K5 + cross-pool overflow.
 Failover: pool keys → overflow keys → all models × all keys.
 
 Rate Limits (Free Tier, per key):
@@ -29,7 +29,7 @@ load_dotenv()
 
 
 class GroqClient:
-    """Unified Groq client with 5-key pool allocation and task-based model routing."""
+    """Unified Groq client with 10-key pool allocation and task-based model routing."""
 
     # ── Models grouped by task type — ordered by preference ──
     MODELS_BY_TASK = {
@@ -60,26 +60,26 @@ class GroqClient:
     }
 
     # ── Key pool indices (0-based) per task type ──
-    # idea:      K1,K2 (index 0,1) — creative tasks get dedicated keys
-    # code:      K3,K4 (index 2,3) — code gen gets dedicated keys
+    # idea:      K1,K2,K7,K8 (index 0,1,6,7) — creative tasks get dedicated keys
+    # code:      K3,K4,K6,K9,K10 (index 2,3,5,8,9) — code gen is the bottleneck
     # fix:       K5    (index 4)   — fix is fast & light, 1 key suffices
-    # director:  K1,K2 (index 0,1) — shares idea pool (infrequent, high quality)
-    # secretary: K1,K2 (index 0,1) — shares idea pool (infrequent, structured output)
+    # director:  K1,K2,K7,K8 (index 0,1,6,7) — shares idea pool (infrequent, high quality)
+    # secretary: K1,K2,K7,K8 (index 0,1,6,7) — shares idea pool (infrequent, structured output)
     KEY_POOLS = {
-        "idea":      [0, 1],
-        "code":      [2, 3, 5],   # K3, K4, K6 — code generation is the bottleneck
+        "idea":      [0, 1, 6, 7],
+        "code":      [2, 3, 5, 8, 9],   # K3, K4, K6, K9, K10 — code generation is the bottleneck
         "fix":       [4],
-        "director":  [0, 1],
-        "secretary": [0, 1],
+        "director":  [0, 1, 6, 7],
+        "secretary": [0, 1, 6, 7],
     }
 
     # Rate limit cooldown tracking (seconds to wait per key)
     RATE_LIMIT_COOLDOWN = 65  # Wait slightly over 1 minute for RPM reset
 
     def __init__(self):
-        # Collect all available keys (up to 5)
+        # Collect all available keys (up to 10)
         self.keys: List[str] = []
-        for i in range(1, 7):
+        for i in range(1, 11):
             env_name = "GROQ_API_KEY" if i == 1 else f"GROQ_API_KEY_{i}"
             key = os.getenv(env_name, "").strip().strip('"')
             if key:
