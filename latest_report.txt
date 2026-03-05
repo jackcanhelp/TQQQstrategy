@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-06 06:18:16
+   2026-03-06 06:59:55
 =======================================================
 
 📈 Overall
-  Total iterations: 3229
-  Successful: 894 (28%)
+  Total iterations: 3255
+  Successful: 899 (28%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 0 strategies
 
-  This session: 375 iters, 39 ok
-  Duration: 8:13:30
-  LLM calls: 1548 (Groq: 1530 [Groq: 1530/1548 ok, 10 keys | pools: idea=276, code=274, fix=242, director=365, secretary=110, overflow=263 | models: kimi-k2-instruct=358, qwen3-32b=306, llama-4-scout-17b-16e-instruct=267 | cooling: 19 keys], GitHub: 18, Gemini: 0)
+  This session: 400 iters, 43 ok
+  Duration: 8:55:09
+  LLM calls: 1651 (Groq: 1629 [Groq: 1629/1651 ok, 10 keys | pools: idea=297, code=294, fix=257, director=389, secretary=118, overflow=274 | models: kimi-k2-instruct=383, qwen3-32b=332, llama-4-scout-17b-16e-instruct=279], GitHub: 22, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -24,15 +24,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen3220: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3221: REJECTED: Sharpe=0.17 below 0.3
-  ❌ Strategy_Gen3222: REJECTED: Only 2 trades (min=10)
-  ❌ Strategy_Gen3223: REJECTED: Exposure=2.2% below 5%
-  ❌ Strategy_Gen3224: REJECTED: Sharpe=0.29 below 0.3
-  ❌ Strategy_Gen3225: REJECTED: Exposure=2.8% below 5%
-  ❌ Strategy_Gen3226: REJECTED: Sharpe=0.01 below 0.3
-  ❌ Strategy_Gen3227: REJECTED: Only 2 trades (min=10)
-  ❌ Strategy_Gen3228: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3229: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3246: REJECTED: Exposure=2.2% below 5%
+  ❌ Strategy_Gen3247: REJECTED: MaxDD=-71.1% worse than -50%
+  ❌ Strategy_Gen3248: Look-ahead bias in code
+  ❌ Strategy_Gen3249: UnboundLocalError: cannot access local v
+  ❌ Strategy_Gen3250: AttributeError: 'numpy.float64' object h
+  ❌ Strategy_Gen3251: REJECTED: MaxDD=-68.9% worse than -50%
+  ❌ Strategy_Gen3252: REJECTED: MaxDD=-75.4% worse than -50%
+  ❌ Strategy_Gen3253: Strategy never enters the market (time_i
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen3254: Strategy never enters the market (time_i
 
 =======================================================
