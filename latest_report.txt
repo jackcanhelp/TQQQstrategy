@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-05 21:21:33
+   2026-03-05 21:34:42
 =======================================================
 
 📈 Overall
-  Total iterations: 2791
+  Total iterations: 2816
   Successful: 837 (30%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 0 strategies
 
-  This session: 250 iters, 19 ok
-  Duration: 3:52:44
-  LLM calls: 1072 (Groq: 1072 [Groq: 1072/1072 ok, 10 keys | pools: idea=250, code=250, fix=157, director=324, secretary=91 | models: llama-4-scout-17b-16e-instruct=450, kimi-k2-instruct=215, llama-4-maverick-17b-128e-instruct=202], GitHub: 0, Gemini: 0)
+  This session: 275 iters, 19 ok
+  Duration: 4:05:54
+  LLM calls: 1185 (Groq: 1185 [Groq: 1185/1185 ok, 10 keys | pools: idea=275, code=275, fix=170, director=364, secretary=101 | models: llama-4-scout-17b-16e-instruct=519, llama-4-maverick-17b-128e-instruct=226, kimi-k2-instruct=221 | cooling: 9 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -24,16 +24,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen2782: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2783: REJECTED: Exposure=1.2% below 5%
-  ❌ Strategy_Gen2784: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2785: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2786: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2787: REJECTED: MaxDD=-90.4% worse than -50%
-  ❌ Strategy_Gen2788: KeyError: 'HV_10_SMA'
-Traceback (most re
-  ✅ Cross_RVI_State_PPO_Cross_ATR_Spike: Comp=0.0000 Sharpe=0.98 CAGR=42.7% MaxDD=-49.1%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen2789: Strategy never enters the market (time_i
+  ❌ Strategy_Gen2807: REJECTED: MaxDD=-53.5% worse than -50%
+  ❌ Strategy_Gen2808: REJECTED: Sharpe=-22.74 below 0.3
+  ❌ Strategy_Gen2809: REJECTED: MaxDD=-98.5% worse than -50%
+  ❌ Strategy_Gen2810: Strategy never enters the market (time_i
+  ❌ Strategy_Gen2811: Strategy never enters the market (time_i
+  ❌ Strategy_Gen2812: REJECTED: Exposure=2.3% below 5%
+  ❌ Strategy_Gen2813: REJECTED: MaxDD=-97.6% worse than -50%
+  ❌ Strategy_Gen2814: REJECTED: Exposure=2.2% below 5%
+  ❌ Strategy_Gen2815: Strategy never enters the market (time_i
+  ❌ Strategy_Gen2816: REJECTED: MaxDD=-60.0% worse than -50%
 
 =======================================================
