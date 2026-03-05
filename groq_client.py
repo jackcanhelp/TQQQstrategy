@@ -88,8 +88,9 @@ class GroqClient:
         # Per-pool round-robin index
         self._pool_index: Dict[str, int] = {"idea": 0, "code": 0, "fix": 0, "director": 0, "secretary": 0}
 
-        # Rate limit cooldown tracker: key_index → timestamp when usable again
-        self._key_cooldown: Dict[int, float] = {}
+        # Rate limit cooldown tracker: (key_index, model) → timestamp when usable again
+        # Per-model granularity: kimi-k2 rate limit on K1 doesn't block llama-4-scout on K1
+        self._key_cooldown: Dict[tuple, float] = {}
 
         # Stats
         self.calls = 0
@@ -114,31 +115,31 @@ class GroqClient:
             )
         return self._clients[key]
 
-    def _is_key_available(self, key_index: int) -> bool:
-        """Check if a key is available (not in cooldown)."""
-        if key_index not in self._key_cooldown:
+    def _is_key_available(self, key_index: int, model: str = "") -> bool:
+        """Check if a key is available for a specific model (not in cooldown).
+        Model-specific: kimi-k2 rate limit on K1 does NOT block llama-4-scout on K1."""
+        ck = (key_index, model)
+        if ck not in self._key_cooldown:
             return True
-        return time.time() >= self._key_cooldown[key_index]
+        return time.time() >= self._key_cooldown[ck]
 
-    def _mark_key_limited(self, key_index: int):
-        """Mark a key as rate-limited with cooldown."""
-        self._key_cooldown[key_index] = time.time() + self.RATE_LIMIT_COOLDOWN
+    def _mark_key_limited(self, key_index: int, model: str = ""):
+        """Mark a (key, model) pair as rate-limited with cooldown."""
+        self._key_cooldown[(key_index, model)] = time.time() + self.RATE_LIMIT_COOLDOWN
 
-    def _get_pool_keys(self, task: str) -> List[int]:
-        """Get available key indices for a task's pool, respecting cooldowns."""
+    def _get_pool_keys(self, task: str, model: str = "") -> List[int]:
+        """Get available key indices for a task's pool, filtered by model-specific cooldowns."""
         pool = self.KEY_POOLS.get(task, self.KEY_POOLS["idea"])
-        # Filter to keys that actually exist and are available
-        available = [i for i in pool if i < len(self.keys) and self._is_key_available(i)]
-        return available
+        return [i for i in pool if i < len(self.keys) and self._is_key_available(i, model)]
 
-    def _get_overflow_keys(self, task: str) -> List[int]:
+    def _get_overflow_keys(self, task: str, model: str = "") -> List[int]:
         """Get overflow keys from OTHER pools (not the task's own pool)."""
         own_pool = set(self.KEY_POOLS.get(task, []))
         all_indices = set(range(len(self.keys)))
         overflow = all_indices - own_pool
         # Sort: prefer fix pool key (K5) as overflow first, then others
         return sorted(
-            [i for i in overflow if self._is_key_available(i)],
+            [i for i in overflow if self._is_key_available(i, model)],
             key=lambda x: (0 if x == 4 else 1, x)
         )
 
@@ -178,7 +179,7 @@ class GroqClient:
             error_msg = str(e)
             if '429' in error_msg or 'rate_limit' in error_msg.lower():
                 print(f"   ⚠️ Groq {model.split('/')[-1]} {key_label} rate limited, cooldown {self.RATE_LIMIT_COOLDOWN}s")
-                self._mark_key_limited(key_index)
+                self._mark_key_limited(key_index, model)  # Only block this (key, model) pair
                 return None
             print(f"   ⚠️ Groq {model.split('/')[-1]} {key_label} failed: {error_msg[:80]}")
         return None
@@ -206,35 +207,41 @@ class GroqClient:
         self.calls += 1
         models = self.MODELS_BY_TASK.get(task, self.MODELS_BY_TASK["idea"])
 
-        # Phase 1: Try dedicated pool keys (round-robin start for even distribution)
-        pool_keys = self._get_pool_keys(task)
-        if pool_keys:
+        # Phase 1: Try dedicated pool keys — re-filter per model so a kimi-k2 rate limit
+        # on K1 does NOT prevent llama-4-scout from using K1 in the same call.
+        for model in models:
+            pool_keys = self._get_pool_keys(task, model)
+            if not pool_keys:
+                continue
             rotated_keys = self._rotate_pool_keys(pool_keys, task)
-            for model in models:
-                for key_idx in rotated_keys:
-                    result = self._try_call(key_idx, model, prompt)
-                    if result:
-                        self.successes += 1
-                        self.model_stats[model] = self.model_stats.get(model, 0) + 1
-                        self.pool_stats[task] = self.pool_stats.get(task, 0) + 1
-                        key_label = f"K{key_idx + 1}"
-                        print(f"   ✅ Groq ({model.split('/')[-1]} {key_label} pool:{task}) success")
-                        return result
+            for key_idx in rotated_keys:
+                result = self._try_call(key_idx, model, prompt)
+                if result:
+                    self.successes += 1
+                    self.model_stats[model] = self.model_stats.get(model, 0) + 1
+                    self.pool_stats[task] = self.pool_stats.get(task, 0) + 1
+                    key_label = f"K{key_idx + 1}"
+                    print(f"   ✅ Groq ({model.split('/')[-1]} {key_label} pool:{task}) success")
+                    return result
 
-        # Phase 2: Try overflow keys from other pools
-        overflow_keys = self._get_overflow_keys(task)
-        if overflow_keys:
-            print(f"   🔀 Groq: {task} pool exhausted, trying overflow keys...")
-            for model in models:
-                for key_idx in overflow_keys:
-                    result = self._try_call(key_idx, model, prompt)
-                    if result:
-                        self.successes += 1
-                        self.model_stats[model] = self.model_stats.get(model, 0) + 1
-                        self.pool_stats["overflow"] = self.pool_stats.get("overflow", 0) + 1
-                        key_label = f"K{key_idx + 1}"
-                        print(f"   ✅ Groq ({model.split('/')[-1]} {key_label} overflow) success")
-                        return result
+        # Phase 2: Try overflow keys from other pools (also re-filtered per model)
+        any_overflow = False
+        for model in models:
+            overflow_keys = self._get_overflow_keys(task, model)
+            if not overflow_keys:
+                continue
+            if not any_overflow:
+                print(f"   🔀 Groq: {task} pool exhausted, trying overflow keys...")
+                any_overflow = True
+            for key_idx in overflow_keys:
+                result = self._try_call(key_idx, model, prompt)
+                if result:
+                    self.successes += 1
+                    self.model_stats[model] = self.model_stats.get(model, 0) + 1
+                    self.pool_stats["overflow"] = self.pool_stats.get("overflow", 0) + 1
+                    key_label = f"K{key_idx + 1}"
+                    print(f"   ✅ Groq ({model.split('/')[-1]} {key_label} overflow) success")
+                    return result
 
         print(f"   ❌ Groq: all {len(self.keys)} keys × {len(models)} models exhausted for '{task}'")
         return None
