@@ -1109,7 +1109,7 @@ def generate_report(history: Dict, session_stats: Dict) -> str:
   Duration: {session_stats['duration']}
   {session_stats['llm_stats']}
 
-🏆 Top 5 Strategies (by composite score)
+🏆 Top 5 Strategies (by Sharpe ratio)
 {'─'*55}"""
     for i, s in enumerate(top5, 1):
         cs = s.get('composite', 0)
@@ -1235,7 +1235,7 @@ def get_director_advice(llm: 'LLMClient', history: Dict) -> Optional[str]:
         return None
 
     # Build review report for director
-    report = "═══ CURRENT TOP STRATEGIES (ranked by composite score) ═══\n"
+    report = "═══ CURRENT TOP STRATEGIES (ranked by Sharpe ratio) ═══\n"
     for i, s in enumerate(top5, 1):
         report += (
             f"\n--- Rank {i}: {s['name']} ---\n"
