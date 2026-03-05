@@ -333,7 +333,7 @@ def build_idea_prompt(history: Dict, indicator_menu: str,
     total = history["total_iterations"]
     strategies = history["strategies"]
     rankable = [s for s in strategies if is_rankable(s)]
-    top3 = sorted(rankable, key=lambda x: x.get("composite", x.get("calmar", 0)), reverse=True)[:3]
+    top3 = sorted(rankable, key=lambda x: x.get("sharpe", 0), reverse=True)[:3]
     recent5 = strategies[-5:] if strategies else []
 
     # Hall of fame
@@ -1088,7 +1088,7 @@ def generate_report(history: Dict, session_stats: Dict) -> str:
     strategies = history["strategies"]
     successful = [s for s in strategies if s.get("success")]
     rankable = [s for s in strategies if is_rankable(s)]
-    top5 = sorted(rankable, key=lambda x: x.get("composite", x.get("calmar", 0)), reverse=True)[:5]
+    top5 = sorted(rankable, key=lambda x: x.get("sharpe", 0), reverse=True)[:5]
     recent10 = strategies[-10:]
     hof = load_hall_of_fame()
 
@@ -1227,7 +1227,7 @@ def get_director_advice(llm: 'LLMClient', history: Dict) -> Optional[str]:
     """
     strategies = history.get("strategies", [])
     rankable = [s for s in strategies if is_rankable(s)]
-    top5 = sorted(rankable, key=lambda x: x.get("composite", x.get("calmar", 0)), reverse=True)[:5]
+    top5 = sorted(rankable, key=lambda x: x.get("sharpe", 0), reverse=True)[:5]
     recent_failures = [s for s in strategies[-20:] if not s.get("success")][-5:]
     recent_all = strategies[-10:]
 
@@ -1277,6 +1277,8 @@ Based on the above data, provide a concise strategic directive (2-4 sentences) f
   Volume: OBV, OBV_SMA, CMF, Force_Index, Vol_Ratio, VWAP_Ratio
   Structure: Drawdown, Days_Up, Days_Down, Gap_Pct, ZScore, SMA50_Dist, SMA200_Dist
   Elder: Elder_Bull, Elder_Bear
+  ML Regime (Phase 3A): HMM_Regime (0=bear/1=neutral/2=bull), HMM_Prob_Bull (0-1 bull probability), GARCH_Vol (annualized conditional volatility %), CP_Distance (days since last structural break)
+  New Momentum (Phase 3B): QQE, STC, KDJ_K, KDJ_D, KDJ_J, CTI, SMI, Squeeze_Pro_Hist, Squeeze_Pro_On
 DO NOT suggest: yield curve, Fed funds rate, VIX (external), SPY, QQQ, or any macro data.
 Be specific and actionable.
 DO NOT write code. ONLY provide strategic direction."""

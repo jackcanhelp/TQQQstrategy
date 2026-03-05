@@ -163,8 +163,8 @@ class InternalAnalyst:
             trend_detail = ""
 
         # ── 5. Top strategies and their dominant indicators ──
-        rankable = [s for s in strategies if s.get("success") and s.get("composite", 0) > 0]
-        top5 = sorted(rankable, key=lambda x: x.get("composite", 0), reverse=True)[:5]
+        rankable = [s for s in strategies if s.get("success") and s.get("sharpe", 0) > 0]
+        top5 = sorted(rankable, key=lambda x: x.get("sharpe", 0), reverse=True)[:5]
 
         top5_info = []
         for s in top5:
@@ -892,8 +892,9 @@ class ResultChecker:
                 flags.append(f"repeated_error={most_common}(x{count})")
 
         # Flag 3: OOS composite degrading across last 3 successful iterations
+        # Use > 0 (not truthiness) since test_composite defaults to 0.0 (falsy)
         successful = [r for r in self._recent
-                      if r.get("success") and r.get("test_composite")]
+                      if r.get("success") and r.get("test_composite", 0) > 0]
         if len(successful) >= 3:
             composites = [r["test_composite"] for r in successful[-3:]]
             if composites[2] < composites[0] * 0.7:
