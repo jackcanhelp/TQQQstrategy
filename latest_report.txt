@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-06 00:01:11
+   2026-03-06 00:31:32
 =======================================================
 
 📈 Overall
-  Total iterations: 2944
-  Successful: 854 (29%)
+  Total iterations: 2969
+  Successful: 859 (29%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 0 strategies
 
-  This session: 100 iters, 9 ok
-  Duration: 1:56:24
-  LLM calls: 416 (Groq: 416 [Groq: 416/416 ok, 10 keys | pools: idea=69, code=76, fix=63, director=105, secretary=30, overflow=73 | models: kimi-k2-instruct=90, qwen3-32b=89, llama-4-scout-17b-16e-instruct=74], GitHub: 0, Gemini: 0)
+  This session: 125 iters, 14 ok
+  Duration: 2:26:45
+  LLM calls: 501 (Groq: 501 [Groq: 501/501 ok, 10 keys | pools: idea=94, code=98, fix=77, director=121, secretary=35, overflow=76 | models: kimi-k2-instruct=105, qwen3-32b=101, llama-4-scout-17b-16e-instruct=93 | cooling: 4 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -24,16 +24,17 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen2935: REJECTED: MaxDD=-83.3% worse than -50%
-  ❌ Strategy_Gen2936: REJECTED: Sharpe=0.22 below 0.3
-  ❌ Strategy_Gen2937: KeyError: 'hurst_extrapolated'
-Traceback
-  ❌ Strategy_Gen2938: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2939: ValueError: cannot set using a slice ind
-  ❌ Strategy_Gen2940: Strategy never enters the market (time_i
-  ❌ Strategy_Gen2941: REJECTED: Sharpe=-0.10 below 0.3
-  ❌ Strategy_Gen2942: REJECTED: Sharpe=0.29 below 0.3
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen2943: REJECTED: MaxDD=-55.2% worse than -50%
+  ❌ Strategy_Gen2960: REJECTED: Sharpe=0.27 below 0.3
+  ❌ Strategy_Gen2961: REJECTED: MaxDD=-51.3% worse than -50%
+  ❌ Strategy_Gen2962: REJECTED: Sharpe=0.16 below 0.3
+  ✅ Strategy_Gen2963: Comp=0.3049 Sharpe=0.69 CAGR=18.3% MaxDD=-38.1%
+  ❌ Strategy_Gen2964: REJECTED: MaxDD=-58.4% worse than -50%
+  ❌ Strategy_Gen2965: REJECTED: Only 6 trades (min=10)
+  ❌ Strategy_Gen2966: KeyError: 'Vol'
+Traceback (most recent c
+  ❌ Strategy_Gen2967: Strategy never enters the market (time_i
+  ❌ Strategy_Gen2968: KeyError: 'Hurst'
+Traceback (most recent
+  ❌ Strategy_Gen2969: Strategy never enters the market (time_i
 
 =======================================================
