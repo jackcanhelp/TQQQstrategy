@@ -323,13 +323,15 @@ def main():
             "original_sharpe": s.get("sharpe", 0),
         }
 
-        if best and best["composite"] > s.get("composite", 0) + 0.005:
+        # Compare on Sharpe (in-sample) — composites are not comparable because
+        # history composites use OOS-weighted scoring while sweep runs IS only.
+        if best and best["sharpe"] > s.get("sharpe", 0) + 0.02:
             update_history_with_swept_result(history, name, best)
             entry.update({"status": "improved", "best": best})
             improved += 1
         else:
             entry["status"] = "no_improvement"
-            print(f"   — No improvement over base composite={s.get('composite',0):.4f}")
+            print(f"   — No improvement over base Sharpe={s.get('sharpe',0):.2f}")
 
         log_entries.append(entry)
         print()
