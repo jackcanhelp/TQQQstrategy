@@ -1,5 +1,5 @@
 {
-  "total_iterations": 3502,
+  "total_iterations": 3509,
   "best_sharpe": 1.3065759294685262,
   "best_strategy": "Strategy_Gen1920",
   "strategies": [
@@ -55976,6 +55976,196 @@
         "ADX",
         "CTI"
       ]
+    },
+    {
+      "id": 3503,
+      "name": "Strategy_Gen3503",
+      "idea": "Strategy Name: RVI_GARCH_Regime_TightStop\n\nChampion Modules Kept: RVI state-machine entry logic, ATR-based stop structure  \nChampion Modules Changed: ATR multiplier 1.8 \u2192 1.2; add SMA50_Dist regime, GARCH_Vol size halving, and trailing exit\n\nState Machine Logic  \nStates: Green=1, Orange=0, Red=-1 (from RVI_State column)  \nEntry trigger: transition (prev_state \u2264 0) & (curr_state == 1)\n\nEntry Signal Logic  \nLong only:  \nself.entry = ((self.data['RVI_State'] == 1) & (self.prev_state <= 0) & (self.d",
+      "sharpe": -0.2722283024417276,
+      "calmar": 0.0007892813440505455,
+      "cagr": 0.00015554525546401798,
+      "max_dd": -0.1970720030778491,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: Sharpe=-0.27 below 0.3",
+      "success": false,
+      "timestamp": "2026-03-06T16:38:17.469526",
+      "mode_used": 13,
+      "indicator_fingerprint": [
+        "RVI",
+        "RVI_Refined",
+        "RVI_State",
+        "ATR",
+        "SMA",
+        "HMM_Regime",
+        "GARCH_Vol"
+      ]
+    },
+    {
+      "id": 3504,
+      "name": "Strategy_Gen3504",
+      "idea": "Strategy_Gen3504\n\nKEPT: RVI_State transitions for core entry timing  \nCHANGED: replaced pure-RVI entry with BB_Squeeze contraction + STC flip confirmation; added SMA50_Dist regime filter; GARCH_Vol>35 % or HMM_Regime\u22602 halves size and tightens stop to 1.2\u00d7ATR\n\nState Machine Logic  \n- RVI_State tracks volatility regime (Green/Orange/Red)  \n- ENTRY requires RVI_State transition Orange\u2192Green (momentum building) AND BB_Squeeze=1 (contraction) AND STC flip (\u2191 through 25)  \n- Regime filter: SMA50_Dist",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.000%). Signal stats: min=0.0000, max=0.0000, mean",
+      "success": false,
+      "timestamp": "2026-03-06T16:38:35.108412",
+      "mode_used": 3,
+      "indicator_fingerprint": [
+        "RVI",
+        "RVI_State",
+        "ATR",
+        "BB",
+        "SMA",
+        "HMM_Regime",
+        "GARCH_Vol",
+        "STC",
+        "CTI"
+      ]
+    },
+    {
+      "id": 3505,
+      "name": "Strategy_Gen3505",
+      "idea": "Strategy_Gen3505_Assignment3\n\nKEPT: RVI_State machine entry logic (transition from neutral/orange\u2192green)\nCHANGED: Added ROC_20 zero-cross confirmation, SMA50_Dist trend filter, GARCH_Vol/HMM_Regime size halver, 1.2\u00d7ATR stop\n\nState Machine:\n- Green=1, Orange=0, Red=-1\n- Entry: (prev_RVI_State \u22640) & (RVI_State==1)  // Orange/Red\u2192Green\n\nEntry Logic:\nlong_entry  = (RVI_State==1) & (prev_RVI_State<=0) & (ROC_20>0) & (SMA50_Dist>-0.02)\nshort_entry = (RVI_State==-1) & (prev_RVI_State>=0) & (ROC_20<0) &",
+      "sharpe": -0.0288157521992494,
+      "calmar": 0.00034124417300203743,
+      "cagr": -0.00015902276911672342,
+      "max_dd": -0.46600874593036334,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: Sharpe=-0.03 below 0.3",
+      "success": false,
+      "timestamp": "2026-03-06T16:38:50.014412",
+      "mode_used": 0,
+      "indicator_fingerprint": [
+        "RVI",
+        "RVI_State",
+        "ATR",
+        "SMA",
+        "HMM_Regime",
+        "GARCH_Vol"
+      ]
+    },
+    {
+      "id": 3506,
+      "name": "Strategy_Gen3506",
+      "idea": "```python\nclass Strategy_VolBudget_Donchian_Hybrid(Strategy):\n    def init(self):\n        self.don_period = 20\n        self.atr_mult = 3.0\n        self.rvi_exit_top = 76\n        self.rvi_exit_bot = 42\n        self.garch_spike_q = 0.90\n        self.bb_squeeze_q = 0.25\n        self.regime_cut = 1\n        self.size_atr_period = 20\n        self.max_size = 1.5\n        self.min_size = 0.0\n        self.rvi_short = 42\n        self.atr_short_mult = 1.8\n        self.tp_short_mult = 1.8\n\n    def next(self)",
+      "sharpe": -0.1548778702377816,
+      "calmar": 0.06006950191650748,
+      "cagr": -0.041020165776816775,
+      "max_dd": -0.682878406979835,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: MaxDD=-68.3% worse than -50%",
+      "success": false,
+      "timestamp": "2026-03-06T16:40:16.169098",
+      "mode_used": 1,
+      "indicator_fingerprint": [
+        "RVI",
+        "RVI_Refined",
+        "RVI_State",
+        "ATR",
+        "BB",
+        "SMA",
+        "HMM_Regime",
+        "GARCH_Vol"
+      ]
+    },
+    {
+      "id": 3507,
+      "name": "Strategy_Gen3507",
+      "idea": "```python\nclass Strategy_CP_Fade_Quality(BaseStrategy):\n    strategy_name = \"CP_Fade_Quality\"\n    \n    def init(self):\n        pass\n    \n    def next(self):\n        # Regime filters\n        regime_ok = self.data['HMM_Regime'].iloc[-1] <= 1  # bear/neutral only\n        \n        # Volatility filters\n        garch_vol = self.data['GARCH_Vol'].iloc[-1]\n        garch_90th = self.data['GARCH_Vol'].rolling(252).quantile(0.9).iloc[-1]\n        vol_spike = garch_vol > garch_90th\n        \n        bb_width ",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.000%). Signal stats: min=0.0000, max=0.0000, mean",
+      "success": false,
+      "timestamp": "2026-03-06T16:41:00.058170",
+      "mode_used": 2,
+      "indicator_fingerprint": [
+        "BB",
+        "SMA",
+        "Stoch",
+        "HMM_Regime",
+        "GARCH_Vol",
+        "CP_Distance"
+      ]
+    },
+    {
+      "id": 3508,
+      "name": "Strategy_Gen3508",
+      "idea": "### HV Regime Squeeze Strategy\n\n#### 1. Strategy Name\nHV_Regime_Squeeze\n\n#### 2. Champion Module Changes\n- **Kept**: RVI State transitions for capturing momentum build-up\n- **Changed**: Incorporated HV_30, HV_10, BB_Squeeze, and MACD indicators for entry/exit conditions. Added regime filter and adaptive sizing.\n\n#### 3. State Machine Logic\n- **Regime States**: \n  - Bear (HMM_Regime = 0)\n  - Neutral (HMM_Regime = 1)\n  - Bull (HMM_Regime = 2)\n- **Entry State Transition**: Long when transitioning f",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.000%). Signal stats: min=0.0000, max=0.0000, mean",
+      "success": false,
+      "timestamp": "2026-03-06T16:41:14.938869",
+      "mode_used": 14,
+      "indicator_fingerprint": [
+        "RVI",
+        "MACD",
+        "ATR",
+        "BB",
+        "HMM_Regime",
+        "GARCH_Vol",
+        "CTI"
+      ]
+    },
+    {
+      "id": 3509,
+      "name": "Strategy_Gen3509",
+      "idea": "### Strategy Name\nTQQQ_Aroon_MACD_Regime\n\n### Champion Module Changes\n- **Kept**: RVI State Machine concept for regime filtering\n- **Changed**: Replaced RVI state transitions with Aroon_Down and MACD_hist for entry/exit logic, added GARCH_Vol regime filter\n\n### State Machine Logic\n- **Regime States**: Based on GARCH_Vol\n  - Low Vol: GARCH_Vol < 20 (Bullish Regime)\n  - High Vol: GARCH_Vol \u2265 20 (Bearish Regime)\n\n### Entry Signal Logic\n- **Long Entry**: Aroon_Down < 30 and MACD_hist > 0 and GARCH_V",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.000%). Signal stats: min=0.0000, max=0.0000, mean",
+      "success": false,
+      "timestamp": "2026-03-06T16:45:53.020396",
+      "mode_used": 7,
+      "indicator_fingerprint": [
+        "RVI",
+        "RSI",
+        "MACD",
+        "ATR",
+        "Stoch",
+        "Aroon",
+        "GARCH_Vol"
+      ]
     }
   ],
   "best_calmar": 1.3065759294685262,
@@ -55983,11 +56173,11 @@
   "mode_stats": {
     "2": {
       "wins": 1,
-      "trials": 15
+      "trials": 16
     },
     "12": {
       "wins": 0,
-      "trials": 12
+      "trials": 13
     },
     "7": {
       "wins": 2,
@@ -56003,7 +56193,7 @@
     },
     "0": {
       "wins": 1,
-      "trials": 15
+      "trials": 16
     },
     "10": {
       "wins": 0,
@@ -56011,11 +56201,11 @@
     },
     "14": {
       "wins": 1,
-      "trials": 15
+      "trials": 16
     },
     "1": {
       "wins": 1,
-      "trials": 15
+      "trials": 16
     },
     "5": {
       "wins": 0,
@@ -56035,11 +56225,11 @@
     },
     "13": {
       "wins": 0,
-      "trials": 12
+      "trials": 13
     },
     "3": {
       "wins": 3,
-      "trials": 18
+      "trials": 19
     }
   }
 }
