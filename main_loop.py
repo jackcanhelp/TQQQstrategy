@@ -202,35 +202,43 @@ def get_banned_indicators(history: Dict) -> List[str]:
 
 
 # ── Plan B: UCB1 multi-armed bandit for mutation mode selection ──
-def ucb_select_mutation(history: Dict) -> tuple:
+def ucb_select_mutation(history: Dict, banned_indicators: List[str] = None) -> tuple:
     """
     UCB1 bandit selects the best mutation mode to explore.
-    Returns (mode_index, mode_text).
+    When key indicators are banned, restricts candidate pool to non-banned modes.
+    Returns (mode_index, mode_text) where mode_index is the MUTATION_MODES index.
     mode_stats in history: {"0": {"wins": 3, "trials": 10}, ...}
     """
     import math
     mode_stats = history.get("mode_stats", {})
-    n_modes = len(MUTATION_MODES)
-    total_trials = sum(v.get("trials", 0) for v in mode_stats.values())
 
-    # Exploration phase: ensure every mode tried at least once
-    if total_trials < n_modes:
-        tried = {int(k) for k in mode_stats if mode_stats[k].get("trials", 0) > 0}
-        untried = [i for i in range(n_modes) if i not in tried]
-        if untried:
-            idx = random.choice(untried)
-            return idx, MUTATION_MODES[idx]
+    # Determine candidate mode indices: exclude modes referencing banned indicators
+    rvi_banned = banned_indicators and any(
+        b in ("RVI", "RVI_State", "RVI_Refined") for b in banned_indicators)
+    if rvi_banned:
+        candidate_indices = [i for i, m in enumerate(MUTATION_MODES) if "RVI" not in m.upper()]
+    else:
+        candidate_indices = list(range(len(MUTATION_MODES)))
 
-    # UCB1 selection
-    best_idx, best_ucb = 0, -1.0
-    for i in range(n_modes):
+    if not candidate_indices:
+        candidate_indices = list(range(len(MUTATION_MODES)))
+
+    total_trials = sum(mode_stats.get(str(i), {}).get("trials", 0) for i in candidate_indices)
+
+    # Exploration: try each candidate at least once
+    untried = [i for i in candidate_indices if mode_stats.get(str(i), {}).get("trials", 0) == 0]
+    if untried:
+        idx = random.choice(untried)
+        return idx, MUTATION_MODES[idx]
+
+    # UCB1 selection on candidates
+    best_idx, best_ucb = candidate_indices[0], -1.0
+    for i in candidate_indices:
         stats = mode_stats.get(str(i), {"wins": 0, "trials": 0})
         trials = stats.get("trials", 0)
         wins = stats.get("wins", 0)
-        if trials == 0:
-            return i, MUTATION_MODES[i]
-        mu = wins / trials
-        ucb = mu + math.sqrt(2 * math.log(max(total_trials, 1)) / trials)
+        mu = wins / trials if trials > 0 else 0
+        ucb = mu + math.sqrt(2 * math.log(max(total_trials, 1)) / max(trials, 1))
         if ucb > best_ucb:
             best_ucb = ucb
             best_idx = i
@@ -567,17 +575,15 @@ EXPLORE SOMETHING NEW: use indicators from a completely different category (see 
 
 """
 
-    # Plan B: UCB1 selects mutation mode, filtered to avoid banned-indicator modes
-    if preset_mutation:
-        # Filter: if preset mentions a banned indicator, pick an alternative non-RVI mode
-        if banned_indicators and any(b.upper() in preset_mutation.upper() for b in banned_indicators
-                                     if b in ("RVI", "RVI_State", "RVI_Refined")):
-            non_rvi_modes = [m for m in MUTATION_MODES if "RVI" not in m.upper()[:30]]
-            champion_mutation = random.choice(non_rvi_modes) if non_rvi_modes else preset_mutation
-        else:
-            champion_mutation = preset_mutation
+    # Plan B: use UCB1-selected mode, but replace with non-banned alternative if needed
+    rvi_banned_check = banned_indicators and any(
+        b in ("RVI", "RVI_State", "RVI_Refined") for b in banned_indicators)
+    if preset_mutation and rvi_banned_check and "RVI" in preset_mutation.upper():
+        # Selected mode references banned indicator — pick from non-RVI modes instead
+        non_rvi_modes = [m for m in MUTATION_MODES if "RVI" not in m.upper()]
+        champion_mutation = random.choice(non_rvi_modes) if non_rvi_modes else preset_mutation
     else:
-        champion_mutation = random.choice(MUTATION_MODES)
+        champion_mutation = preset_mutation if preset_mutation else random.choice(MUTATION_MODES)
 
     # Directed assignment from execution queue (overrides random mutation mode when set)
     assignment_section = ""
@@ -1008,7 +1014,7 @@ def run_iteration(
 
     # Plan A+B: compute banned indicators + UCB mutation mode before idea generation
     banned_indicators = get_banned_indicators(history)
-    mode_idx, preset_mutation = ucb_select_mutation(history)
+    mode_idx, preset_mutation = ucb_select_mutation(history, banned_indicators=banned_indicators)
     result["mode_used"] = mode_idx
     if banned_indicators:
         print(f"   🚫 [PlanA] Banned (overused): {', '.join(banned_indicators)}")
