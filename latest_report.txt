@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-06 18:19:51
+   2026-03-06 18:40:28
 =======================================================
 
 📈 Overall
-  Total iterations: 3586
-  Successful: 935 (26%)
+  Total iterations: 3611
+  Successful: 937 (26%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 1 strategies
 
-  This session: 100 iters, 13 ok
-  Duration: 1:48:25
-  LLM calls: 378 (Groq: 378 [Groq: 378/378 ok, 10 keys | pools: idea=90, code=92, fix=50, director=91, secretary=26, overflow=29 | models: llama-4-scout-17b-16e-instruct=109, kimi-k2-instruct=103, llama-4-maverick-17b-128e-instruct=67 | cooling: 1 keys], GitHub: 0, Gemini: 0)
+  This session: 125 iters, 15 ok
+  Duration: 2:09:02
+  LLM calls: 489 (Groq: 487 [Groq: 487/489 ok, 10 keys | pools: idea=105, code=107, fix=70, director=109, secretary=31, overflow=65 | models: kimi-k2-instruct=137, llama-4-scout-17b-16e-instruct=136, llama-4-maverick-17b-128e-instruct=80 | cooling: 9 keys], GitHub: 2, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -28,15 +28,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen3577: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3578: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3579: REJECTED: MaxDD=-70.9% worse than -50%
-  ❌ Strategy_Gen3580: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3581: Strategy never enters the market (time_i
-  ✅ Strategy_Gen3582: Comp=0.2962 Sharpe=0.72 CAGR=21.3% MaxDD=-44.5%
-  ❌ Strategy_Gen3583: REJECTED: MaxDD=-62.9% worse than -50%
-  ❌ Strategy_Gen3584: Strategy never enters the market (time_i
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen3585: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3602: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3603: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3604: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3605: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3606: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3607: REJECTED: MaxDD=-56.2% worse than -50%
+  ❌ Strategy_Gen3608: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3609: Strategy never enters the market (time_i
+  ✅ Strategy_Gen3610: Comp=0.2673 Sharpe=0.54 CAGR=14.4% MaxDD=-46.2%
+  ❌ Strategy_Gen3611: KeyError: 'OBV_SMA_50'
+Traceback (most r
 
 =======================================================
