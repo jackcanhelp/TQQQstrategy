@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-07 01:49:12
+   2026-03-07 02:32:24
 =======================================================
 
 📈 Overall
-  Total iterations: 3918
-  Successful: 975 (25%)
+  Total iterations: 3944
+  Successful: 978 (25%)
   Best: Strategy_Gen3671 (Composite: 0.4382)
   Hall of Fame: 2 strategies
 
-  This session: 425 iters, 46 ok
-  Duration: 9:17:46
-  LLM calls: 1752 (Groq: 1713 [Groq: 1713/1752 ok, 10 keys | pools: idea=273, code=350, fix=254, director=419, secretary=131, overflow=286 | models: kimi-k2-instruct=518, llama-4-scout-17b-16e-instruct=427, llama-4-maverick-17b-128e-instruct=285 | cooling: 8 keys], GitHub: 39, Gemini: 0)
+  This session: 450 iters, 48 ok
+  Duration: 10:00:57
+  LLM calls: 1870 (Groq: 1828 [Groq: 1828/1870 ok, 10 keys | pools: idea=284, code=368, fix=272, director=448, secretary=138, overflow=318 | models: kimi-k2-instruct=557, llama-4-scout-17b-16e-instruct=456, llama-4-maverick-17b-128e-instruct=300 | cooling: 3 keys], GitHub: 42, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -29,15 +29,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen3909: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3910: REJECTED: Sharpe=-0.38 below 0.3
-  ❌ Strategy_Gen3911: REJECTED: MaxDD=-65.0% worse than -50%
-  ❌ Strategy_Gen3912: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3913: REJECTED: MaxDD=-51.3% worse than -50%
-  ❌ Strategy_Gen3914: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3915: REJECTED: Sharpe=0.02 below 0.3
-  ❌ Strategy_Gen3916: REJECTED: MaxDD=-56.9% worse than -50%
-  ❌ Strategy_Gen3917: REJECTED: Sharpe=0.08 below 0.3
-  ❌ Strategy_Gen3918: REJECTED: MaxDD=-96.3% worse than -50%
+  ❌ Strategy_Gen3935: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3936: REJECTED: MaxDD=-51.0% worse than -50%
+  ✅ Strategy_Gen3937: Comp=0.3280 Sharpe=0.82 CAGR=32.5% MaxDD=-44.5%
+  ❌ Strategy_Gen3938: TypeError: unsupported operand type(s) f
+  ❌ Strategy_Gen3939: REJECTED: Sharpe=0.24 below 0.3
+  ❌ Strategy_Gen3940: REJECTED: MaxDD=-90.6% worse than -50%
+  ❌ Strategy_Gen3941: REJECTED: MaxDD=-66.1% worse than -50%
+  ❌ Strategy_Gen3942: REJECTED: MaxDD=-88.5% worse than -50%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen3943: REJECTED: MaxDD=-100.0% worse than -50%
 
 =======================================================
