@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-06 07:48:06
+   2026-03-06 08:26:11
 =======================================================
 
 📈 Overall
-  Total iterations: 3302
-  Successful: 903 (27%)
+  Total iterations: 3328
+  Successful: 906 (27%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 0 strategies
 
-  This session: 25 iters, 4 ok
-  Duration: 0:29:51
-  LLM calls: 103 (Groq: 88 [Groq: 88/103 ok, 10 keys | pools: idea=18, code=10, fix=17, director=16, secretary=4, overflow=23 | models: kimi-k2-instruct=33, llama-4-scout-17b-16e-instruct=22, qwen3-32b=18 | cooling: 9 keys], GitHub: 15, Gemini: 0)
+  This session: 50 iters, 6 ok
+  Duration: 1:07:56
+  LLM calls: 212 (Groq: 191 [Groq: 191/212 ok, 10 keys | pools: idea=32, code=27, fix=29, director=44, secretary=14, overflow=45 | models: kimi-k2-instruct=68, llama-4-scout-17b-16e-instruct=42, qwen3-32b=41 | cooling: 6 keys], GitHub: 21, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -24,16 +24,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen3293: REJECTED: Sharpe=0.08 below 0.3
-  ❌ Strategy_Gen3294: REJECTED: MaxDD=-83.6% worse than -50%
-  ❌ Strategy_Gen3295: REJECTED: Only 2 trades (min=10)
-  ❌ Strategy_Gen3296: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3297: KeyError: 'Vol'
-Traceback (most recent c
-  ❌ Strategy_Gen3298: REJECTED: Sharpe=-0.06 below 0.3
-  ❌ Strategy_Gen3299: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3300: REJECTED: MaxDD=-81.7% worse than -50%
-  ✅ Strategy_Gen3301: Comp=0.2560 Sharpe=0.50 CAGR=12.0% MaxDD=-49.1%
-  ❌ Strategy_Gen3302: REJECTED: MaxDD=-52.8% worse than -50%
+  ❌ Strategy_Gen3319: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3320: REJECTED: Only 8 trades (min=10)
+  ❌ Strategy_Gen3321: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3322: REJECTED: Exposure=3.3% below 5%
+  ❌ Strategy_Gen3323: REJECTED: MaxDD=-71.8% worse than -50%
+  ❌ Strategy_Gen3324: REJECTED: MaxDD=-80.8% worse than -50%
+  ❌ Strategy_Gen3325: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3326: REJECTED: MaxDD=-81.7% worse than -50%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen3327: UnboundLocalError: cannot access local v
 
 =======================================================
