@@ -760,10 +760,10 @@ TASK: Propose exactly 3 NEW technical indicators that are:
 3. Implementable with pandas/numpy only (no TA-Lib, no yfinance, no imports)
 4. Each is a self-contained Python method
 
-Good candidates: KAMA, TEMA, CMO, Zero-Lag EMA, Fisher Transform, Laguerre RSI,
+Good candidates: TEMA, CMO, Zero-Lag EMA, Fisher Transform, Laguerre RSI,
 McGinley Dynamic, KST, PVT, VIDYA, Hurst Exponent, Kalman RSI, Fractal Adaptive MA,
 Ehlers Instantaneous Trendline, Recursive Bands, Stochastic RSI smoothed, etc.
-(QQE, STC, KDJ, SMI, Squeeze_Pro are already in the pool — do NOT propose these)
+(QQE, STC, KDJ, SMI, Squeeze_Pro, KAMA are already implemented — do NOT propose these)
 
 Output ONLY valid JSON:
 {{

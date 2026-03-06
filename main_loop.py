@@ -554,20 +554,30 @@ Try a COMPLETELY DIFFERENT approach. Explore a new indicator combination."""
 
     forced_str = "\n".join(forced_indicators)
 
-    # Plan B: UCB1 selects mutation mode (preset_mutation passed from run_iteration)
-    champion_mutation = preset_mutation if preset_mutation else random.choice(MUTATION_MODES)
-
-    # Plan A: Dynamic indicator ban section
+    # Plan A: Dynamic indicator ban section — harden: no loophole, filter modes
     ban_section = ""
     if banned_indicators:
         ban_list = ", ".join(banned_indicators)
-        ban_section = f"""⛔ OVERUSE BAN (Plan A — diversity enforcement):
-The following indicators appear in >{DIVERSITY_BAN_THRESHOLD:.0%} of recent successful strategies.
-DO NOT use them as primary signals — explore something NEW instead:
-  BANNED: {ban_list}
-(You may still use them as secondary confirmation if absolutely necessary, but NOT as the main regime/entry indicator.)
+        ban_section = f"""⛔ ══ DIVERSITY ENFORCEMENT — HARD BAN ══ ⛔
+The following indicators are COMPLETELY BANNED this iteration (overused >{DIVERSITY_BAN_THRESHOLD:.0%} of recent successes):
+  ❌ BANNED: {ban_list}
+DO NOT use these indicators in ANY role — not regime filter, not entry, not exit, not confirmation.
+This is NON-NEGOTIABLE. Using banned indicators will produce a clone that wastes the iteration.
+EXPLORE SOMETHING NEW: use indicators from a completely different category (see menu below).
 
 """
+
+    # Plan B: UCB1 selects mutation mode, filtered to avoid banned-indicator modes
+    if preset_mutation:
+        # Filter: if preset mentions a banned indicator, pick an alternative non-RVI mode
+        if banned_indicators and any(b.upper() in preset_mutation.upper() for b in banned_indicators
+                                     if b in ("RVI", "RVI_State", "RVI_Refined")):
+            non_rvi_modes = [m for m in MUTATION_MODES if "RVI" not in m.upper()[:30]]
+            champion_mutation = random.choice(non_rvi_modes) if non_rvi_modes else preset_mutation
+        else:
+            champion_mutation = preset_mutation
+    else:
+        champion_mutation = random.choice(MUTATION_MODES)
 
     # Directed assignment from execution queue (overrides random mutation mode when set)
     assignment_section = ""
@@ -628,9 +638,15 @@ These indicators are NOT in self.data. Include the helper method and call it in 
         custom_section += "\n⚠️ NOT in self.data — call as methods: kama = self._calc_kama(self.data['Close'])"
         custom_section += "\nUsing these gives genuinely NEW signal sources beyond self.data columns."
 
+    # Plan A: Champion DNA override when RVI is banned
+    rvi_banned = banned_indicators and any(b in ("RVI", "RVI_State", "RVI_Refined") for b in banned_indicators)
+    champ_ban_notice = ""
+    if rvi_banned:
+        champ_ban_notice = "\n⚠️  RVI IS CURRENTLY BANNED — DO NOT USE IT. Treat it as if it does not exist.\n    Design a NON-RVI strategy using a completely different regime/entry/exit approach.\n"
+
     return f"""You are a Quantitative Research Director designing TQQQ (3x Leveraged Nasdaq) strategies.
 
-{context}
+{ban_section}{context}
 {mutation}
 {assignment_section}
 {director_section}
@@ -640,7 +656,7 @@ These indicators are NOT in self.data. Include the helper method and call it in 
 
 ═══════════════════════════════════════════════════════════════
 🧬 CHAMPION DNA — PROVEN STRATEGY TO BUILD UPON
-═══════════════════════════════════════════════════════════════
+═══════════════════════════════════════════════════════════════{champ_ban_notice}
 Our BEST PROVEN strategy is the Champion RVI (Sharpe=1.28, CAGR=52.5%):
 
 HOW IT WORKS:
@@ -673,7 +689,7 @@ HOW IT WORKS:
 
 KEY INSIGHT: Volume surges often precede strong directional moves in TQQQ.
 Combining trend filter (MA) + volume confirmation reduces false breakouts.
-Can be combined with RVI regime filter for even better results.
+Can be combined with a regime filter (e.g., ADX > 25, DI_Plus > DI_Minus, or HV regime) for better results.
 
 ═══════════════════════════════════════════════════════════════
 🧪 NEW INDICATOR CATEGORIES TO EXPLORE
