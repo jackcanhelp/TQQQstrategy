@@ -1,0 +1,11 @@
+[
+  {
+    "name": "Strategy_Gen3518",
+    "sharpe": 1.2066879345781052,
+    "max_dd": -0.4184510649942798,
+    "cagr": 0.475972243848942,
+    "calmar": 1.1374621399408997,
+    "idea": "### Strategy Name\nStrategy_Gen_RVI_ATR_TQQQ\n\n### Champion Module Changes\n- **Kept**: RVI_State machine logic from Champion RVI strategy for regime detection.\n- **Changed**: Incorporated ATR_Pct for dynamic position sizing and stop-loss adjustments. Added KDJ_K for momentum confirmation.\n\n### State Machine Logic\n- **States**: \n  - Green (Bullish): RVI_Refined > 59\n  - Orange (Neutral): 42 \u2264 RVI_Refined \u2264 59\n  - Red (Bearish): RVI_Refined < 42\n- **Transitions**:\n  - Long entry on transition from O",
+    "inducted": "2026-03-06T16:50:32.337437"
+  }
+]
