@@ -1,5 +1,14 @@
 [
   {
+    "name": "Strategy_Gen3671",
+    "sharpe": 1.2312754360739595,
+    "max_dd": -0.219798689575605,
+    "cagr": 0.25731060066983114,
+    "calmar": 1.1706648532193502,
+    "idea": "```python\nclass Strategy_Assign1_RVI_Hybrid_GARCH(QCAlgorithm):\n    def Initialize(self):\n        self.SetStartDate(2010,1,1)\n        self.SetCash(100000)\n        self.tqqq = self.AddEquity(\"TQQQ\", Resolution.Daily).Symbol\n        self.SetBenchmark(\"TQQQ\")\n        self.rsi_period = 14\n        self.atr_period = 14\n        self.rvi_smooth = 20\n        self.don_len = 5\n        self.garch_cap = 0.35\n        self.vol_thresh = 0.35\n        self.min_exposure = 0.60\n        self.max_dd = 0.30\n        se",
+    "inducted": "2026-03-06T19:53:04.403482"
+  },
+  {
     "name": "Strategy_Gen3518",
     "sharpe": 1.2066879345781052,
     "max_dd": -0.4184510649942798,

@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-06 19:43:24
+   2026-03-06 20:27:10
 =======================================================
 
 📈 Overall
-  Total iterations: 3662
-  Successful: 942 (26%)
-  Best: Strategy_Gen1920 (Composite: 0.4163)
-  Hall of Fame: 1 strategies
+  Total iterations: 3688
+  Successful: 946 (26%)
+  Best: Strategy_Gen3671 (Composite: 0.4382)
+  Hall of Fame: 2 strategies
 
-  This session: 175 iters, 19 ok
-  Duration: 3:11:58
-  LLM calls: 706 (Groq: 694 [Groq: 694/706 ok, 10 keys | pools: idea=129, code=143, fix=105, director=165, secretary=48, overflow=104 | models: kimi-k2-instruct=208, llama-4-scout-17b-16e-instruct=184, llama-4-maverick-17b-128e-instruct=110 | cooling: 3 keys], GitHub: 12, Gemini: 0)
+  This session: 200 iters, 22 ok
+  Duration: 3:55:44
+  LLM calls: 814 (Groq: 792 [Groq: 792/814 ok, 10 keys | pools: idea=146, code=157, fix=121, director=190, secretary=56, overflow=122 | models: kimi-k2-instruct=240, llama-4-scout-17b-16e-instruct=206, llama-4-maverick-17b-128e-instruct=122 | cooling: 5 keys], GitHub: 22, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -22,21 +22,22 @@
   #4 Strategy_Gen1920: Comp=0.4163 Sharpe=1.28 CAGR=52.7% MaxDD=-40.3% | OOS Sharpe=1.44
   #5 Strategy_Gen2117: Comp=0.4163 Sharpe=1.28 CAGR=52.7% MaxDD=-40.3% | OOS Sharpe=1.44
 
-🥇 Hall of Fame (1)
+🥇 Hall of Fame (2)
 ───────────────────────────────────────────────────────
+  Strategy_Gen3671: Calmar=1.17 Sharpe=1.23 MaxDD=-22.0%
   Strategy_Gen3518: Calmar=1.14 Sharpe=1.21 MaxDD=-41.8%
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen3653: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3654: REJECTED: MaxDD=-96.0% worse than -50%
-  ❌ Strategy_Gen3655: REJECTED: MaxDD=-63.4% worse than -50%
-  ❌ Strategy_Gen3656: REJECTED: MaxDD=-81.7% worse than -50%
-  ❌ Strategy_Gen3657: REJECTED: Exposure=1.4% below 5%
-  ❌ Strategy_Gen3658: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3659: REJECTED: MaxDD=-51.6% worse than -50%
-  ❌ Strategy_Gen3660: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3661: REJECTED: Exposure=4.1% below 5%
-  ❌ Strategy_Gen3662: AttributeError: 'numpy.bool' object has 
+  ❌ Strategy_Gen3679: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3680: REJECTED: MaxDD=-81.7% worse than -50%
+  ❌ Strategy_Gen3681: REJECTED: Sharpe=0.23 below 0.3
+  ✅ Strategy_Gen3682: Comp=0.3137 Sharpe=0.33 CAGR=3.7% MaxDD=-11.5%
+  ❌ Strategy_Gen3683: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3684: REJECTED: Sharpe=-1.93 below 0.3
+  ❌ Strategy_Gen3685: REJECTED: MaxDD=-52.8% worse than -50%
+  ✅ Strategy_Gen3686: Comp=0.3326 Sharpe=0.46 CAGR=4.7% MaxDD=-10.6%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen3687: REJECTED: MaxDD=-68.4% worse than -50%
 
 =======================================================
