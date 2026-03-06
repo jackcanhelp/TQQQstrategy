@@ -115,3 +115,192 @@ Targets: 15 strategies | max_combos=100
 ============================================================
 ✅ Done: 4/15 strategies improved
 ============================================================
+C:\Users\Jack Chang\OneDrive\桌面\TQQQstrategy\researcher.py:17: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+============================================================
+🔬 Retroactive Parameter Sweep
+============================================================
+📊 Loaded cached enriched data: 4039 rows, 91 columns
+Targets: 50 strategies | max_combos=80
+
+[1/50] Strategy_Gen995  Sharpe=0.32 Comp=0.6407
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5, 'mult_0.92': 4}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=0.34 CAGR=5.8% MaxDD=-27.9% Comp=0.2732
+          Params: {'thresh_42': 50, 'thresh_59': 48, 'thresh_76': 106, 'mult_0.92': 0.64}
+   — No improvement over base Sharpe=0.32
+
+[2/50] Strategy_Gen980  Sharpe=0.86 Comp=0.6133
+   ⚠️ No sweepable params found in Strategy_Gen980
+   — No improvement over base Sharpe=0.86
+
+[3/50] Strategy_Gen1381  Sharpe=1.31 Comp=0.4220
+   ⏭ Already swept ({'thresh_10': 8, 'thresh_25': 15, 'thresh_42': 42, 'thresh_59': 59}), skipping
+[4/50] Strategy_Gen1920  Sharpe=1.28 Comp=0.4163
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5, 'mult_1.5': 4}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=1.29 CAGR=53.0% MaxDD=-40.3% Comp=0.4176
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76, 'mult_1.5': 1.05}
+   — No improvement over base Sharpe=1.28
+
+[5/50] Strategy_Gen2117  Sharpe=1.28 Comp=0.4163
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=1.01 CAGR=42.2% MaxDD=-43.7% Comp=0.3626
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 106}
+   — No improvement over base Sharpe=1.28
+
+[6/50] Strategy_Gen2300  Sharpe=1.14 Comp=0.4163
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=1.14 CAGR=33.5% MaxDD=-26.9% Comp=0.4163
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.14
+
+[7/50] Strategy_Gen1131  Sharpe=1.27 Comp=0.4137
+   🔍 Sweep params: {'thresh_24': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=1.29 CAGR=52.8% MaxDD=-40.3% Comp=0.4174
+          Params: {'thresh_24': 32, 'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.27
+
+[8/50] Strategy_Gen2113  Sharpe=1.19 Comp=0.4085
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=1.19 CAGR=46.5% MaxDD=-36.2% Comp=0.4117
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.19
+
+[9/50] Strategy_Gen2083  Sharpe=1.16 Comp=0.3954
+   ⏭ Already swept ({'thresh_1.5': 0.9, 'thresh_35': 49, 'thresh_42': 42, 'thresh_59': 59}), skipping
+[10/50] Strategy_Gen2343  Sharpe=0.93 Comp=0.3914
+   ⚠️ No sweepable params found in Strategy_Gen2343
+   — No improvement over base Sharpe=0.93
+
+[11/50] Strategy_Gen1766  Sharpe=1.07 Comp=0.3911
+   🔍 Sweep params: {'thresh_30': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_70': 5}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=1.05 CAGR=39.4% MaxDD=-36.5% Comp=0.3848
+          Params: {'thresh_30': 42, 'thresh_42': 42, 'thresh_59': 59, 'thresh_70': 70}
+   — No improvement over base Sharpe=1.07
+
+[12/50] Strategy_Gen2289  Sharpe=1.07 Comp=0.3691
+   🔍 Sweep params: {'thresh_30': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=1.07 CAGR=40.3% MaxDD=-41.9% Comp=0.3691
+          Params: {'thresh_30': 18, 'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.07
+
+[13/50] Strategy_Gen1230  Sharpe=0.89 Comp=0.3669
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=0.96 CAGR=19.3% MaxDD=-25.0% Comp=0.3779
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   ✅ History updated: Comp 0.3669 → 0.3779
+
+[14/50] Strategy_Gen983  Sharpe=0.83 Comp=0.3664
+   ⏭ Already swept ({'thresh_59': 59, 'thresh_76': 76, 'window_20': 20, 'window_34': 44}), skipping
+[15/50] Strategy_Gen1724  Sharpe=1.06 Comp=0.3658
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=1.07 CAGR=40.3% MaxDD=-41.9% Comp=0.3691
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.06
+
+[16/50] Strategy_Gen993  Sharpe=0.61 Comp=0.3591
+   🔍 Sweep params: {'thresh_50': 5, 'window_34': 4, 'window_14': 4, 'window_20': 4}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=0.67 CAGR=21.6% MaxDD=-43.5% Comp=0.2990
+          Params: {'thresh_50': 70, 'window_34': 34, 'window_14': 14, 'window_20': 26}
+   ✅ History updated: Comp 0.3591 → 0.2990
+
+[17/50] Strategy_Gen1776  Sharpe=1.00 Comp=0.3544
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=1.11 CAGR=39.2% MaxDD=-39.8% Comp=0.3775
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   ✅ History updated: Comp 0.3544 → 0.3775
+
+[18/50] Strategy_Gen2381  Sharpe=0.95 Comp=0.3534
+   🔍 Sweep params: {'thresh_76': 5}
+   🔢 Testing 5 combinations...
+   🏆 Best: Sharpe=0.85 CAGR=29.3% MaxDD=-45.0% Comp=0.3233
+          Params: {'thresh_76': 91}
+   — No improvement over base Sharpe=0.95
+
+[19/50] Strategy_Gen1632  Sharpe=0.98 Comp=0.3458
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.95 CAGR=38.2% MaxDD=-42.5% Comp=0.3556
+          Params: {'thresh_42': 58, 'thresh_59': 37}
+   — No improvement over base Sharpe=0.98
+
+[20/50] Strategy_Gen1576  Sharpe=0.87 Comp=0.3422
+   🔍 Sweep params: {'thresh_2': 4, 'thresh_40': 5, 'thresh_60': 5, 'thresh_80': 5}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=0.92 CAGR=29.2% MaxDD=-37.6% Comp=0.3486
+          Params: {'thresh_2': 1, 'thresh_40': 48, 'thresh_60': 48, 'thresh_80': 80}
+   ✅ History updated: Comp 0.3422 → 0.3486
+
+[21/50] Strategy_Gen2270  Sharpe=1.00 Comp=0.3388
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=0.60 CAGR=11.8% MaxDD=-26.0% Comp=0.3155
+          Params: {'thresh_42': 58, 'thresh_59': 37, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.00
+
+[22/50] Strategy_Gen2244  Sharpe=0.61 Comp=0.3341
+   🔍 Sweep params: {'thresh_2': 4, 'window_20': 4}
+   🔢 Testing 16 combinations...
+   🏆 Best: Sharpe=0.61 CAGR=9.0% MaxDD=-18.3% Comp=0.3341
+          Params: {'thresh_2': 2, 'window_20': 20}
+   — No improvement over base Sharpe=0.61
+
+[23/50] Strategy_Gen1589  Sharpe=0.89 Comp=0.3309
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'mult_2.0': 4, 'mult_1.5': 4}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=0.82 CAGR=29.4% MaxDD=-46.3% Comp=0.3183
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'mult_2.0': 2.0, 'mult_1.5': 1.5}
+   — No improvement over base Sharpe=0.89
+
+[24/50] Strategy_Gen1751  Sharpe=0.87 Comp=0.3308
+   ⚠️ No sweepable params found in Strategy_Gen1751
+   — No improvement over base Sharpe=0.87
+
+[25/50] Strategy_Gen960  Sharpe=0.46 Comp=0.3297
+   🔍 Sweep params: {'thresh_100': 5, 'window_9': 4, 'window_20': 4, 'window_14': 4}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=0.54 CAGR=7.4% MaxDD=-18.7% Comp=0.3229
+          Params: {'thresh_100': 100, 'window_9': 11, 'window_20': 14, 'window_14': 18}
+   ✅ History updated: Comp 0.3297 → 0.3229
+
+[26/50] Strategy_Gen2370  Sharpe=0.88 Comp=0.3287
+   ⚠️ No sweepable params found in Strategy_Gen2370
+   — No improvement over base Sharpe=0.88
+
+[27/50] Strategy_Gen2115  Sharpe=0.87 Comp=0.3280
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'mult_2.5': 4}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=1.03 CAGR=41.7% MaxDD=-44.9% Comp=0.3617
+          Params: {'thresh_42': 50, 'thresh_59': 59, 'mult_2.5': 3.25}
+   ✅ History updated: Comp 0.3280 → 0.3617
+
+[28/50] Strategy_Gen971  Sharpe=0.84 Comp=0.3270
+   ⏭ Already swept ({'thresh_42': 50, 'thresh_58': 58, 'thresh_76': 76, 'window_200': 80}), skipping
+[29/50] Strategy_Gen2197  Sharpe=0.89 Comp=0.3247
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5, 'mult_2.5': 4}
+   🔢 Testing 80 combinations...
+   🏆 Best: Sharpe=0.78 CAGR=25.6% MaxDD=-44.8% Comp=0.3102
+          Params: {'thresh_42': 58, 'thresh_59': 59, 'thresh_76': 76, 'mult_2.5': 1.75}
+   — No improvement over base Sharpe=0.89
+
+[30/50] Strategy_Gen1184  Sharpe=0.58 Comp=0.3244
+   🔍 Sweep params: {'thresh_3': 5, 'thresh_4': 5, 'thresh_7': 5, 'thresh_8': 5}
+   🔢 Testing 80 combinations...

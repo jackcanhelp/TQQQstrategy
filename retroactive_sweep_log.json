@@ -369,5 +369,1322 @@
         "status": "no_improvement"
       }
     ]
+  },
+  {
+    "run_at": "2026-03-05T15:32:50.299133",
+    "targets": 370,
+    "improved": 46,
+    "skipped": 263,
+    "entries": [
+      {
+        "name": "Strategy_Gen1920",
+        "original_sharpe": 1.2832151736408899,
+        "original_composite": 0.4163,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2117",
+        "original_sharpe": 1.2832151736408899,
+        "original_composite": 0.4163,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1131",
+        "original_sharpe": 1.2742769191131091,
+        "original_composite": 0.4137,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2113",
+        "original_sharpe": 1.1931162242214668,
+        "original_composite": 0.4085,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2300",
+        "original_sharpe": 1.1375656063468158,
+        "original_composite": 0.4163,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2289",
+        "original_sharpe": 1.0709455760826256,
+        "original_composite": 0.3691,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1766",
+        "original_sharpe": 1.0707385983186528,
+        "original_composite": 0.3911,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1724",
+        "original_sharpe": 1.0584169401129007,
+        "original_composite": 0.3658,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2270",
+        "original_sharpe": 1.001229972560425,
+        "original_composite": 0.3388,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1776",
+        "original_sharpe": 1.0005850154739575,
+        "original_composite": 0.3544,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 42,
+            "thresh_59": 59,
+            "thresh_76": 76
+          },
+          "sharpe": 1.1088988059445504,
+          "cagr": 0.3921891917604965,
+          "max_dd": -0.3977765450217481,
+          "calmar": 0.9859535376553031,
+          "composite": 0.3775
+        }
+      },
+      {
+        "name": "Strategy_Gen1632",
+        "original_sharpe": 0.9766229795551297,
+        "original_composite": 0.3458,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2381",
+        "original_sharpe": 0.9497845881256499,
+        "original_composite": 0.3534,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen795",
+        "original_sharpe": 0.9395540748773422,
+        "original_composite": 0,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2343",
+        "original_sharpe": 0.9256063028238596,
+        "original_composite": 0.3914,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1230",
+        "original_sharpe": 0.8868922497563367,
+        "original_composite": 0.3669,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2197",
+        "original_sharpe": 0.8856340039354266,
+        "original_composite": 0.3247,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1589",
+        "original_sharpe": 0.8852382300813719,
+        "original_composite": 0.3309,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2370",
+        "original_sharpe": 0.876821583095989,
+        "original_composite": 0.3287,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2115",
+        "original_sharpe": 0.8742180638981822,
+        "original_composite": 0.328,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 26,
+            "thresh_59": 59,
+            "mult_2.5": 3.25
+          },
+          "sharpe": 1.034259015442592,
+          "cagr": 0.41733069411901136,
+          "max_dd": -0.449480945380414,
+          "calmar": 0.9284724934575534,
+          "composite": 0.3617
+        }
+      },
+      {
+        "name": "Strategy_Gen1576",
+        "original_sharpe": 0.8720437655182149,
+        "original_composite": 0.3422,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1751",
+        "original_sharpe": 0.866242293608863,
+        "original_composite": 0.3308,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen980",
+        "original_sharpe": 0.8595137214224282,
+        "original_composite": 0.6132646391285299,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen744",
+        "original_sharpe": 0.8371904835111249,
+        "original_composite": 0,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen844",
+        "original_sharpe": 0.8369473082343664,
+        "original_composite": 0,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_20": 16,
+            "thresh_25": 25,
+            "thresh_30": 42,
+            "thresh_35": 21
+          },
+          "sharpe": 0.8744733195302689,
+          "cagr": 0.26179913506276686,
+          "max_dd": -0.48531295023997256,
+          "calmar": 0.5394439504103797,
+          "composite": 0.3203
+        }
+      },
+      {
+        "name": "Strategy_Gen936",
+        "original_sharpe": 0.836644931831219,
+        "original_composite": 0,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2374",
+        "original_sharpe": 0.8271438648103053,
+        "original_composite": 0.2991,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1177",
+        "original_sharpe": 0.8191164705878281,
+        "original_composite": 0.3194,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2079",
+        "original_sharpe": 0.8167868544573165,
+        "original_composite": 0.309,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_50": 60
+          },
+          "sharpe": 0.8654702032305074,
+          "cagr": 0.29543891798947697,
+          "max_dd": -0.4931765079814325,
+          "calmar": 0.5990531041283903,
+          "composite": 0.3136
+        }
+      },
+      {
+        "name": "Strategy_Gen1521",
+        "original_sharpe": 0.7979870748087238,
+        "original_composite": 0.2974,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2126",
+        "original_sharpe": 0.7890068604754208,
+        "original_composite": 0.3239,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 42,
+            "thresh_59": 59
+          },
+          "sharpe": 0.8291112094924187,
+          "cagr": 0.24447069641291086,
+          "max_dd": -0.3730547660959309,
+          "calmar": 0.6553211984699461,
+          "composite": 0.3332
+        }
+      },
+      {
+        "name": "Strategy_Gen1341",
+        "original_sharpe": 0.7762476404847198,
+        "original_composite": 0.3167,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2114",
+        "original_sharpe": 0.7585540762967208,
+        "original_composite": 0.3015,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 58,
+            "thresh_59": 48,
+            "thresh_76": 76
+          },
+          "sharpe": 0.9124453017046471,
+          "cagr": 0.2369131074036055,
+          "max_dd": -0.3924875788075116,
+          "calmar": 0.603619375989973,
+          "composite": 0.3334
+        }
+      },
+      {
+        "name": "Strategy_Gen866",
+        "original_sharpe": 0.7411264871298797,
+        "original_composite": 0,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1056",
+        "original_sharpe": 0.7373447388312425,
+        "original_composite": 0.313,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen959",
+        "original_sharpe": 0.7185646712113793,
+        "original_composite": 0,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 50,
+            "thresh_50": 60,
+            "thresh_59": 48,
+            "thresh_76": 76
+          },
+          "sharpe": 0.7600889129673504,
+          "cagr": 0.1579489396173912,
+          "max_dd": -0.29974831554923304,
+          "calmar": 0.5269385395143227,
+          "composite": 0.3287
+        }
+      },
+      {
+        "name": "Strategy_Gen921",
+        "original_sharpe": 0.7145363158056923,
+        "original_composite": 0,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_59": 59,
+            "thresh_76": 76,
+            "window_14": 14,
+            "window_200": 200
+          },
+          "sharpe": 0.7635228021163332,
+          "cagr": 0.1691619676280638,
+          "max_dd": -0.3573460355557481,
+          "calmar": 0.4733842012965987,
+          "composite": 0.3161
+        }
+      },
+      {
+        "name": "Strategy_Gen1422",
+        "original_sharpe": 0.7122093171503651,
+        "original_composite": 0.319,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 58,
+            "thresh_59": 48,
+            "mult_2.0": 0.8
+          },
+          "sharpe": 0.8103469114015285,
+          "cagr": 0.18330392640851456,
+          "max_dd": -0.30139040303081854,
+          "calmar": 0.6081943040162792,
+          "composite": 0.3389
+        }
+      },
+      {
+        "name": "Strategy_Gen2110",
+        "original_sharpe": 0.710474546406816,
+        "original_composite": 0.3204,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 58,
+            "thresh_59": 48,
+            "mult_2.0": 2.6
+          },
+          "sharpe": 0.7652818586754919,
+          "cagr": 0.20929682808535244,
+          "max_dd": -0.40617089238057397,
+          "calmar": 0.5152925332946939,
+          "composite": 0.3113
+        }
+      },
+      {
+        "name": "Strategy_Gen1952",
+        "original_sharpe": 0.7090425516272914,
+        "original_composite": 0.2959,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1881",
+        "original_sharpe": 0.7051365431999613,
+        "original_composite": 0.2875,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 26,
+            "thresh_59": 59,
+            "mult_2.0": 2.6
+          },
+          "sharpe": 0.9898333061088067,
+          "cagr": 0.37749725078329344,
+          "max_dd": -0.4434446413135288,
+          "calmar": 0.8512838257896355,
+          "composite": 0.3524
+        }
+      },
+      {
+        "name": "Strategy_Gen758",
+        "original_sharpe": 0.6995706963799301,
+        "original_composite": 0,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen733",
+        "original_sharpe": 0.6982289105873654,
+        "original_composite": 0,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_35": 28,
+            "thresh_42": 50,
+            "thresh_59": 59,
+            "thresh_76": 46
+          },
+          "sharpe": 0.7639876353458028,
+          "cagr": 0.14626147064656525,
+          "max_dd": -0.2350988860621361,
+          "calmar": 0.6221274506928488,
+          "composite": 0.3466
+        }
+      },
+      {
+        "name": "Strategy_Gen1172",
+        "original_sharpe": 0.6961885109273255,
+        "original_composite": 0.3181,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_22": 18,
+            "thresh_42": 58,
+            "thresh_59": 48
+          },
+          "sharpe": 0.8450402480026284,
+          "cagr": 0.19067855020854174,
+          "max_dd": -0.3196008206258313,
+          "calmar": 0.5966147077944343,
+          "composite": 0.3387
+        }
+      },
+      {
+        "name": "Strategy_Gen1459",
+        "original_sharpe": 0.6892225575684352,
+        "original_composite": 0.3149,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2232",
+        "original_sharpe": 0.6860756411999434,
+        "original_composite": 0.296,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_1.5": 0.9,
+            "thresh_40": 56,
+            "thresh_60": 36
+          },
+          "sharpe": 0.7064513257388652,
+          "cagr": 0.22453785855720376,
+          "max_dd": -0.4476830607421162,
+          "calmar": 0.5015554043635052,
+          "composite": 0.2993
+        }
+      },
+      {
+        "name": "Strategy_Gen1648",
+        "original_sharpe": 0.6776605827329736,
+        "original_composite": 0.2989,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 58,
+            "thresh_59": 48,
+            "mult_1.5": 1.95
+          },
+          "sharpe": 0.8099848802487942,
+          "cagr": 0.22104260765589734,
+          "max_dd": -0.4058839311120101,
+          "calmar": 0.5445956114850409,
+          "composite": 0.3186
+        }
+      },
+      {
+        "name": "Strategy_Gen2297",
+        "original_sharpe": 0.6759954785529001,
+        "original_composite": 0.3003,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1054",
+        "original_sharpe": 0.6758297210630578,
+        "original_composite": 0.3098,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_2": 4,
+            "window_20": 26
+          },
+          "sharpe": 0.7073640723165253,
+          "cagr": 0.185740771355126,
+          "max_dd": -0.40929144992145133,
+          "calmar": 0.4538105337670069,
+          "composite": 0.3003
+        }
+      },
+      {
+        "name": "Strategy_Gen1967",
+        "original_sharpe": 0.6747218868047861,
+        "original_composite": 0.2917,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen748",
+        "original_sharpe": 0.6728413453037919,
+        "original_composite": 0,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_2": 1,
+            "thresh_55": 66,
+            "mult_1.5": 1.05,
+            "window_20": 20
+          },
+          "sharpe": 0.8935289474275667,
+          "cagr": 0.3161127717450236,
+          "max_dd": -0.3891479279351225,
+          "calmar": 0.8123203261607111,
+          "composite": 0.349
+        }
+      },
+      {
+        "name": "Strategy_Gen1285",
+        "original_sharpe": 0.6651125458238919,
+        "original_composite": 0.3081,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1216",
+        "original_sharpe": 0.6647900655096978,
+        "original_composite": 0.3147,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1612",
+        "original_sharpe": 0.6590778873746103,
+        "original_composite": 0.2961,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2105",
+        "original_sharpe": 0.6572720262981542,
+        "original_composite": 0.2916,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2201",
+        "original_sharpe": 0.655930670186535,
+        "original_composite": 0.2841,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 50,
+            "thresh_59": 59,
+            "thresh_76": 106,
+            "mult_1.5": 1.5
+          },
+          "sharpe": 0.8704489688837277,
+          "cagr": 0.23204231802188158,
+          "max_dd": -0.48581319633055664,
+          "calmar": 0.4776369184174971,
+          "composite": 0.305
+        }
+      },
+      {
+        "name": "Strategy_Gen1741",
+        "original_sharpe": 0.6488863830490444,
+        "original_composite": 0.2994,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen968",
+        "original_sharpe": 0.638912805186015,
+        "original_composite": 0.2963532014337146,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2068",
+        "original_sharpe": 0.635770165753062,
+        "original_composite": 0.3131,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2190",
+        "original_sharpe": 0.6342027565551835,
+        "original_composite": 0.2941,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1055",
+        "original_sharpe": 0.6332510866994274,
+        "original_composite": 0.2819,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_2": 1
+          },
+          "sharpe": 0.6647846866906795,
+          "cagr": 0.20029760198008284,
+          "max_dd": -0.4362368628823045,
+          "calmar": 0.4591487309363917,
+          "composite": 0.2942
+        }
+      },
+      {
+        "name": "Strategy_Gen2237",
+        "original_sharpe": 0.6313541623628413,
+        "original_composite": 0.2819,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_2": 2,
+            "thresh_42": 34,
+            "thresh_59": 59
+          },
+          "sharpe": 0.7859600276632288,
+          "cagr": 0.1973372033728329,
+          "max_dd": -0.3428750454407087,
+          "calmar": 0.5755367910172314,
+          "composite": 0.326
+        }
+      },
+      {
+        "name": "Strategy_Gen2222",
+        "original_sharpe": 0.6245016712193577,
+        "original_composite": 0.2686,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_1.5": 2.1,
+            "thresh_42": 50,
+            "thresh_59": 59,
+            "thresh_76": 106
+          },
+          "sharpe": 0.8060936720000796,
+          "cagr": 0.21588371686472652,
+          "max_dd": -0.4093214844903541,
+          "calmar": 0.5274184841128562,
+          "composite": 0.3151
+        }
+      },
+      {
+        "name": "Strategy_Gen1287",
+        "original_sharpe": 0.6217529347270325,
+        "original_composite": 0.2862,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2244",
+        "original_sharpe": 0.6126036364629608,
+        "original_composite": 0.3341,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen887",
+        "original_sharpe": 0.6110507645902871,
+        "original_composite": 0,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen993",
+        "original_sharpe": 0.6083503674959648,
+        "original_composite": 0.35909047528323884,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_50": 30,
+            "window_34": 14,
+            "window_14": 6,
+            "window_20": 26
+          },
+          "sharpe": 0.7207863974075275,
+          "cagr": 0.2428377026591899,
+          "max_dd": -0.49030853550921843,
+          "calmar": 0.4952752911123332,
+          "composite": 0.2947
+        }
+      },
+      {
+        "name": "Strategy_Gen1234",
+        "original_sharpe": 0.6028806326167148,
+        "original_composite": 0.2936,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2394",
+        "original_sharpe": 0.5989260203187398,
+        "original_composite": 0.3173,
+        "status": "improved",
+        "best": {
+          "params": {
+            "entry_rsi": 77.0,
+            "atr_mult": 1.6,
+            "macd_threshold": 0.1
+          },
+          "sharpe": 0.6430056915178337,
+          "cagr": 0.11925487541737345,
+          "max_dd": -0.24630281951667912,
+          "calmar": 0.48417990362996133,
+          "composite": 0.3163
+        }
+      },
+      {
+        "name": "Strategy_Gen823",
+        "original_sharpe": 0.594199264200186,
+        "original_composite": 0,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1184",
+        "original_sharpe": 0.5773737871134439,
+        "original_composite": 0.3244,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_3": 4,
+            "thresh_4": 6,
+            "thresh_7": 6,
+            "thresh_8": 8
+          },
+          "sharpe": 0.6651307396581306,
+          "cagr": 0.12467458207964599,
+          "max_dd": -0.2955724724567819,
+          "calmar": 0.4218071495067109,
+          "composite": 0.3134
+        }
+      },
+      {
+        "name": "Strategy_Gen1376",
+        "original_sharpe": 0.5740933162107836,
+        "original_composite": 0.2876,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_3": 4,
+            "thresh_5": 6,
+            "thresh_76": 76
+          },
+          "sharpe": 0.6130073919749967,
+          "cagr": 0.14864978418350105,
+          "max_dd": -0.37814467212627634,
+          "calmar": 0.3931029448270567,
+          "composite": 0.2931
+        }
+      },
+      {
+        "name": "Strategy_Gen1719",
+        "original_sharpe": 0.5650865597775387,
+        "original_composite": 0.3142,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1337",
+        "original_sharpe": 0.5583740293263745,
+        "original_composite": 0.287,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen745",
+        "original_sharpe": 0.5432533869583414,
+        "original_composite": 0,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1238",
+        "original_sharpe": 0.5427979648426815,
+        "original_composite": 0.2624,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1227",
+        "original_sharpe": 0.5358657115912943,
+        "original_composite": 0.2611,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2364",
+        "original_sharpe": 0.5354242567088778,
+        "original_composite": 0.2648,
+        "status": "improved",
+        "best": {
+          "params": {
+            "bb_width_th": 0.23,
+            "vol_ratio_th": 0.9,
+            "atr_tp": 1.8,
+            "atr_sl": 1.2
+          },
+          "sharpe": 0.5667205474854067,
+          "cagr": 0.142891498143928,
+          "max_dd": -0.43858968633138645,
+          "calmar": 0.32579767057258857,
+          "composite": 0.2689
+        }
+      },
+      {
+        "name": "Strategy_Gen967",
+        "original_sharpe": 0.5345889622493742,
+        "original_composite": 0.2478354408643126,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1152",
+        "original_sharpe": 0.5316959043030034,
+        "original_composite": 0.3183,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1482",
+        "original_sharpe": 0.5311447873070836,
+        "original_composite": 0.2682,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1826",
+        "original_sharpe": 0.5045952194194525,
+        "original_composite": 0.3026,
+        "status": "improved",
+        "best": {
+          "params": {
+            "mult_2.5": 3.25
+          },
+          "sharpe": 0.5883680971435764,
+          "cagr": 0.11289860450647127,
+          "max_dd": -0.24835896942682076,
+          "calmar": 0.45457832574771156,
+          "composite": 0.3158
+        }
+      },
+      {
+        "name": "Strategy_Gen1150",
+        "original_sharpe": 0.5005399023204937,
+        "original_composite": 0.3056,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_2": 4,
+            "thresh_45": 63,
+            "mult_1.5": 1.95,
+            "mult_1.8": 1.26
+          },
+          "sharpe": 0.6943100041589356,
+          "cagr": 0.14559637637345801,
+          "max_dd": -0.27676667093433266,
+          "calmar": 0.5260618118574079,
+          "composite": 0.3261
+        }
+      },
+      {
+        "name": "Strategy_Gen1284",
+        "original_sharpe": 0.49936032525471113,
+        "original_composite": 0.3031,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_6": 8
+          },
+          "sharpe": 0.5761381141215497,
+          "cagr": 0.06917956623514754,
+          "max_dd": -0.24120033486230363,
+          "calmar": 0.28681372384760884,
+          "composite": 0.314
+        }
+      },
+      {
+        "name": "Strategy_Gen1008",
+        "original_sharpe": 0.4985017410255503,
+        "original_composite": 0.1890620770667487,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_59": 37,
+            "thresh_76": 61,
+            "mult_0.92": 0.36,
+            "window_200": 140
+          },
+          "sharpe": 0.6090860652087313,
+          "cagr": 0.14619890354853937,
+          "max_dd": -0.43449118716840346,
+          "calmar": 0.33648301246642887,
+          "composite": 0.2783
+        }
+      },
+      {
+        "name": "Strategy_Gen2314",
+        "original_sharpe": 0.48916069482726104,
+        "original_composite": 0.3025,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_50": 70
+          },
+          "sharpe": 0.5963384330988508,
+          "cagr": 0.08068941668471963,
+          "max_dd": -0.23784598362416087,
+          "calmar": 0.33925070104283667,
+          "composite": 0.3159
+        }
+      },
+      {
+        "name": "Strategy_Gen927",
+        "original_sharpe": 0.48414393267819883,
+        "original_composite": 0,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1791",
+        "original_sharpe": 0.47957599590191846,
+        "original_composite": 0.2658,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_20": 12
+          },
+          "sharpe": 0.5573886717597668,
+          "cagr": 0.14325964789830947,
+          "max_dd": -0.4350008847437673,
+          "calmar": 0.32933185407817056,
+          "composite": 0.276
+        }
+      },
+      {
+        "name": "Strategy_Gen1674",
+        "original_sharpe": 0.4696040426441582,
+        "original_composite": 0.2895,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 50,
+            "thresh_76": 76
+          },
+          "sharpe": 0.4997693373951402,
+          "cagr": 0.08594840362577694,
+          "max_dd": -0.2919859950829834,
+          "calmar": 0.2943579660433717,
+          "composite": 0.2904
+        }
+      },
+      {
+        "name": "Strategy_Gen1468",
+        "original_sharpe": 0.4694748267616747,
+        "original_composite": 0.2862,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_24": 32,
+            "thresh_25": 25,
+            "thresh_42": 50,
+            "thresh_59": 59
+          },
+          "sharpe": 0.49856173935090176,
+          "cagr": 0.07997725086800989,
+          "max_dd": -0.1960455212937953,
+          "calmar": 0.40795245073798636,
+          "composite": 0.3158
+        }
+      },
+      {
+        "name": "Strategy_Gen2286",
+        "original_sharpe": 0.46880206380234607,
+        "original_composite": 0.278,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_4": 6
+          },
+          "sharpe": 0.7419822164564198,
+          "cagr": 0.179327482024501,
+          "max_dd": -0.4427206146768228,
+          "calmar": 0.40505789899891265,
+          "composite": 0.2957
+        }
+      },
+      {
+        "name": "Strategy_Gen941",
+        "original_sharpe": 0.46651556965761803,
+        "original_composite": 0,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen960",
+        "original_sharpe": 0.45912410303826756,
+        "original_composite": 0.32968251755144456,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_100": 80,
+            "window_9": 11,
+            "window_20": 8,
+            "window_14": 10
+          },
+          "sharpe": 0.6489609563589398,
+          "cagr": 0.09929185426467191,
+          "max_dd": -0.3035163770806887,
+          "calmar": 0.3271383746066379,
+          "composite": 0.3071
+        }
+      },
+      {
+        "name": "Strategy_Gen879",
+        "original_sharpe": 0.45428898676869994,
+        "original_composite": 0,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_20": 12,
+            "window_14": 6,
+            "window_200": 260,
+            "window_20": 20
+          },
+          "sharpe": 0.545897243180674,
+          "cagr": 0.1437089213555196,
+          "max_dd": -0.4654772821320626,
+          "calmar": 0.30873455455715954,
+          "composite": 0.2664
+        }
+      },
+      {
+        "name": "Strategy_Gen1608",
+        "original_sharpe": 0.45296272324601267,
+        "original_composite": 0.2525,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2161",
+        "original_sharpe": 0.45103712807717183,
+        "original_composite": 0.277,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen779",
+        "original_sharpe": 0.439167495846673,
+        "original_composite": 0,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_30": 30,
+            "thresh_70": 42,
+            "window_14": 6,
+            "window_200": 200
+          },
+          "sharpe": 0.7137952851902575,
+          "cagr": 0.19182132957159048,
+          "max_dd": -0.395531793757472,
+          "calmar": 0.48497069666467685,
+          "composite": 0.3038
+        }
+      },
+      {
+        "name": "Strategy_Gen1856",
+        "original_sharpe": 0.4340638248198811,
+        "original_composite": 0.2506,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_20": 12,
+            "thresh_50": 40
+          },
+          "sharpe": 0.7258070858908722,
+          "cagr": 0.1789559929197111,
+          "max_dd": -0.32157893886308786,
+          "calmar": 0.5564916457290182,
+          "composite": 0.3236
+        }
+      },
+      {
+        "name": "Strategy_Gen2199",
+        "original_sharpe": 0.4288120709645531,
+        "original_composite": 0.2551,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_24": 20,
+            "thresh_42": 58,
+            "thresh_59": 48,
+            "thresh_76": 76
+          },
+          "sharpe": 0.6070999806543516,
+          "cagr": 0.11660446984843031,
+          "max_dd": -0.4002468321929231,
+          "calmar": 0.29133139970043725,
+          "composite": 0.2814
+        }
+      },
+      {
+        "name": "Strategy_Gen1548",
+        "original_sharpe": 0.42743084650901764,
+        "original_composite": 0.2561,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1182",
+        "original_sharpe": 0.42662397408086167,
+        "original_composite": 0.2652,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_45": 45,
+            "thresh_55": 33,
+            "thresh_70": 98
+          },
+          "sharpe": 0.4702168834028592,
+          "cagr": 0.11477611485016959,
+          "max_dd": -0.3688973846977232,
+          "calmar": 0.3111329047350602,
+          "composite": 0.2751
+        }
+      },
+      {
+        "name": "Strategy_Gen1411",
+        "original_sharpe": 0.424595929712916,
+        "original_composite": 0.2502,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 42,
+            "thresh_59": 59
+          },
+          "sharpe": 0.45872141251236725,
+          "cagr": 0.10348869718182874,
+          "max_dd": -0.40202534817946756,
+          "calmar": 0.2574183385462314,
+          "composite": 0.2657
+        }
+      },
+      {
+        "name": "Strategy_Gen2298",
+        "original_sharpe": 0.42444482387243493,
+        "original_composite": 0.3203,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_20": 12,
+            "thresh_40": 40
+          },
+          "sharpe": 0.6950940916593557,
+          "cagr": 0.11047896110562205,
+          "max_dd": -0.25512455818174107,
+          "calmar": 0.43303930398939106,
+          "composite": 0.3267
+        }
+      },
+      {
+        "name": "Strategy_Gen988",
+        "original_sharpe": 0.4223832272244778,
+        "original_composite": 0.21336994006653875,
+        "status": "improved",
+        "best": {
+          "params": {
+            "window_50": 20,
+            "window_200": 260,
+            "window_14": 6,
+            "window_20": 14
+          },
+          "sharpe": 0.6654586305530038,
+          "cagr": 0.19228089092042722,
+          "max_dd": -0.4657696538834673,
+          "calmar": 0.41282399855215707,
+          "composite": 0.2852
+        }
+      },
+      {
+        "name": "Strategy_Gen1573",
+        "original_sharpe": 0.413844230561969,
+        "original_composite": 0.2526,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1233",
+        "original_sharpe": 0.41142817547834704,
+        "original_composite": 0.2667,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2203",
+        "original_sharpe": 0.4093642527654085,
+        "original_composite": 0.2589,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_50": 40
+          },
+          "sharpe": 0.5376352834137221,
+          "cagr": 0.12455897752474421,
+          "max_dd": -0.41384395926248463,
+          "calmar": 0.30098053804318414,
+          "composite": 0.2725
+        }
+      },
+      {
+        "name": "Strategy_Gen1922",
+        "original_sharpe": 0.4065494162350649,
+        "original_composite": 0.3177,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_10": 14,
+            "thresh_26": 36,
+            "thresh_42": 42,
+            "thresh_59": 48
+          },
+          "sharpe": 0.48908566007165744,
+          "cagr": 0.05515750092483507,
+          "max_dd": -0.11837286391879195,
+          "calmar": 0.4659640655705948,
+          "composite": 0.3352
+        }
+      }
+    ]
+  },
+  {
+    "run_at": "2026-03-05T15:54:40.985773",
+    "targets": 30,
+    "improved": 0,
+    "skipped": 28,
+    "entries": [
+      {
+        "name": "Strategy_Gen1381",
+        "original_sharpe": 1.3128721533577974,
+        "original_composite": 0.422,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1920",
+        "original_sharpe": 1.2832151736408899,
+        "original_composite": 0.4163,
+        "status": "no_improvement"
+      }
+    ]
+  },
+  {
+    "run_at": "2026-03-05T17:09:59.687165",
+    "targets": 30,
+    "improved": 1,
+    "skipped": 17,
+    "entries": [
+      {
+        "name": "Strategy_Gen1381",
+        "original_sharpe": 1.3128721533577974,
+        "original_composite": 0.422,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1920",
+        "original_sharpe": 1.2832151736408899,
+        "original_composite": 0.4163,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2117",
+        "original_sharpe": 1.2832151736408899,
+        "original_composite": 0.4163,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1131",
+        "original_sharpe": 1.2742769191131091,
+        "original_composite": 0.4137,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2113",
+        "original_sharpe": 1.1931162242214668,
+        "original_composite": 0.4085,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2083",
+        "original_sharpe": 1.1594752842278921,
+        "original_composite": 0.3954,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2300",
+        "original_sharpe": 1.1375656063468158,
+        "original_composite": 0.4163,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2289",
+        "original_sharpe": 1.0709455760826256,
+        "original_composite": 0.3691,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1766",
+        "original_sharpe": 1.0707385983186528,
+        "original_composite": 0.3911,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1724",
+        "original_sharpe": 1.0584169401129007,
+        "original_composite": 0.3658,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen2270",
+        "original_sharpe": 1.001229972560425,
+        "original_composite": 0.3388,
+        "status": "no_improvement"
+      },
+      {
+        "name": "Strategy_Gen1776",
+        "original_sharpe": 1.0005850154739575,
+        "original_composite": 0.3544,
+        "status": "improved",
+        "best": {
+          "params": {
+            "thresh_42": 42,
+            "thresh_59": 59,
+            "thresh_76": 76
+          },
+          "sharpe": 1.1088988059445504,
+          "cagr": 0.3921891917604965,
+          "max_dd": -0.3977765450217481,
+          "calmar": 0.9859535376553031,
+          "composite": 0.3775
+        }
+      },
+      {
+        "name": "Strategy_Gen1632",
+        "original_sharpe": 0.9766229795551297,
+        "original_composite": 0.3458,
+        "status": "no_improvement"
+      }
+    ]
   }
 ]

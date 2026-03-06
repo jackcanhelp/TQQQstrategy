@@ -1,0 +1,160 @@
+C:\Users\Jack Chang\OneDrive\桌面\TQQQstrategy\researcher.py:17: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+============================================================
+🔬 Retroactive Parameter Sweep
+============================================================
+📊 Loaded cached enriched data: 4039 rows, 91 columns
+Filter: Sharpe >= 0.4
+Unique strategies after dedup: 215
+Mode: top 30
+Targets: 30 strategies | max_combos=200 | update_file=True | force=True
+
+[1/30] Strategy_Gen1381  Sharpe=1.31 Comp=0.4220
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_10': 5, 'thresh_25': 5, 'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 200 combinations...
+   🏆 Best: Sharpe=1.29 CAGR=53.0% MaxDD=-40.3% Comp=0.4174
+          Params: {'thresh_10': 6, 'thresh_25': 30, 'thresh_42': 42, 'thresh_59': 59}
+   — No improvement over base Sharpe=1.31
+
+[2/30] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.29 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[3/30] Strategy_Gen448  Sharpe=1.29 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[4/30] Strategy_Gen1920  Sharpe=1.28 Comp=0.4163
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5, 'mult_1.5': 4}
+   🔢 Testing 200 combinations...
+   🏆 Best: Sharpe=1.29 CAGR=53.0% MaxDD=-40.3% Comp=0.4176
+          Params: {'thresh_42': 42, 'thresh_59': 37, 'thresh_76': 76, 'mult_1.5': 1.05}
+   — No improvement over base Sharpe=1.28
+
+[5/30] Strategy_Gen2117  Sharpe=1.28 Comp=0.4163
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 125 combinations...
+   🏆 Best: Sharpe=1.29 CAGR=53.0% MaxDD=-40.3% Comp=0.4176
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.28
+
+[6/30] ChampionRVI  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[7/30] Strategy_Gen521  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[8/30] Strategy_Gen538  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[9/30] Strategy_Gen1131  Sharpe=1.27 Comp=0.4137
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_24': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 200 combinations...
+   🏆 Best: Sharpe=1.29 CAGR=52.8% MaxDD=-40.3% Comp=0.4174
+          Params: {'thresh_24': 28, 'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.27
+
+[10/30] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.23 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[11/30] Strategy_Gen2113  Sharpe=1.19 Comp=0.4085
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 125 combinations...
+   🏆 Best: Sharpe=1.19 CAGR=46.5% MaxDD=-36.2% Comp=0.4117
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.19
+
+[12/30] Strategy_Gen453  Sharpe=1.18 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[13/30] ChampionRVI_Short  Sharpe=1.17 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[14/30] Strategy_Gen2083  Sharpe=1.16 Comp=0.3954
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_1.5': 5, 'thresh_35': 5, 'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 200 combinations...
+   🏆 Best: Sharpe=1.14 CAGR=38.3% MaxDD=-35.2% Comp=0.3949
+          Params: {'thresh_1.5': 0.9, 'thresh_35': 35, 'thresh_42': 42, 'thresh_59': 59}
+   — No improvement over base Sharpe=1.16
+
+[15/30] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[16/30] Strategy_Gen330  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[17/30] Strategy_Gen2300  Sharpe=1.14 Comp=0.4163
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 125 combinations...
+   🏆 Best: Sharpe=1.14 CAGR=33.5% MaxDD=-26.9% Comp=0.4163
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.14
+
+[18/30] Strategy_Gen520  Sharpe=1.11 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[19/30] Cross_RVI_State_MACD_Cross_RVI_Extreme  Sharpe=1.10 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[20/30] Strategy_Gen423  Sharpe=1.07 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[21/30] Strategy_Gen2289  Sharpe=1.07 Comp=0.3691
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_30': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 200 combinations...
+   🏆 Best: Sharpe=1.07 CAGR=40.3% MaxDD=-41.9% Comp=0.3691
+          Params: {'thresh_30': 42, 'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.07
+
+[22/30] Strategy_Gen1766  Sharpe=1.07 Comp=0.3911
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_30': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_70': 5}
+   🔢 Testing 200 combinations...
+   🏆 Best: Sharpe=1.07 CAGR=40.5% MaxDD=-36.5% Comp=0.3886
+          Params: {'thresh_30': 18, 'thresh_42': 42, 'thresh_59': 59, 'thresh_70': 70}
+   — No improvement over base Sharpe=1.07
+
+[23/30] Strategy_Gen410  Sharpe=1.07 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[24/30] Strategy_Gen284  Sharpe=1.06 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[25/30] Strategy_Gen1724  Sharpe=1.06 Comp=0.3658
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 125 combinations...
+   🏆 Best: Sharpe=1.07 CAGR=40.3% MaxDD=-41.9% Comp=0.3691
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.06
+
+[26/30] Strategy_Gen401  Sharpe=1.05 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[27/30] Cross_Supertrend_MACD_Cross_RVI_Extreme  Sharpe=1.05 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[28/30] Strategy_Gen2270  Sharpe=1.00 Comp=0.3388
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 125 combinations...
+   🏆 Best: Sharpe=1.00 CAGR=32.9% MaxDD=-46.4% Comp=0.3388
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.00
+
+[29/30] Strategy_Gen1776  Sharpe=1.00 Comp=0.3544
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 125 combinations...
+   🏆 Best: Sharpe=1.11 CAGR=39.2% MaxDD=-39.8% Comp=0.3775
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   ✅ History updated: Sharpe 1.00 → 1.11
+
+[30/30] Strategy_Gen1632  Sharpe=0.98 Comp=0.3458
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.98 CAGR=38.4% MaxDD=-46.7% Comp=0.3456
+          Params: {'thresh_42': 26, 'thresh_59': 59}
+   — No improvement over base Sharpe=0.98
+
+💾 History saved.
+============================================================
+✅ Done: 1/30 improved, 17 skipped
+============================================================

@@ -1,0 +1,1502 @@
+C:\Users\Jack Chang\OneDrive\桌面\TQQQstrategy\researcher.py:17: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+============================================================
+🔬 Retroactive Parameter Sweep
+============================================================
+📊 Loaded cached enriched data: 4039 rows, 91 columns
+Filter: Sharpe >= 0.4
+Mode: ALL (370 strategies)
+Targets: 370 strategies | max_combos=40 | update_file=True | force=False
+
+[1/370] Strategy_Gen1381  Sharpe=1.31 Comp=0.4220
+   ⏭ Already swept at 2026-03-05, skipping (use --force to re-sweep)
+[2/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.29 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[3/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.29 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[4/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.29 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[5/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.29 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[6/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.29 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[7/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.29 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[8/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.29 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[9/370] Strategy_Gen448  Sharpe=1.29 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[10/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[11/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[12/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[13/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[14/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[15/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[16/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[17/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[18/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[19/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[20/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[21/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[22/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[23/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[24/370] Strategy_Gen1920  Sharpe=1.28 Comp=0.4163
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5, 'mult_1.5': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=1.01 CAGR=42.2% MaxDD=-43.7% Comp=0.3626
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 106, 'mult_1.5': 1.05}
+   — No improvement over base Sharpe=1.28
+
+[25/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[26/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[27/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[28/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[29/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[30/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[31/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[32/370] Strategy_Gen2117  Sharpe=1.28 Comp=0.4163
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.93 CAGR=24.3% MaxDD=-39.2% Comp=0.3358
+          Params: {'thresh_42': 58, 'thresh_59': 48, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.28
+
+[33/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[34/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[35/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[36/370] ChampionRVI  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[37/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[38/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[39/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[40/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[41/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[42/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[43/370] Strategy_Gen521  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[44/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[45/370] Strategy_Gen538  Sharpe=1.28 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[46/370] Strategy_Gen1131  Sharpe=1.27 Comp=0.4137
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_24': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=1.29 CAGR=52.8% MaxDD=-40.3% Comp=0.4174
+          Params: {'thresh_24': 28, 'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.27
+
+[47/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[48/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[49/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[50/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[51/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[52/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[53/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[54/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[55/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[56/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[57/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[58/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[59/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[60/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.27 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[61/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.23 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[62/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.23 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[63/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.23 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[64/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.23 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[65/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.23 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[66/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.23 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[67/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.23 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[68/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[69/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[70/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[71/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[72/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[73/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[74/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[75/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[76/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[77/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[78/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[79/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[80/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[81/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[82/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[83/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[84/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[85/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[86/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[87/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[88/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[89/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[90/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[91/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[92/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[93/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[94/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[95/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[96/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[97/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[98/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[99/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[100/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[101/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[102/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[103/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[104/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[105/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[106/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[107/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[108/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[109/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.22 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[110/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.21 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[111/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.21 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[112/370] Cross_RVI_State_RVI_Trans_RSI_OB  Sharpe=1.20 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[113/370] Strategy_Gen2113  Sharpe=1.19 Comp=0.4085
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=1.05 CAGR=43.0% MaxDD=-46.6% Comp=0.3584
+          Params: {'thresh_42': 34, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.19
+
+[114/370] Strategy_Gen453  Sharpe=1.18 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[115/370] ChampionRVI_Short  Sharpe=1.17 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[116/370] Strategy_Gen2083  Sharpe=1.16 Comp=0.3954
+   ⏭ Already swept at 2026-03-05, skipping (use --force to re-sweep)
+[117/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.16 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[118/370] Cross_RVI_State_RVI_Trans_RVI_Extreme  Sharpe=1.16 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[119/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[120/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[121/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[122/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[123/370] Strategy_Gen330  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[124/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[125/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[126/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[127/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[128/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[129/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[130/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[131/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[132/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[133/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[134/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[135/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[136/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[137/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[138/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[139/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[140/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[141/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[142/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[143/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[144/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[145/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[146/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[147/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[148/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[149/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.15 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[150/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[151/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[152/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[153/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[154/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[155/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[156/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[157/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[158/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[159/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[160/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[161/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[162/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[163/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[164/370] Strategy_Gen2300  Sharpe=1.14 Comp=0.4163
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.89 CAGR=31.2% MaxDD=-45.2% Comp=0.3339
+          Params: {'thresh_42': 34, 'thresh_59': 59, 'thresh_76': 106}
+   — No improvement over base Sharpe=1.14
+
+[165/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[166/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[167/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[168/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[169/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[170/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[171/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[172/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[173/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[174/370] Cross_RVI_State_MACD_Cross_RSI_OB  Sharpe=1.14 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[175/370] Strategy_Gen520  Sharpe=1.11 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[176/370] Cross_RVI_State_MACD_Cross_RVI_Extreme  Sharpe=1.10 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[177/370] Cross_RVI_State_MACD_Cross_RVI_Extreme  Sharpe=1.10 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[178/370] Strategy_Gen423  Sharpe=1.07 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[179/370] Strategy_Gen2289  Sharpe=1.07 Comp=0.3691
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_30': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.95 CAGR=26.9% MaxDD=-44.4% Comp=0.3295
+          Params: {'thresh_30': 18, 'thresh_42': 50, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.07
+
+[180/370] Strategy_Gen1766  Sharpe=1.07 Comp=0.3911
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_30': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_70': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.77 CAGR=20.6% MaxDD=-37.6% Comp=0.3172
+          Params: {'thresh_30': 42, 'thresh_42': 34, 'thresh_59': 59, 'thresh_70': 56}
+   — No improvement over base Sharpe=1.07
+
+[181/370] Strategy_Gen410  Sharpe=1.07 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[182/370] Strategy_Gen284  Sharpe=1.06 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[183/370] Strategy_Gen1724  Sharpe=1.06 Comp=0.3658
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.82 CAGR=25.4% MaxDD=-43.8% Comp=0.3164
+          Params: {'thresh_42': 50, 'thresh_59': 59, 'thresh_76': 91}
+   — No improvement over base Sharpe=1.06
+
+[184/370] Strategy_Gen401  Sharpe=1.05 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[185/370] Cross_Supertrend_MACD_Cross_RVI_Extreme  Sharpe=1.05 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[186/370] Cross_Supertrend_MACD_Cross_RVI_Extreme  Sharpe=1.05 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[187/370] Strategy_Gen2270  Sharpe=1.00 Comp=0.3388
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=1.00 CAGR=32.9% MaxDD=-46.4% Comp=0.3388
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   — No improvement over base Sharpe=1.00
+
+[188/370] Strategy_Gen1776  Sharpe=1.00 Comp=0.3544
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=1.11 CAGR=39.2% MaxDD=-39.8% Comp=0.3775
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'thresh_76': 76}
+   ✅ History updated: Sharpe 1.00 → 1.11
+
+[189/370] Strategy_Gen1632  Sharpe=0.98 Comp=0.3458
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.98 CAGR=38.4% MaxDD=-46.7% Comp=0.3456
+          Params: {'thresh_42': 26, 'thresh_59': 59}
+   — No improvement over base Sharpe=0.98
+
+[190/370] Strategy_Gen2381  Sharpe=0.95 Comp=0.3534
+   → New-style strategy: using get_params() path
+   🔍 Parameter sweep: testing 40 combinations...
+
+   🏆 Top 10 parameter sets:
+      #1: Sharpe=0.94, CAGR=25.5%, MaxDD=-40.4%, Calmar=0.63
+          Changed: {'bear_threshold': 50.4, 'atr_mult_long': 3.0, 'atr_mult_short': 1.98}
+      #2: Sharpe=0.94, CAGR=25.4%, MaxDD=-40.4%, Calmar=0.63
+          Changed: {'bear_threshold': 50.4, 'atr_mult_long': 2.75}
+      #3: Sharpe=0.91, CAGR=31.7%, MaxDD=-41.0%, Calmar=0.77
+          Changed: {'bear_threshold': 37.8, 'atr_mult_long': 3.0, 'atr_mult_short': 1.44, 'short_selling': True}
+      #4: Sharpe=0.91, CAGR=24.1%, MaxDD=-45.8%, Calmar=0.53
+          Changed: {'bear_threshold': 50.4, 'atr_mult_long': 2.25, 'atr_mult_short': 2.16, 'short_selling': True}
+      #5: Sharpe=0.88, CAGR=28.3%, MaxDD=-46.0%, Calmar=0.62
+   — No improvement over base Sharpe=0.95
+
+[191/370] Strategy_Gen795  Sharpe=0.94 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_2': 4, 'window_14': 4, 'window_10': 4}
+   🔢 Testing 40 combinations...
+   ❌ No valid variants found
+   — No improvement over base Sharpe=0.94
+
+[192/370] Strategy_Gen617  Sharpe=0.93 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[193/370] Strategy_Gen2343  Sharpe=0.93 Comp=0.3914
+   → New-style strategy: using get_params() path
+   🔍 Parameter sweep: testing 40 combinations...
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+<string>:44: RuntimeWarning: divide by zero encountered in scalar divide
+
+   🏆 Top 10 parameter sets:
+      #1: Sharpe=0.92, CAGR=9.2%, MaxDD=-12.1%, Calmar=0.77
+          Changed: {'trix_window': 17, 'adx_threshold': 27, 'atr_entry_threshold': 1.8, 'atr_exit_threshold': 2.7}
+      #2: Sharpe=0.92, CAGR=9.2%, MaxDD=-12.1%, Calmar=0.76
+          Changed: {'atr_window': 13, 'adx_threshold': 27, 'atr_entry_threshold': 2.2, 'atr_exit_threshold': 2.7}
+      #3: Sharpe=0.81, CAGR=8.3%, MaxDD=-11.8%, Calmar=0.70
+          Changed: {'trix_window': 13, 'atr_window': 15, 'adx_threshold': 27, 'atr_entry_threshold': 1.6, 'atr_exit_threshold': 2.4}
+      #4: Sharpe=0.63, CAGR=6.6%, MaxDD=-12.3%, Calmar=0.53
+          Changed: {'trix_window': 17, 'atr_window': 16, 'atr_exit_threshold': 2.4}
+      #5: Sharpe=0.63, CAGR=6.6%, MaxDD=-12.3%, Calmar=0.53
+          Changed: {'trix_window': 17, 'atr_window': 15, 'atr_exit_threshold': 2.4}
+   — No improvement over base Sharpe=0.93
+
+[194/370] Strategy_Gen418  Sharpe=0.91 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[195/370] Strategy_Gen1230  Sharpe=0.89 Comp=0.3669
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.73 CAGR=20.7% MaxDD=-43.1% Comp=0.3087
+          Params: {'thresh_42': 26, 'thresh_59': 48, 'thresh_76': 91}
+   — No improvement over base Sharpe=0.89
+
+[196/370] Strategy_Gen2197  Sharpe=0.89 Comp=0.3247
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5, 'mult_2.5': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.37 CAGR=6.3% MaxDD=-20.3% Comp=0.2959
+          Params: {'thresh_42': 58, 'thresh_59': 37, 'thresh_76': 46, 'mult_2.5': 1.75}
+   — No improvement over base Sharpe=0.89
+
+[197/370] Strategy_Gen1589  Sharpe=0.89 Comp=0.3309
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'mult_2.0': 4, 'mult_1.5': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.87 CAGR=32.3% MaxDD=-45.7% Comp=0.3297
+          Params: {'thresh_42': 42, 'thresh_59': 59, 'mult_2.0': 0.8, 'mult_1.5': 1.95}
+   — No improvement over base Sharpe=0.89
+
+[198/370] Strategy_Gen2370  Sharpe=0.88 Comp=0.3287
+   → New-style strategy: using get_params() path
+   🔍 Parameter sweep: testing 40 combinations...
+
+   🏆 Top 10 parameter sets:
+      #1: Sharpe=0.88, CAGR=32.9%, MaxDD=-44.5%, Calmar=0.74
+          Changed: {'rvi_bear_threshold': 50.4, 'atr_mult': 1.65, 'rsi_oversold': 32}
+      #2: Sharpe=0.88, CAGR=32.9%, MaxDD=-44.5%, Calmar=0.74
+          Changed: {'rvi_bear_threshold': 46.2, 'atr_mult': 1.8, 'rsi_oversold': 32}
+      #3: Sharpe=0.76, CAGR=25.7%, MaxDD=-53.1%, Calmar=0.48
+          Changed: {'rvi_bear_threshold': 37.8, 'atr_mult': 1.35, 'rsi_oversold': 36}
+      #4: Sharpe=0.76, CAGR=25.7%, MaxDD=-53.1%, Calmar=0.48
+          Changed: {'atr_mult': 1.65, 'rsi_oversold': 36}
+      #5: Sharpe=0.75, CAGR=24.4%, MaxDD=-46.0%, Calmar=0.53
+   — No improvement over base Sharpe=0.88
+
+[199/370] Strategy_Gen2115  Sharpe=0.87 Comp=0.3280
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'mult_2.5': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=1.03 CAGR=41.7% MaxDD=-44.9% Comp=0.3617
+          Params: {'thresh_42': 26, 'thresh_59': 59, 'mult_2.5': 3.25}
+   ✅ History updated: Sharpe 0.87 → 1.03
+
+[200/370] Strategy_Gen1576  Sharpe=0.87 Comp=0.3422
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_2': 4, 'thresh_40': 5, 'thresh_60': 5, 'thresh_80': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.87 CAGR=22.0% MaxDD=-31.0% Comp=0.3497
+          Params: {'thresh_2': 4, 'thresh_40': 48, 'thresh_60': 60, 'thresh_80': 80}
+   — No improvement over base Sharpe=0.87
+
+[201/370] Strategy_Gen1751  Sharpe=0.87 Comp=0.3308
+   → Old-style strategy: using regex path
+   ⚠️ No sweepable params found in Strategy_Gen1751
+   — No improvement over base Sharpe=0.87
+
+[202/370] Strategy_Gen980  Sharpe=0.86 Comp=0.6133
+   → Old-style strategy: using regex path
+   ⚠️ No sweepable params found in Strategy_Gen980
+   — No improvement over base Sharpe=0.86
+
+[203/370] Cross_SMA_Trend_MACD_Cross_RVI_Extreme  Sharpe=0.86 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[204/370] Cross_SMA_Trend_MACD_Cross_RVI_Extreme  Sharpe=0.86 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[205/370] Strategy_Gen441  Sharpe=0.85 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[206/370] Cross_SMA_Trend_MACD_Cross_RSI_OB  Sharpe=0.85 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[207/370] Cross_SMA_Trend_MACD_Cross_RSI_OB  Sharpe=0.85 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[208/370] Strategy_Gen971  Sharpe=0.84 Comp=0.3270
+   ⏭ Already swept at 2026-03-05, skipping (use --force to re-sweep)
+[209/370] Strategy_Gen744  Sharpe=0.84 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'window_200': 4, 'span_12': 4, 'span_26': 4, 'span_9': 4}
+   🔢 Testing 40 combinations...
+   ❌ No valid variants found
+   — No improvement over base Sharpe=0.84
+
+[210/370] Strategy_Gen844  Sharpe=0.84 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_20': 5, 'thresh_25': 5, 'thresh_30': 5, 'thresh_35': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.87 CAGR=26.2% MaxDD=-48.5% Comp=0.3203
+          Params: {'thresh_20': 16, 'thresh_25': 25, 'thresh_30': 42, 'thresh_35': 21}
+   ✅ History updated: Sharpe 0.84 → 0.87
+
+[211/370] Strategy_Gen936  Sharpe=0.84 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_20': 5, 'thresh_80': 5, 'window_14': 4, 'window_3': 4}
+   🔢 Testing 40 combinations...
+   ❌ No valid variants found
+   — No improvement over base Sharpe=0.84
+
+[212/370] Strategy_Gen983  Sharpe=0.83 Comp=0.3664
+   ⏭ Already swept at 2026-03-05, skipping (use --force to re-sweep)
+[213/370] Strategy_Gen2374  Sharpe=0.83 Comp=0.2991
+   → New-style strategy: using get_params() path
+   🔍 Parameter sweep: testing 40 combinations...
+
+   🏆 Top 10 parameter sets:
+      #1: Sharpe=0.83, CAGR=21.2%, MaxDD=-45.3%, Calmar=0.47
+          Changed: {'kama_period': 11, 'atr_mult': 4}
+      #2: Sharpe=0.81, CAGR=20.8%, MaxDD=-45.3%, Calmar=0.46
+          Changed: {'kama_period': 12, 'atr_mult': 4, 'days_down_crash_threshold': 5}
+      #3: Sharpe=0.81, CAGR=20.8%, MaxDD=-45.3%, Calmar=0.46
+          Changed: {'kama_period': 12, 'atr_mult': 4, 'days_down_crash_threshold': 4}
+      #4: Sharpe=0.80, CAGR=20.2%, MaxDD=-34.7%, Calmar=0.58
+          Changed: {'bb_percentile_lookback': 22, 'kama_period': 11, 'atr_mult': 5, 'days_down_crash_threshold': 2}
+      #5: Sharpe=0.79, CAGR=20.7%, MaxDD=-48.4%, Calmar=0.43
+          Changed: {'atr_mult': 5, 'days_down_crash_threshold': 4}
+   — No improvement over base Sharpe=0.83
+
+[214/370] Strategy_Gen1177  Sharpe=0.82 Comp=0.3194
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_76': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.84 CAGR=25.9% MaxDD=-43.3% Comp=0.3196
+          Params: {'thresh_42': 42, 'thresh_76': 76}
+   — No improvement over base Sharpe=0.82
+
+[215/370] Strategy_Gen2079  Sharpe=0.82 Comp=0.3090
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_50': 5}
+   🔢 Testing 5 combinations...
+   🏆 Best: Sharpe=0.87 CAGR=29.5% MaxDD=-49.3% Comp=0.3136
+          Params: {'thresh_50': 60}
+   ✅ History updated: Sharpe 0.82 → 0.87
+
+[216/370] Strategy_Gen255  Sharpe=0.81 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[217/370] Strategy_Gen391  Sharpe=0.81 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[218/370] Strategy_Gen1521  Sharpe=0.80 Comp=0.2974
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_55': 5, 'thresh_60': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.80 CAGR=16.8% MaxDD=-44.7% Comp=0.2974
+          Params: {'thresh_55': 55, 'thresh_60': 60}
+   — No improvement over base Sharpe=0.80
+
+[219/370] Strategy_Gen2126  Sharpe=0.79 Comp=0.3239
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.83 CAGR=24.4% MaxDD=-37.3% Comp=0.3332
+          Params: {'thresh_42': 42, 'thresh_59': 59}
+   ✅ History updated: Sharpe 0.79 → 0.83
+
+[220/370] Strategy_Gen252  Sharpe=0.79 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[221/370] Strategy_Gen467  Sharpe=0.78 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[222/370] Strategy_Gen1341  Sharpe=0.78 Comp=0.3167
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_25': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.66 CAGR=22.2% MaxDD=-49.7% Comp=0.2835
+          Params: {'thresh_25': 15, 'thresh_42': 26, 'thresh_59': 59, 'thresh_76': 91}
+   — No improvement over base Sharpe=0.78
+
+[223/370] Strategy_Gen3  Sharpe=0.77 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[224/370] Strategy_Gen427  Sharpe=0.77 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[225/370] Strategy_Gen2114  Sharpe=0.76 Comp=0.3015
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.91 CAGR=23.7% MaxDD=-39.2% Comp=0.3334
+          Params: {'thresh_42': 58, 'thresh_59': 48, 'thresh_76': 76}
+   ✅ History updated: Sharpe 0.76 → 0.91
+
+[226/370] Strategy_Gen308  Sharpe=0.74 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[227/370] Strategy_Gen866  Sharpe=0.74 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_15': 5, 'thresh_20': 5, 'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 40 combinations...
+   ❌ No valid variants found
+   — No improvement over base Sharpe=0.74
+
+[228/370] Strategy_Gen1056  Sharpe=0.74 Comp=0.3130
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_2': 4, 'mult_1.5': 4}
+   🔢 Testing 16 combinations...
+   🏆 Best: Sharpe=0.74 CAGR=18.3% MaxDD=-37.0% Comp=0.3129
+          Params: {'thresh_2': 2, 'mult_1.5': 1.5}
+   — No improvement over base Sharpe=0.74
+
+[229/370] Strategy_Gen547  Sharpe=0.73 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[230/370] Strategy_Gen959  Sharpe=0.72 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_50': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.76 CAGR=15.8% MaxDD=-30.0% Comp=0.3287
+          Params: {'thresh_42': 50, 'thresh_50': 60, 'thresh_59': 48, 'thresh_76': 76}
+   ✅ History updated: Sharpe 0.72 → 0.76
+
+[231/370] Strategy_Gen446  Sharpe=0.72 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[232/370] Strategy_Gen921  Sharpe=0.71 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_59': 5, 'thresh_76': 5, 'window_14': 4, 'window_200': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.76 CAGR=16.9% MaxDD=-35.7% Comp=0.3161
+          Params: {'thresh_59': 59, 'thresh_76': 76, 'window_14': 14, 'window_200': 200}
+   ✅ History updated: Sharpe 0.71 → 0.76
+
+[233/370] Strategy_Gen324  Sharpe=0.71 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[234/370] Strategy_Gen1422  Sharpe=0.71 Comp=0.3190
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'mult_2.0': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.81 CAGR=18.3% MaxDD=-30.1% Comp=0.3389
+          Params: {'thresh_42': 58, 'thresh_59': 48, 'mult_2.0': 0.8}
+   ✅ History updated: Sharpe 0.71 → 0.81
+
+[235/370] Strategy_Gen2110  Sharpe=0.71 Comp=0.3204
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'mult_2.0': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.77 CAGR=20.9% MaxDD=-40.6% Comp=0.3113
+          Params: {'thresh_42': 58, 'thresh_59': 48, 'mult_2.0': 2.6}
+   ✅ History updated: Sharpe 0.71 → 0.77
+
+[236/370] Strategy_Gen1952  Sharpe=0.71 Comp=0.2959
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_80': 5}
+   🔢 Testing 5 combinations...
+   🏆 Best: Sharpe=0.71 CAGR=20.7% MaxDD=-45.0% Comp=0.2962
+          Params: {'thresh_80': 80}
+   — No improvement over base Sharpe=0.71
+
+[237/370] Strategy_Gen1881  Sharpe=0.71 Comp=0.2875
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'mult_2.0': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.99 CAGR=37.7% MaxDD=-44.3% Comp=0.3524
+          Params: {'thresh_42': 26, 'thresh_59': 59, 'mult_2.0': 2.6}
+   ✅ History updated: Sharpe 0.71 → 0.99
+
+[238/370] Strategy_Gen362  Sharpe=0.70 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[239/370] Strategy_Gen758  Sharpe=0.70 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_30': 5, 'thresh_70': 5, 'window_13': 4, 'window_20': 4}
+   🔢 Testing 40 combinations...
+   ❌ No valid variants found
+   — No improvement over base Sharpe=0.70
+
+[240/370] Strategy_Gen733  Sharpe=0.70 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_35': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.76 CAGR=14.6% MaxDD=-23.5% Comp=0.3466
+          Params: {'thresh_35': 28, 'thresh_42': 50, 'thresh_59': 59, 'thresh_76': 46}
+   ✅ History updated: Sharpe 0.70 → 0.76
+
+[241/370] Strategy_Gen1172  Sharpe=0.70 Comp=0.3181
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_22': 5, 'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.85 CAGR=19.1% MaxDD=-32.0% Comp=0.3387
+          Params: {'thresh_22': 18, 'thresh_42': 58, 'thresh_59': 48}
+   ✅ History updated: Sharpe 0.70 → 0.85
+
+[242/370] Strategy_Gen533  Sharpe=0.69 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[243/370] Strategy_Gen1459  Sharpe=0.69 Comp=0.3149
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.63 CAGR=16.9% MaxDD=-42.0% Comp=0.2875
+          Params: {'thresh_42': 58, 'thresh_59': 37}
+   — No improvement over base Sharpe=0.69
+
+[244/370] Strategy_Gen2232  Sharpe=0.69 Comp=0.2960
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_1.5': 5, 'thresh_40': 5, 'thresh_60': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.71 CAGR=22.5% MaxDD=-44.8% Comp=0.2993
+          Params: {'thresh_1.5': 0.9, 'thresh_40': 56, 'thresh_60': 36}
+   ✅ History updated: Sharpe 0.69 → 0.71
+
+[245/370] Strategy_Gen1648  Sharpe=0.68 Comp=0.2989
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'mult_1.5': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.81 CAGR=22.1% MaxDD=-40.6% Comp=0.3186
+          Params: {'thresh_42': 58, 'thresh_59': 48, 'mult_1.5': 1.95}
+   ✅ History updated: Sharpe 0.68 → 0.81
+
+[246/370] Strategy_Gen2297  Sharpe=0.68 Comp=0.3003
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'window_10': 4}
+   🔢 Testing 4 combinations...
+   🏆 Best: Sharpe=0.68 CAGR=16.7% MaxDD=-38.7% Comp=0.3003
+          Params: {'window_10': 4}
+   — No improvement over base Sharpe=0.68
+
+[247/370] Strategy_Gen1054  Sharpe=0.68 Comp=0.3098
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_2': 4, 'window_20': 4}
+   🔢 Testing 16 combinations...
+   🏆 Best: Sharpe=0.71 CAGR=18.6% MaxDD=-40.9% Comp=0.3003
+          Params: {'thresh_2': 4, 'window_20': 26}
+   ✅ History updated: Sharpe 0.68 → 0.71
+
+[248/370] Strategy_Gen1967  Sharpe=0.67 Comp=0.2917
+   → Old-style strategy: using regex path
+   ⚠️ No sweepable params found in Strategy_Gen1967
+   — No improvement over base Sharpe=0.67
+
+[249/370] Strategy_Gen748  Sharpe=0.67 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_2': 4, 'thresh_55': 5, 'mult_1.5': 4, 'window_20': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.89 CAGR=31.6% MaxDD=-38.9% Comp=0.3490
+          Params: {'thresh_2': 1, 'thresh_55': 66, 'mult_1.5': 1.05, 'window_20': 20}
+   ✅ History updated: Sharpe 0.67 → 0.89
+
+[250/370] Strategy_Gen389  Sharpe=0.67 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[251/370] Strategy_Gen435  Sharpe=0.67 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[252/370] Strategy_Gen1285  Sharpe=0.67 Comp=0.3081
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_6': 5, 'mult_0.8': 4}
+   🔢 Testing 20 combinations...
+   🏆 Best: Sharpe=0.66 CAGR=14.0% MaxDD=-33.1% Comp=0.3080
+          Params: {'thresh_6': 6, 'mult_0.8': 0.8}
+   — No improvement over base Sharpe=0.67
+
+[253/370] Strategy_Gen1216  Sharpe=0.66 Comp=0.3147
+   → Old-style strategy: using regex path
+   ⚠️ No sweepable params found in Strategy_Gen1216
+   — No improvement over base Sharpe=0.66
+
+[254/370] Strategy_Gen1612  Sharpe=0.66 Comp=0.2961
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_2': 4, 'thresh_30': 5}
+   🔢 Testing 20 combinations...
+   🏆 Best: Sharpe=0.67 CAGR=19.1% MaxDD=-45.4% Comp=0.2893
+          Params: {'thresh_2': 1, 'thresh_30': 42}
+   — No improvement over base Sharpe=0.66
+
+[255/370] Strategy_Gen2105  Sharpe=0.66 Comp=0.2916
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.66 CAGR=19.5% MaxDD=-43.9% Comp=0.2913
+          Params: {'thresh_42': 26, 'thresh_59': 59}
+   — No improvement over base Sharpe=0.66
+
+[256/370] Strategy_Gen2201  Sharpe=0.66 Comp=0.2841
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5, 'mult_1.5': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.87 CAGR=23.2% MaxDD=-48.6% Comp=0.3050
+          Params: {'thresh_42': 50, 'thresh_59': 59, 'thresh_76': 106, 'mult_1.5': 1.5}
+   ✅ History updated: Sharpe 0.66 → 0.87
+
+[257/370] Strategy_Gen464  Sharpe=0.65 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[258/370] Strategy_Gen1741  Sharpe=0.65 Comp=0.2994
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_1.02': 5}
+   🔢 Testing 5 combinations...
+   🏆 Best: Sharpe=0.47 CAGR=10.0% MaxDD=-45.3% Comp=0.2544
+          Params: {'thresh_1.02': 0.62}
+   — No improvement over base Sharpe=0.65
+
+[259/370] Strategy_Gen408  Sharpe=0.65 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[260/370] Strategy_Gen4  Sharpe=0.64 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[261/370] Strategy_Gen112  Sharpe=0.64 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[262/370] Strategy_Gen968  Sharpe=0.64 Comp=0.2964
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_50': 5}
+   🔢 Testing 5 combinations...
+   🏆 Best: Sharpe=0.56 CAGR=12.9% MaxDD=-30.9% Comp=0.3009
+          Params: {'thresh_50': 60}
+   — No improvement over base Sharpe=0.64
+
+[263/370] Strategy_Gen2068  Sharpe=0.64 Comp=0.3131
+   → Old-style strategy: using regex path
+   ⚠️ No sweepable params found in Strategy_Gen2068
+   — No improvement over base Sharpe=0.64
+
+[264/370] Strategy_Gen400  Sharpe=0.64 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[265/370] Strategy_Gen327  Sharpe=0.63 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[266/370] Strategy_Gen2190  Sharpe=0.63 Comp=0.2941
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_20': 5, 'thresh_100': 5, 'window_20': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.61 CAGR=11.9% MaxDD=-35.3% Comp=0.2934
+          Params: {'thresh_20': 20, 'thresh_100': 120, 'window_20': 20}
+   — No improvement over base Sharpe=0.63
+
+[267/370] Strategy_Gen323  Sharpe=0.63 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[268/370] Strategy_Gen1055  Sharpe=0.63 Comp=0.2819
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_2': 4}
+   🔢 Testing 4 combinations...
+   🏆 Best: Sharpe=0.66 CAGR=20.0% MaxDD=-43.6% Comp=0.2942
+          Params: {'thresh_2': 1}
+   ✅ History updated: Sharpe 0.63 → 0.66
+
+[269/370] Strategy_Gen395  Sharpe=0.63 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[270/370] Strategy_Gen2237  Sharpe=0.63 Comp=0.2819
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_2': 4, 'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.79 CAGR=19.7% MaxDD=-34.3% Comp=0.3260
+          Params: {'thresh_2': 2, 'thresh_42': 34, 'thresh_59': 59}
+   ✅ History updated: Sharpe 0.63 → 0.79
+
+[271/370] Strategy_Gen2222  Sharpe=0.62 Comp=0.2686
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_1.5': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.81 CAGR=21.6% MaxDD=-40.9% Comp=0.3151
+          Params: {'thresh_1.5': 2.1, 'thresh_42': 50, 'thresh_59': 59, 'thresh_76': 106}
+   ✅ History updated: Sharpe 0.62 → 0.81
+
+[272/370] Strategy_Gen1287  Sharpe=0.62 Comp=0.2862
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.51 CAGR=8.6% MaxDD=-29.3% Comp=0.2919
+          Params: {'thresh_42': 58, 'thresh_59': 37, 'thresh_76': 76}
+   — No improvement over base Sharpe=0.62
+
+[273/370] Strategy_Gen209  Sharpe=0.62 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[274/370] Strategy_Gen392  Sharpe=0.62 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[275/370] Strategy_Gen549  Sharpe=0.62 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[276/370] Strategy_Gen578  Sharpe=0.61 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[277/370] Strategy_Gen2244  Sharpe=0.61 Comp=0.3341
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_2': 4, 'window_20': 4}
+   🔢 Testing 16 combinations...
+   🏆 Best: Sharpe=0.61 CAGR=9.0% MaxDD=-18.3% Comp=0.3341
+          Params: {'thresh_2': 2, 'window_20': 20}
+   — No improvement over base Sharpe=0.61
+
+[278/370] Strategy_Gen887  Sharpe=0.61 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_45': 5, 'thresh_50': 5, 'thresh_60': 5, 'thresh_65': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.51 CAGR=7.6% MaxDD=-19.7% Comp=0.3156
+          Params: {'thresh_45': 27, 'thresh_50': 30, 'thresh_60': 60, 'thresh_65': 91}
+   — No improvement over base Sharpe=0.61
+
+[279/370] Strategy_Gen546  Sharpe=0.61 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[280/370] Strategy_Gen492  Sharpe=0.61 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[281/370] Strategy_Gen993  Sharpe=0.61 Comp=0.3591
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_50': 5, 'window_34': 4, 'window_14': 4, 'window_20': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.72 CAGR=24.3% MaxDD=-49.0% Comp=0.2947
+          Params: {'thresh_50': 30, 'window_34': 14, 'window_14': 6, 'window_20': 26}
+   ✅ History updated: Sharpe 0.61 → 0.72
+
+[282/370] Strategy_Gen193  Sharpe=0.60 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[283/370] Strategy_Gen1234  Sharpe=0.60 Comp=0.2936
+   → Old-style strategy: using regex path
+   ⚠️ No sweepable params found in Strategy_Gen1234
+   — No improvement over base Sharpe=0.60
+
+[284/370] Strategy_Gen548  Sharpe=0.60 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[285/370] Strategy_Gen539  Sharpe=0.60 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[286/370] Strategy_Gen2394  Sharpe=0.60 Comp=0.3173
+   → New-style strategy: using get_params() path
+   🔍 Parameter sweep: testing 40 combinations...
+
+   🏆 Top 10 parameter sets:
+      #1: Sharpe=0.64, CAGR=11.9%, MaxDD=-24.6%, Calmar=0.48
+          Changed: {'entry_rsi': 77.0, 'atr_mult': 1.6, 'macd_threshold': 0.1}
+      #2: Sharpe=0.64, CAGR=11.9%, MaxDD=-24.6%, Calmar=0.48
+          Changed: {'entry_rsi': 77.0, 'macd_threshold': 0.2}
+      #3: Sharpe=0.64, CAGR=11.9%, MaxDD=-24.6%, Calmar=0.48
+          Changed: {'entry_rsi': 77.0, 'macd_threshold': 0.1}
+      #4: Sharpe=0.64, CAGR=11.9%, MaxDD=-24.6%, Calmar=0.48
+          Changed: {'entry_rsi': 77.0, 'atr_mult': 2.4, 'macd_threshold': 0.2}
+      #5: Sharpe=0.64, CAGR=11.9%, MaxDD=-24.6%, Calmar=0.48
+          Changed: {'entry_rsi': 77.0, 'atr_mult': 2.2, 'macd_threshold': 0.1}
+   ✅ History updated: Sharpe 0.60 → 0.64
+   ✏️  Updated __init__ defaults: entry_rsi=77.0, atr_mult=1.6, macd_threshold=0.1
+
+[287/370] Strategy_Gen481  Sharpe=0.60 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[288/370] Strategy_Gen372  Sharpe=0.60 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[289/370] Strategy_Gen343  Sharpe=0.60 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[290/370] Strategy_Gen823  Sharpe=0.59 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_59': 5, 'window_14': 4, 'window_34': 4, 'span_20': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.43 CAGR=5.9% MaxDD=-18.8% Comp=0.3086
+          Params: {'thresh_59': 59, 'window_14': 14, 'window_34': 14, 'span_20': 26}
+   — No improvement over base Sharpe=0.59
+
+[291/370] Strategy_Gen545  Sharpe=0.59 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[292/370] Strategy_Gen553  Sharpe=0.58 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[293/370] Strategy_Gen394  Sharpe=0.58 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[294/370] Strategy_Gen1184  Sharpe=0.58 Comp=0.3244
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_3': 5, 'thresh_4': 5, 'thresh_7': 5, 'thresh_8': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.67 CAGR=12.5% MaxDD=-29.6% Comp=0.3134
+          Params: {'thresh_3': 4, 'thresh_4': 6, 'thresh_7': 6, 'thresh_8': 8}
+   ✅ History updated: Sharpe 0.58 → 0.67
+
+[295/370] Strategy_Gen475  Sharpe=0.57 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[296/370] Strategy_Gen1376  Sharpe=0.57 Comp=0.2876
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_3': 5, 'thresh_5': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.61 CAGR=14.9% MaxDD=-37.8% Comp=0.2931
+          Params: {'thresh_3': 4, 'thresh_5': 6, 'thresh_76': 76}
+   ✅ History updated: Sharpe 0.57 → 0.61
+
+[297/370] Strategy_Gen1719  Sharpe=0.57 Comp=0.3142
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.52 CAGR=10.2% MaxDD=-26.4% Comp=0.3047
+          Params: {'thresh_42': 42, 'thresh_59': 59}
+   — No improvement over base Sharpe=0.57
+
+[298/370] Strategy_Gen1337  Sharpe=0.56 Comp=0.2870
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_25': 5}
+   🔢 Testing 5 combinations...
+   🏆 Best: Sharpe=0.57 CAGR=15.0% MaxDD=-38.7% Comp=0.2886
+          Params: {'thresh_25': 25}
+   — No improvement over base Sharpe=0.56
+
+[299/370] Strategy_Gen643  Sharpe=0.56 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[300/370] Strategy_Gen493  Sharpe=0.56 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[301/370] Strategy_Gen131  Sharpe=0.56 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[302/370] Strategy_Gen463  Sharpe=0.55 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[303/370] Strategy_Gen745  Sharpe=0.54 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'window_20': 4, 'window_14': 4, 'window_3': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.46 CAGR=12.3% MaxDD=-40.9% Comp=0.2649
+          Params: {'window_20': 14, 'window_14': 6, 'window_3': 4}
+   — No improvement over base Sharpe=0.54
+
+[304/370] Strategy_Gen1238  Sharpe=0.54 Comp=0.2624
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_30': 5, 'thresh_50': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.54 CAGR=15.0% MaxDD=-49.3% Comp=0.2623
+          Params: {'thresh_30': 18, 'thresh_50': 50}
+   — No improvement over base Sharpe=0.54
+
+[305/370] Strategy_Gen458  Sharpe=0.54 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[306/370] Strategy_Gen1227  Sharpe=0.54 Comp=0.2611
+   → Old-style strategy: using regex path
+   ⚠️ No sweepable params found in Strategy_Gen1227
+   — No improvement over base Sharpe=0.54
+
+[307/370] Strategy_Gen2364  Sharpe=0.54 Comp=0.2648
+   → New-style strategy: using get_params() path
+   🔍 Parameter sweep: testing 40 combinations...
+
+   🏆 Top 10 parameter sets:
+      #1: Sharpe=0.57, CAGR=14.3%, MaxDD=-43.9%, Calmar=0.33
+          Changed: {'bb_width_th': 0.23, 'vol_ratio_th': 0.9, 'atr_tp': 1.8, 'atr_sl': 1.2}
+      #2: Sharpe=0.57, CAGR=14.3%, MaxDD=-43.9%, Calmar=0.33
+          Changed: {'bb_width_th': 0.23, 'atr_tp': 1.6, 'atr_sl': 1.8}
+      #3: Sharpe=0.57, CAGR=14.3%, MaxDD=-43.9%, Calmar=0.33
+          Changed: {'bb_width_th': 0.23, 'vol_ratio_th': 1.0, 'atr_tp': 1.6, 'atr_sl': 1.65}
+      #4: Sharpe=0.57, CAGR=14.3%, MaxDD=-43.9%, Calmar=0.33
+          Changed: {'bb_width_th': 0.23, 'vol_ratio_th': 0.6, 'atr_tp': 1.8, 'atr_sl': 1.8}
+      #5: Sharpe=0.57, CAGR=14.3%, MaxDD=-43.9%, Calmar=0.33
+          Changed: {'bb_width_th': 0.23, 'atr_tp': 2.2}
+   ✅ History updated: Sharpe 0.54 → 0.57
+   ✏️  Updated __init__ defaults: bb_width_th=0.23, vol_ratio_th=0.9, atr_tp=1.8, atr_sl=1.2
+
+[308/370] Strategy_Gen967  Sharpe=0.53 Comp=0.2478
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_40': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_60': 5}
+   🔢 Testing 40 combinations...
+   ❌ No valid variants found
+   — No improvement over base Sharpe=0.53
+
+[309/370] Strategy_Gen5  Sharpe=0.53 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[310/370] Strategy_Gen1152  Sharpe=0.53 Comp=0.3183
+   → Old-style strategy: using regex path
+   ⚠️ No sweepable params found in Strategy_Gen1152
+   — No improvement over base Sharpe=0.53
+
+[311/370] Strategy_Gen1482  Sharpe=0.53 Comp=0.2682
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_1.5': 5, 'thresh_100': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.53 CAGR=14.7% MaxDD=-45.4% Comp=0.2681
+          Params: {'thresh_1.5': 1.5, 'thresh_100': 100}
+   — No improvement over base Sharpe=0.53
+
+[312/370] Strategy_Gen369  Sharpe=0.52 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[313/370] Strategy_Gen450  Sharpe=0.51 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[314/370] Strategy_Gen329  Sharpe=0.51 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[315/370] Strategy_Gen554  Sharpe=0.51 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[316/370] Strategy_Gen325  Sharpe=0.51 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[317/370] Strategy_Gen351  Sharpe=0.51 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[318/370] Strategy_Gen1826  Sharpe=0.50 Comp=0.3026
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'mult_2.5': 4}
+   🔢 Testing 4 combinations...
+   🏆 Best: Sharpe=0.59 CAGR=11.3% MaxDD=-24.8% Comp=0.3158
+          Params: {'mult_2.5': 3.25}
+   ✅ History updated: Sharpe 0.50 → 0.59
+
+[319/370] Strategy_Gen1150  Sharpe=0.50 Comp=0.3056
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_2': 4, 'thresh_45': 5, 'mult_1.5': 4, 'mult_1.8': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.69 CAGR=14.6% MaxDD=-27.7% Comp=0.3261
+          Params: {'thresh_2': 4, 'thresh_45': 63, 'mult_1.5': 1.95, 'mult_1.8': 1.26}
+   ✅ History updated: Sharpe 0.50 → 0.69
+
+[320/370] Strategy_Gen1284  Sharpe=0.50 Comp=0.3031
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_6': 5}
+   🔢 Testing 5 combinations...
+   🏆 Best: Sharpe=0.58 CAGR=6.9% MaxDD=-24.1% Comp=0.3140
+          Params: {'thresh_6': 8}
+   ✅ History updated: Sharpe 0.50 → 0.58
+
+[321/370] Strategy_Gen1008  Sharpe=0.50 Comp=0.1891
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_59': 5, 'thresh_76': 5, 'mult_0.92': 4, 'window_200': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.61 CAGR=14.6% MaxDD=-43.4% Comp=0.2783
+          Params: {'thresh_59': 37, 'thresh_76': 61, 'mult_0.92': 0.36, 'window_200': 140}
+   ✅ History updated: Sharpe 0.50 → 0.61
+
+[322/370] Strategy_Gen406  Sharpe=0.50 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[323/370] Strategy_Gen439  Sharpe=0.50 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[324/370] Strategy_Gen447  Sharpe=0.50 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[325/370] Strategy_Gen460  Sharpe=0.50 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[326/370] Strategy_Gen340  Sharpe=0.50 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[327/370] Strategy_Gen645  Sharpe=0.50 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[328/370] Strategy_Gen440  Sharpe=0.49 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[329/370] Strategy_Gen2314  Sharpe=0.49 Comp=0.3025
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_50': 5}
+   🔢 Testing 5 combinations...
+   🏆 Best: Sharpe=0.60 CAGR=8.1% MaxDD=-23.8% Comp=0.3159
+          Params: {'thresh_50': 70}
+   ✅ History updated: Sharpe 0.49 → 0.60
+
+[330/370] Strategy_Gen927  Sharpe=0.48 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'window_55': 4, 'window_10': 4}
+   🔢 Testing 40 combinations...
+   ❌ No valid variants found
+   — No improvement over base Sharpe=0.48
+
+[331/370] Strategy_Gen1791  Sharpe=0.48 Comp=0.2658
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_20': 5}
+   🔢 Testing 5 combinations...
+   🏆 Best: Sharpe=0.56 CAGR=14.3% MaxDD=-43.5% Comp=0.2760
+          Params: {'thresh_20': 12}
+   ✅ History updated: Sharpe 0.48 → 0.56
+
+[332/370] Strategy_Gen1674  Sharpe=0.47 Comp=0.2895
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_76': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.50 CAGR=8.6% MaxDD=-29.2% Comp=0.2904
+          Params: {'thresh_42': 50, 'thresh_76': 76}
+   ✅ History updated: Sharpe 0.47 → 0.50
+
+[333/370] Strategy_Gen1468  Sharpe=0.47 Comp=0.2862
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_24': 5, 'thresh_25': 5, 'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.50 CAGR=8.0% MaxDD=-19.6% Comp=0.3158
+          Params: {'thresh_24': 32, 'thresh_25': 25, 'thresh_42': 50, 'thresh_59': 59}
+   ✅ History updated: Sharpe 0.47 → 0.50
+
+[334/370] Strategy_Gen2286  Sharpe=0.47 Comp=0.2780
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_4': 5}
+   🔢 Testing 5 combinations...
+   🏆 Best: Sharpe=0.74 CAGR=17.9% MaxDD=-44.3% Comp=0.2957
+          Params: {'thresh_4': 6}
+   ✅ History updated: Sharpe 0.47 → 0.74
+
+[335/370] Strategy_Gen941  Sharpe=0.47 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5, 'mult_1.8': 4}
+   🔢 Testing 40 combinations...
+   ❌ No valid variants found
+   — No improvement over base Sharpe=0.47
+
+[336/370] Strategy_Gen387  Sharpe=0.46 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[337/370] Strategy_Gen960  Sharpe=0.46 Comp=0.3297
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_100': 5, 'window_9': 4, 'window_20': 4, 'window_14': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.65 CAGR=9.9% MaxDD=-30.4% Comp=0.3071
+          Params: {'thresh_100': 80, 'window_9': 11, 'window_20': 8, 'window_14': 10}
+   ✅ History updated: Sharpe 0.46 → 0.65
+
+[338/370] Strategy_Gen531  Sharpe=0.46 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[339/370] Strategy_Gen457  Sharpe=0.46 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[340/370] Strategy_Gen344  Sharpe=0.45 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[341/370] Strategy_Gen879  Sharpe=0.45 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_20': 5, 'window_14': 4, 'window_200': 4, 'window_20': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.55 CAGR=14.4% MaxDD=-46.5% Comp=0.2664
+          Params: {'thresh_20': 12, 'window_14': 6, 'window_200': 260, 'window_20': 20}
+   ✅ History updated: Sharpe 0.45 → 0.55
+
+[342/370] Strategy_Gen431  Sharpe=0.45 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[343/370] Strategy_Gen1608  Sharpe=0.45 Comp=0.2525
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'window_20': 4}
+   🔢 Testing 4 combinations...
+   🏆 Best: Sharpe=0.43 CAGR=8.6% MaxDD=-41.3% Comp=0.2564
+          Params: {'window_20': 20}
+   — No improvement over base Sharpe=0.45
+
+[344/370] Strategy_Gen647  Sharpe=0.45 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[345/370] Strategy_Gen366  Sharpe=0.45 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[346/370] Strategy_Gen2161  Sharpe=0.45 Comp=0.2770
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'mult_0.98': 4}
+   🔢 Testing 4 combinations...
+   🏆 Best: Sharpe=0.45 CAGR=8.8% MaxDD=-35.2% Comp=0.2769
+          Params: {'mult_0.98': 0.4}
+   — No improvement over base Sharpe=0.45
+
+[347/370] Strategy_Gen92  Sharpe=0.45 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[348/370] Strategy_Gen466  Sharpe=0.44 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[349/370] Strategy_Gen779  Sharpe=0.44 Comp=0.0000
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_30': 5, 'thresh_70': 5, 'window_14': 4, 'window_200': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.71 CAGR=19.2% MaxDD=-39.6% Comp=0.3038
+          Params: {'thresh_30': 30, 'thresh_70': 42, 'window_14': 6, 'window_200': 200}
+   ✅ History updated: Sharpe 0.44 → 0.71
+
+[350/370] Strategy_Gen15  Sharpe=0.43 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[351/370] Strategy_Gen1856  Sharpe=0.43 Comp=0.2506
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_20': 5, 'thresh_50': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.73 CAGR=17.9% MaxDD=-32.2% Comp=0.3236
+          Params: {'thresh_20': 12, 'thresh_50': 40}
+   ✅ History updated: Sharpe 0.43 → 0.73
+
+[352/370] Strategy_Gen419  Sharpe=0.43 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[353/370] Strategy_Gen334  Sharpe=0.43 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[354/370] Strategy_Gen2199  Sharpe=0.43 Comp=0.2551
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_24': 5, 'thresh_42': 5, 'thresh_59': 5, 'thresh_76': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.61 CAGR=11.7% MaxDD=-40.0% Comp=0.2814
+          Params: {'thresh_24': 20, 'thresh_42': 58, 'thresh_59': 48, 'thresh_76': 76}
+   ✅ History updated: Sharpe 0.43 → 0.61
+
+[355/370] Strategy_Gen1548  Sharpe=0.43 Comp=0.2561
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'mult_0.95': 4}
+   🔢 Testing 4 combinations...
+   🏆 Best: Sharpe=0.42 CAGR=9.4% MaxDD=-44.1% Comp=0.2513
+          Params: {'mult_0.95': 0.39}
+   — No improvement over base Sharpe=0.43
+
+[356/370] Strategy_Gen1182  Sharpe=0.43 Comp=0.2652
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_45': 5, 'thresh_55': 5, 'thresh_70': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.47 CAGR=11.5% MaxDD=-36.9% Comp=0.2751
+          Params: {'thresh_45': 45, 'thresh_55': 33, 'thresh_70': 98}
+   ✅ History updated: Sharpe 0.43 → 0.47
+
+[357/370] Strategy_Gen1411  Sharpe=0.42 Comp=0.2502
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.46 CAGR=10.3% MaxDD=-40.2% Comp=0.2657
+          Params: {'thresh_42': 42, 'thresh_59': 59}
+   ✅ History updated: Sharpe 0.42 → 0.46
+
+[358/370] Strategy_Gen2298  Sharpe=0.42 Comp=0.3203
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_20': 5, 'thresh_40': 5}
+   🔢 Testing 25 combinations...
+   🏆 Best: Sharpe=0.70 CAGR=11.0% MaxDD=-25.5% Comp=0.3267
+          Params: {'thresh_20': 12, 'thresh_40': 40}
+   ✅ History updated: Sharpe 0.42 → 0.70
+
+[359/370] Strategy_Gen487  Sharpe=0.42 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[360/370] Strategy_Gen174  Sharpe=0.42 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[361/370] Strategy_Gen988  Sharpe=0.42 Comp=0.2134
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'window_50': 4, 'window_200': 4, 'window_14': 4, 'window_20': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.67 CAGR=19.2% MaxDD=-46.6% Comp=0.2852
+          Params: {'window_50': 20, 'window_200': 260, 'window_14': 6, 'window_20': 14}
+   ✅ History updated: Sharpe 0.42 → 0.67
+
+[362/370] Strategy_Gen283  Sharpe=0.42 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[363/370] Strategy_Gen202  Sharpe=0.42 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[364/370] Strategy_Gen1573  Sharpe=0.41 Comp=0.2526
+   → Old-style strategy: using regex path
+   ⚠️ No sweepable params found in Strategy_Gen1573
+   — No improvement over base Sharpe=0.41
+
+[365/370] Strategy_Gen169  Sharpe=0.41 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[366/370] Strategy_Gen1233  Sharpe=0.41 Comp=0.2667
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_2': 4, 'mult_0.9': 4, 'mult_1.1': 4, 'mult_0.8': 4}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.43 CAGR=8.5% MaxDD=-36.4% Comp=0.2688
+          Params: {'thresh_2': 1, 'mult_0.9': 0.36, 'mult_1.1': 0.44, 'mult_0.8': 0.56}
+   — No improvement over base Sharpe=0.41
+
+[367/370] Strategy_Gen195  Sharpe=0.41 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[368/370] Strategy_Gen2203  Sharpe=0.41 Comp=0.2589
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_50': 5}
+   🔢 Testing 5 combinations...
+   🏆 Best: Sharpe=0.54 CAGR=12.5% MaxDD=-41.4% Comp=0.2725
+          Params: {'thresh_50': 40}
+   ✅ History updated: Sharpe 0.41 → 0.54
+
+[369/370] Strategy_Gen390  Sharpe=0.41 Comp=0.0000
+   ⚠️ .py file not found, skipping
+[370/370] Strategy_Gen1922  Sharpe=0.41 Comp=0.3177
+   → Old-style strategy: using regex path
+   🔍 Sweep params: {'thresh_10': 5, 'thresh_26': 5, 'thresh_42': 5, 'thresh_59': 5}
+   🔢 Testing 40 combinations...
+   🏆 Best: Sharpe=0.49 CAGR=5.5% MaxDD=-11.8% Comp=0.3352
+          Params: {'thresh_10': 14, 'thresh_26': 36, 'thresh_42': 42, 'thresh_59': 48}
+   ✅ History updated: Sharpe 0.41 → 0.49
+
+💾 History saved.
+============================================================
+✅ Done: 46/370 improved, 263 skipped
+============================================================
