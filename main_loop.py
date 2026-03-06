@@ -655,11 +655,29 @@ These indicators are NOT in self.data. Include the helper method and call it in 
         custom_section += "\n⚠️ NOT in self.data — call as methods: kama = self._calc_kama(self.data['Close'])"
         custom_section += "\nUsing these gives genuinely NEW signal sources beyond self.data columns."
 
-    # Plan A: Champion DNA override when RVI is banned
+    # Plan A: Champion DNA override when RVI is banned — hide entire RVI section
     rvi_banned = banned_indicators and any(b in ("RVI", "RVI_State", "RVI_Refined") for b in banned_indicators)
-    champ_ban_notice = ""
     if rvi_banned:
-        champ_ban_notice = "\n⚠️  RVI IS CURRENTLY BANNED — DO NOT USE IT. Treat it as if it does not exist.\n    Design a NON-RVI strategy using a completely different regime/entry/exit approach.\n"
+        champ_rvi_dna = (
+            "⛔ CHAMPION RVI SECTION HIDDEN — RVI, RVI_State, RVI_Refined are BANNED this iteration.\n"
+            "   Do NOT design anything using RVI in any role (regime, entry, exit, confirmation).\n"
+            "   Build a COMPLETELY DIFFERENT strategy using the Champion #2 or a new approach below."
+        )
+    else:
+        champ_rvi_dna = """Our BEST PROVEN strategy is the Champion RVI (Sharpe=1.28, CAGR=52.5%):
+
+HOW IT WORKS:
+1. RVI (Relative Volatility Index) creates 3 STATES:
+   - Green: RVI_Refined > 59 (bullish volatility)
+   - Orange: 42 ≤ RVI_Refined ≤ 59 (neutral)
+   - Red: RVI_Refined < 42 (bearish volatility)
+
+2. ENTRY: State TRANSITION from Orange/Red → Green (not just level!)
+   The TRANSITION is key — it captures momentum BUILDING, not static levels.
+
+3. EXIT LONG: RVI > 76 (overbought) OR RVI < 42 (breakdown)
+
+4. SHORT: State transition Orange → Red, with ATR×1.8 TP/SL"""
 
     return f"""You are a Quantitative Research Director designing TQQQ (3x Leveraged Nasdaq) strategies.
 
@@ -673,21 +691,8 @@ These indicators are NOT in self.data. Include the helper method and call it in 
 
 ═══════════════════════════════════════════════════════════════
 🧬 CHAMPION DNA — PROVEN STRATEGY TO BUILD UPON
-═══════════════════════════════════════════════════════════════{champ_ban_notice}
-Our BEST PROVEN strategy is the Champion RVI (Sharpe=1.28, CAGR=52.5%):
-
-HOW IT WORKS:
-1. RVI (Relative Volatility Index) creates 3 STATES:
-   - Green: RVI_Refined > 59 (bullish volatility)
-   - Orange: 42 ≤ RVI_Refined ≤ 59 (neutral)
-   - Red: RVI_Refined < 42 (bearish volatility)
-
-2. ENTRY: State TRANSITION from Orange/Red → Green (not just level!)
-   The TRANSITION is key — it captures momentum BUILDING, not static levels.
-
-3. EXIT LONG: RVI > 76 (overbought) OR RVI < 42 (breakdown)
-
-4. SHORT: State transition Orange → Red, with ATR×1.8 TP/SL
+═══════════════════════════════════════════════════════════════
+{champ_rvi_dna}
 
 ═══════════════════════════════════════════════════════════════
 📊 CHAMPION #2 — VOLUME BREAKOUT STRATEGY
@@ -914,6 +919,23 @@ CRITICAL RULES:
   YC_Invert, YC2Y10Y, 2Y, 10Y, US_10Y, curve_2y10y, FedWatch, FedCutProb,
   CME_CutProb, CME_3mo_cut_prob, FedPiv, FedFunds, VIX, SPY, QQQ
   If the strategy idea mentions macro/yield curve → use Sim_VIX or ATR_Pct as proxy instead.
+
+⚠️ ENTRY FREQUENCY — HARD REQUIREMENT (time_in_market=0 = IMMEDIATE REJECTION):
+  Your entry condition MUST fire on ≥ 5% of trading days (~60+ days over 5 years).
+  Each AND condition halves entry frequency — use at MOST 2 AND conditions per signal.
+  FORBIDDEN (fires <1% of days): RSI > 70 AND MACD > 0 AND Vol > 2.5x AND Aroon > 80
+  REQUIRED (fires regularly):    (RSI > 55 AND MACD > 0) OR (Vol > 1.5x AND Close > SMA_20)
+  Single strong condition + 1 regime filter is often best.
+
+⚠️ DRAWDOWN CONTROL — HARD REQUIREMENT (MaxDD < -50% = IMMEDIATE REJECTION):
+  Every strategy MUST include explicit stop-loss. REQUIRED structure:
+    self.atr_mult = atr_mult  # in __init__ params, default ≈ 1.5
+    # In generate_signals() loop:
+    sl_price = entry_price - self.data['ATR'].iloc[i] * self.atr_mult
+    if position == 1 and close < sl_price:
+        position = 0  # exit on stop
+  Without a stop loss, a leveraged TQQQ crash will cause MaxDD < -50% (rejected).
+  ATR_Pct, HV_10 can also gate entries during high-volatility regimes.
 {helper_section}
 OUTPUT ONLY PYTHON CODE. No markdown, no explanations."""
 
@@ -1147,6 +1169,35 @@ def run_iteration(
 
         # Hard filter — reject strategies that don't meet minimum thresholds
         rejection = hard_filter(bt)
+        if rejection and "MaxDD" in rejection and hasattr(strategy, 'get_params') and callable(strategy.get_params):
+            # ── MaxDD rescue sweep: bad MaxDD but has tunable params — try better risk settings ──
+            try:
+                from param_sweep import sweep_generated_strategy
+                print(f"   🔧 MaxDD rescue sweep ({bt.max_drawdown:.1%} → trying risk param variations)...")
+                base_params = strategy.get_params()
+                sweep_results = sweep_generated_strategy(strategy.__class__, data, base_params)
+                for sr in (sweep_results or [])[:10]:
+                    if (sr.get('max_dd', -99) > HARD_FILTER_MAX_DD
+                            and sr.get('sharpe', 0) >= HARD_FILTER_MIN_SHARPE
+                            and sr.get('total_trades', 0) >= HARD_FILTER_MIN_TRADES
+                            and sr.get('time_in_market', 0) >= HARD_FILTER_MIN_EXPOSURE):
+                        print(f"   ✅ MaxDD rescued: {bt.max_drawdown:.1%}→{sr['max_dd']:.1%} "
+                              f"Sharpe {bt.sharpe_ratio:.2f}→{sr['sharpe']:.2f} | params={sr['params']}")
+                        # Patch bt attributes with rescued metrics
+                        bt.max_drawdown   = sr['max_dd']
+                        bt.sharpe_ratio   = sr['sharpe']
+                        bt.cagr           = sr['cagr']
+                        bt.calmar_ratio   = sr.get('calmar', bt.calmar_ratio)
+                        bt.sortino_ratio  = sr.get('sortino', bt.sharpe_ratio)
+                        bt.profit_factor  = sr.get('profit_factor', 1.0)
+                        bt.total_trades   = sr.get('total_trades', bt.total_trades)
+                        bt.time_in_market = sr.get('time_in_market', bt.time_in_market)
+                        result["swept_params"] = sr['params']
+                        rejection = None  # rescued — clear rejection
+                        break
+            except Exception as _rescue_e:
+                print(f"   ⚠️ MaxDD rescue sweep failed: {_rescue_e}")
+
         if rejection:
             result["error"] = f"Hard filter: {rejection}"
             record_result(history, strategy_id, result["name"], idea,
