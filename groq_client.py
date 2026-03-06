@@ -92,6 +92,9 @@ class GroqClient:
         # Per-model granularity: kimi-k2 rate limit on K1 doesn't block llama-4-scout on K1
         self._key_cooldown: Dict[tuple, float] = {}
 
+        # Models permanently skipped for this session (413 = prompt too large for that model)
+        self._model_skip: set = set()
+
         # Stats
         self.calls = 0
         self.successes = 0
@@ -177,6 +180,11 @@ class GroqClient:
                 return result
         except Exception as e:
             error_msg = str(e)
+            if '413' in error_msg or 'payload too large' in error_msg.lower():
+                # Prompt too large for this model — skip it for ALL keys this session
+                print(f"   ⚠️ Groq {model.split('/')[-1]} prompt too large (413) — skipping model for session")
+                self._model_skip.add(model)
+                return None
             if '429' in error_msg or 'rate_limit' in error_msg.lower():
                 print(f"   ⚠️ Groq {model.split('/')[-1]} {key_label} rate limited, cooldown {self.RATE_LIMIT_COOLDOWN}s")
                 self._mark_key_limited(key_index, model)  # Only block this (key, model) pair
@@ -205,7 +213,10 @@ class GroqClient:
             return None
 
         self.calls += 1
-        models = self.MODELS_BY_TASK.get(task, self.MODELS_BY_TASK["idea"])
+        all_models = self.MODELS_BY_TASK.get(task, self.MODELS_BY_TASK["idea"])
+        models = [m for m in all_models if m not in self._model_skip]
+        if not models:
+            models = all_models  # safety fallback if all skipped
 
         # Phase 1: Try dedicated pool keys — re-filter per model so a kimi-k2 rate limit
         # on K1 does NOT prevent llama-4-scout from using K1 in the same call.
