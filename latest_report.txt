@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-06 12:33:50
+   2026-03-06 13:12:06
 =======================================================
 
 📈 Overall
-  Total iterations: 3441
-  Successful: 917 (27%)
+  Total iterations: 3467
+  Successful: 920 (27%)
   Best: Strategy_Gen1920 (Composite: 0.4163)
   Hall of Fame: 0 strategies
 
-  This session: 75 iters, 4 ok
-  Duration: 1:08:47
-  LLM calls: 307 (Groq: 307 [Groq: 307/307 ok, 10 keys | pools: idea=64, code=71, fix=41, director=92, secretary=24, overflow=15 | models: llama-4-scout-17b-16e-instruct=104, llama-4-maverick-17b-128e-instruct=60, kimi-k2-instruct=58], GitHub: 0, Gemini: 0)
+  This session: 100 iters, 6 ok
+  Duration: 1:47:03
+  LLM calls: 422 (Groq: 422 [Groq: 422/422 ok, 10 keys | pools: idea=82, code=88, fix=62, director=122, secretary=36, overflow=32 | models: llama-4-scout-17b-16e-instruct=126, kimi-k2-instruct=81, llama-4-maverick-17b-128e-instruct=74 | cooling: 4 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -24,15 +24,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen3432: Strategy never enters the market (time_i
-  ✅ Strategy_Gen3433: Comp=0.2696 Sharpe=0.55 CAGR=12.7% MaxDD=-43.7%
-  ❌ Strategy_Gen3434: REJECTED: MaxDD=-68.9% worse than -50%
-  ❌ Strategy_Gen3435: REJECTED: Exposure=1.6% below 5%
-  ❌ Strategy_Gen3436: REJECTED: Exposure=1.5% below 5%
-  ❌ Strategy_Gen3437: REJECTED: MaxDD=-93.2% worse than -50%
-  ❌ Strategy_Gen3438: REJECTED: MaxDD=-94.8% worse than -50%
-  ❌ Strategy_Gen3439: AttributeError: 'numpy.float64' object h
-  ❌ Strategy_Gen3440: Strategy never enters the market (time_i
-  ❌ Strategy_Gen3441: REJECTED: MaxDD=-65.2% worse than -50%
+  ❌ Strategy_Gen3458: REJECTED: Exposure=1.4% below 5%
+  ❌ Strategy_Gen3459: REJECTED: Sharpe=-0.12 below 0.3
+  ❌ Strategy_Gen3460: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3461: KeyError: 'TEMA'
+Traceback (most recent 
+  ❌ Strategy_Gen3462: Strategy never enters the market (time_i
+  ❌ Strategy_Gen3463: REJECTED: Sharpe=0.09 below 0.3
+  ❌ Strategy_Gen3464: REJECTED: Sharpe=0.24 below 0.3
+  ❌ Strategy_Gen3465: Strategy never enters the market (time_i
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen3466: Strategy never enters the market (time_i
 
 =======================================================
