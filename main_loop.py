@@ -413,8 +413,19 @@ def load_history() -> Dict:
 
 
 def save_history(history: Dict):
-    with open(HISTORY_FILE, 'w') as f:
-        json.dump(history, f, indent=2, default=str)
+    """Save history with retry logic to handle OneDrive transient file locks."""
+    for attempt in range(5):
+        try:
+            tmp = HISTORY_FILE.with_suffix('.tmp')
+            with open(tmp, 'w', encoding='utf-8') as f:
+                json.dump(history, f, indent=2, default=str)
+            tmp.replace(HISTORY_FILE)  # atomic rename
+            return
+        except OSError as e:
+            if attempt < 4:
+                time.sleep(1 + attempt)  # back-off: 1, 2, 3, 4 seconds
+            else:
+                print(f"   ⚠️ save_history failed after 5 attempts: {e}")
 
 
 def backfill_fingerprints(history: Dict):
