@@ -941,8 +941,8 @@ class {class_name}(BaseStrategy):
         return signals.clip(-1, 1)
 
     def get_description(self) -> str:
-        return (f"{{self.__class__.__name__}}: entry>{self.entry_threshold}, "
-                f"SL={self.atr_mult}xATR, TP={self.tp_mult}xATR")
+        return (f"{{self.__class__.__name__}}: entry>{{self.entry_threshold}}, "
+                f"SL={{self.atr_mult}}xATR, TP={{self.tp_mult}}xATR")
 ```
 
 ADAPTATION GUIDE — replace the placeholder indicators with your strategy's logic:
