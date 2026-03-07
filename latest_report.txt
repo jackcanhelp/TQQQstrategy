@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-07 19:58:22
+   2026-03-07 20:06:33
 =======================================================
 
 📈 Overall
-  Total iterations: 4214
-  Successful: 995 (24%)
+  Total iterations: 4229
+  Successful: 988 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
-  Hall of Fame: 7 strategies
+  Hall of Fame: 8 strategies
 
-  This session: 175 iters, 22 ok
-  Duration: 4:22:36
-  LLM calls: 713 (Groq: 713 [Groq: 713/713 ok, 10 keys | pools: idea=132, code=148, fix=90, director=161, secretary=45, overflow=137 | models: kimi-k2-instruct=233, llama-4-scout-17b-16e-instruct=207, llama-4-maverick-17b-128e-instruct=120 | cooling: 12 keys], GitHub: 0, Gemini: 0)
+  This session: 175 iters, 18 ok
+  Duration: 4:24:27
+  LLM calls: 743 (Groq: 743 [Groq: 743/743 ok, 10 keys | pools: idea=123, code=175, fix=126, director=166, secretary=43, overflow=110 | models: llama-4-scout-17b-16e-instruct=257, kimi-k2-instruct=222, llama-4-maverick-17b-128e-instruct=154 | cooling: 6 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -22,7 +22,7 @@
   #4 Strategy_Gen2117: Comp=0.4163 Sharpe=1.28 CAGR=52.7% MaxDD=-40.3% | OOS Sharpe=1.44
   #5 Strategy_Gen521: Comp=0.0000 Sharpe=1.28 CAGR=52.4% MaxDD=-40.3%
 
-🥇 Hall of Fame (7)
+🥇 Hall of Fame (8)
 ───────────────────────────────────────────────────────
   ChampionRVI: Calmar=1.28 Sharpe=1.27 MaxDD=-40.3%
   ChampionRVI: Calmar=1.28 Sharpe=1.27 MaxDD=-40.3%
@@ -32,15 +32,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4205: REJECTED: MaxDD=-87.8% worse than -50%
-  ❌ Strategy_Gen4206: REJECTED: MaxDD=-81.3% worse than -50%
-  ❌ Strategy_Gen4207: REJECTED: MaxDD=-51.8% worse than -50%
-  ❌ Strategy_Gen4208: REJECTED: Sharpe=0.00 below 0.3
-  ❌ Strategy_Gen4209: REJECTED: MaxDD=-54.2% worse than -50%
-  ❌ Strategy_Gen4210: TypeError: ufunc 'bitwise_and' not suppo
-  ❌ Strategy_Gen4211: Strategy never enters the market (time_i
-  ✅ Cross_RVI_State_PPO_Cross_ATR_Spike: Comp=0.0000 Sharpe=0.97 CAGR=42.4% MaxDD=-49.1%
-  ✅ Cross_RVI_State_RVI_Trans_MACD_Bear: Comp=0.0000 Sharpe=0.92 CAGR=30.2% MaxDD=-45.4%
-  ❌ Strategy_Gen4212: REJECTED: Exposure=4.2% below 5%
+  ❌ Strategy_Gen4220: REJECTED: Sharpe=0.28 below 0.3
+  ❌ Strategy_Gen4221: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4222: ValueError: The truth value of a Series 
+  ❌ Strategy_Gen4223: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4224: REJECTED: Exposure=1.9% below 5%
+  ❌ Strategy_Gen4225: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4226: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4227: REJECTED: Sharpe=0.03 below 0.3
+  ✅ Cross_RVI_State_RVI_Trans_RSI_OB: Comp=0.0000 Sharpe=1.21 CAGR=49.7% MaxDD=-39.2%
+  ❌ Strategy_Gen4228: KeyError: 'SL_Price'
+Traceback (most rec
 
 =======================================================
