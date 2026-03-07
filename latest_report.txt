@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-07 22:26:39
+   2026-03-07 22:26:51
 =======================================================
 
 📈 Overall
-  Total iterations: 4294
-  Successful: 1007 (23%)
+  Total iterations: 4308
+  Successful: 999 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 8 strategies
 
-  This session: 250 iters, 29 ok
-  Duration: 6:50:53
-  LLM calls: 1050 (Groq: 1023 [Groq: 1023/1050 ok, 10 keys | pools: idea=136, code=220, fix=103, director=188, secretary=55, overflow=321 | models: kimi-k2-instruct=412, llama-4-scout-17b-16e-instruct=207, llama-4-maverick-17b-128e-instruct=183], GitHub: 27, Gemini: 0)
+  This session: 250 iters, 25 ok
+  Duration: 6:44:44
+  LLM calls: 1073 (Groq: 1073 [Groq: 1073/1073 ok, 10 keys | pools: idea=144, code=250, fix=183, director=215, secretary=57, overflow=224 | models: kimi-k2-instruct=360, llama-4-scout-17b-16e-instruct=358, llama-4-maverick-17b-128e-instruct=229], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,16 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4285: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4286: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4287: TypeError: ufunc 'bitwise_and' not suppo
-  ❌ Strategy_Gen4288: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4289: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4290: KeyError: 'HV_10_SMA20'
-Traceback (most 
-  ❌ Strategy_Gen4291: Failed to load strategy: Can't instantia
-  ✅ Strategy_Gen4292: Comp=0.2500 Sharpe=0.51 CAGR=11.8% MaxDD=-49.8%
+  ✅ Strategy_Gen4299: Comp=0.2914 Sharpe=0.73 CAGR=17.1% MaxDD=-46.5%
+  ❌ Strategy_Gen4300: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4301: REJECTED: MaxDD=-67.9% worse than -50%
+  ❌ Strategy_Gen4302: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4303: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4304: Strategy never enters the market (time_i
+  ✅ Strategy_Gen4305: Comp=0.2791 Sharpe=0.46 CAGR=8.3% MaxDD=-32.4%
+  ✅ Cross_RVI_State_MACD_Cross_Consec_Down: Comp=0.0000 Sharpe=0.96 CAGR=39.0% MaxDD=-50.0%
   ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen4293: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4306: Strategy never enters the market (time_i
 
 =======================================================
