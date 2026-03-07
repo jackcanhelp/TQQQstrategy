@@ -413,12 +413,46 @@ def load_history() -> Dict:
 
 
 def save_history(history: Dict):
-    """Save history with retry logic to handle OneDrive transient file locks."""
+    """
+    Save history with merge semantics + retry logic.
+    Merge strategy: disk version is used for EXISTING entries (preserves external
+    modifications like rescue sweep results). New entries from memory are appended.
+    Top-level stats use the higher value between disk and memory.
+    """
     for attempt in range(5):
         try:
             tmp = HISTORY_FILE.with_suffix('.tmp')
+
+            # Build merged history: prefer disk for existing entries, memory for new ones
+            merged = {k: v for k, v in history.items() if k != 'strategies'}
+            if HISTORY_FILE.exists():
+                try:
+                    with open(HISTORY_FILE, encoding='utf-8') as f:
+                        disk = json.load(f)
+                    # Existing entries: use disk version (preserves rescue sweep results)
+                    disk_by_id = {s['id']: s for s in disk.get('strategies', [])}
+                    mem_by_id  = {s['id']: s for s in history.get('strategies', [])}
+                    # Start with all disk entries, then add new memory-only entries
+                    merged_strats = list(disk_by_id.values())
+                    for sid, s in mem_by_id.items():
+                        if sid not in disk_by_id:
+                            merged_strats.append(s)
+                    merged['strategies'] = merged_strats
+                    # Top-level stats: use max across disk and memory
+                    merged['total_iterations'] = max(
+                        history.get('total_iterations', 0), disk.get('total_iterations', 0))
+                    if disk.get('best_composite', 0) > merged.get('best_composite', 0):
+                        merged['best_composite'] = disk['best_composite']
+                        merged['best_strategy']  = disk.get('best_strategy', merged.get('best_strategy'))
+                    # mode_stats: prefer memory (current session is more recent)
+                    merged['mode_stats'] = history.get('mode_stats', disk.get('mode_stats', {}))
+                except Exception:
+                    merged['strategies'] = history.get('strategies', [])  # fallback
+            else:
+                merged['strategies'] = history.get('strategies', [])
+
             with open(tmp, 'w', encoding='utf-8') as f:
-                json.dump(history, f, indent=2, default=str)
+                json.dump(merged, f, indent=2, default=str)
             tmp.replace(HISTORY_FILE)  # atomic rename
             return
         except OSError as e:
