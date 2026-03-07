@@ -1,13 +1,13 @@
 {
-  "total_iterations": 4068,
+  "total_iterations": 4094,
   "best_sharpe": 1.2312754360739595,
   "best_strategy": "Strategy_Gen995",
   "best_calmar": 1.1706648532193502,
   "best_composite": 0.6406664451649691,
   "mode_stats": {
     "2": {
-      "wins": 3,
-      "trials": 38
+      "wins": 4,
+      "trials": 41
     },
     "12": {
       "wins": 2,
@@ -15,19 +15,19 @@
     },
     "7": {
       "wins": 6,
-      "trials": 60
+      "trials": 61
     },
     "11": {
       "wins": 3,
       "trials": 51
     },
     "9": {
-      "wins": 6,
-      "trials": 60
+      "wins": 7,
+      "trials": 62
     },
     "0": {
       "wins": 5,
-      "trials": 43
+      "trials": 44
     },
     "10": {
       "wins": 2,
@@ -35,35 +35,35 @@
     },
     "14": {
       "wins": 8,
-      "trials": 66
+      "trials": 67
     },
     "1": {
-      "wins": 8,
-      "trials": 50
+      "wins": 10,
+      "trials": 56
     },
     "5": {
-      "wins": 8,
-      "trials": 50
+      "wins": 9,
+      "trials": 54
     },
     "8": {
       "wins": 8,
-      "trials": 66
+      "trials": 67
     },
     "6": {
       "wins": 1,
-      "trials": 32
+      "trials": 33
     },
     "4": {
-      "wins": 0,
-      "trials": 29
+      "wins": 1,
+      "trials": 33
     },
     "13": {
       "wins": 7,
       "trials": 64
     },
     "3": {
-      "wins": 6,
-      "trials": 46
+      "wins": 7,
+      "trials": 47
     }
   },
   "strategies": [
@@ -69861,6 +69861,681 @@
         "BB",
         "GARCH_Vol",
         "CTI"
+      ]
+    },
+    {
+      "id": 4069,
+      "name": "Strategy_Gen4069",
+      "idea": "1. Strategy Name: VoV_Momentum_GARCH_Stop\n\n2. Champion Module Usage:  \n   KEPT: Supertrend regime filter concept (but upgraded to throttle size).  \n   CHANGED: Replaced RVI state machine with VoV/ROC-5 transition logic; replaced fixed ATR exit with GARCH-scaled trailing stop.\n\n3. State Machine Logic:  \n   - Regime: Supertrend==1 (up-trend) AND HMM_Regime>0 (neutral/bull) \u2192 allow long; else cash.  \n   - VoV regime: VoV>1.5 \u2192 high vol-of-vol; ATR stop widened to 3\u00d7GARCH_Vol; VoV\u22641.5 \u2192 normal 1.5\u00d7G",
+      "sharpe": 0.7185389156143074,
+      "calmar": 0.5098060682954827,
+      "cagr": 0.21677221742605268,
+      "max_dd": -0.4252052513827903,
+      "composite": 0.3052,
+      "test_sharpe": 0.5793650183841901,
+      "test_cagr": 0.17092952396998062,
+      "test_max_dd": -0.3967565143226294,
+      "test_composite": 0.2921,
+      "failure_analysis": "SEVERE: Max drawdown of -42.5% is too deep | WORST MONTH: 2010-06 lost -19.4%",
+      "success": true,
+      "timestamp": "2026-03-07T16:08:21.478096",
+      "mode_used": 6,
+      "indicator_fingerprint": [
+        "RVI",
+        "ATR",
+        "HMM_Regime",
+        "GARCH_Vol"
+      ]
+    },
+    {
+      "id": 4067,
+      "name": "Strategy_Gen4067",
+      "idea": "### Strategy Name\nMeanReversion_ZScore_MACD_ATR\n\n### Kept vs Changed\n- **Kept**: Regime filter logic, trend logic from top strategies\n- **Changed**: Drawdown control mechanism, added Squeeze Pro indicator for risk management\n\n### State Machine Logic\n- **Regime States**: \n  - Bullish: DI_Plus > DI_Minus and ADX > 20\n  - Bearish: DI_Minus > DI_Plus and ADX > 20\n  - Neutral: ADX < 20 or DI_Plus == DI_Minus\n- **Transitions**:\n  - Enter long from Neutral/Bearish to Bullish\n\n### Entry Signal Logic\n- *",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.025%). Signal stats: min=0.0000, max=1.0000, mean",
+      "success": false,
+      "timestamp": "2026-03-07T16:18:00.815830",
+      "mode_used": 2,
+      "indicator_fingerprint": [
+        "RSI",
+        "MACD",
+        "ATR",
+        "EMA",
+        "ADX",
+        "DI_Plus",
+        "DI_Minus",
+        "ZScore",
+        "Drawdown"
+      ]
+    },
+    {
+      "id": 4068,
+      "name": "Strategy_Gen4068",
+      "idea": "### Strategy Name\nADX_Stoch_CTI_Squeeze\n\n### Champion Module Changes\n- **Retained Logic**: State transitions for entries and regime filters.\n- **Modified**: Incorporated ADX for momentum shift, Stoch_K/D for entry/exit, CTI for regime indication, and Squeeze Pro for risk control.\n\n### State Machine Logic\n- **States**: \n  - **Bullish**: ADX > 25 and CTI > 0.5\n  - **Neutral**: 20 \u2264 ADX \u2264 25 or -0.5 \u2264 CTI \u2264 0.5\n  - **Bearish**: ADX < 20 or CTI < -0.5\n- **Transitions**:\n  - **Entry Long**: Neutral/B",
+      "sharpe": -0.09069220938565901,
+      "calmar": 0.00862426852540713,
+      "cagr": 0.0031084408964912047,
+      "max_dd": -0.3604295120604982,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: Sharpe=-0.09 below 0.3",
+      "success": false,
+      "timestamp": "2026-03-07T16:18:10.668114",
+      "mode_used": 2,
+      "indicator_fingerprint": [
+        "ATR",
+        "ADX",
+        "Stoch",
+        "CTI"
+      ]
+    },
+    {
+      "id": 4070,
+      "name": "Strategy_Gen4070",
+      "idea": "1. Strategy Name: MACD_SMI_GARCH_TQQQ_v1\n\n2. Champion Module Changes:\n   - KEPT: State machine concept, regime filter requirement\n   - CHANGED: Replaced volume breakout entry with MACD/SMI combo, replaced ATR exit with GARCH vol trigger, replaced RVI regime with ADX\n\n3. State Machine Logic:\n   - REGIME: ADX > 25 \u2192 Trending (allow entries), ADX \u2264 25 \u2192 Choppy (cash only)\n   - POSITION: Flat \u2192 Long when entry triggers, Long \u2192 Flat when exit triggers\n   - VOL REGIME: GARCH_Vol \u2264 1.5 \u2192 Normal vol, GA",
+      "sharpe": -0.34700910998662604,
+      "calmar": 0.06571244510773516,
+      "cagr": -0.0286920190091432,
+      "max_dd": -0.43662991024155023,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: Sharpe=-0.35 below 0.3",
+      "success": false,
+      "timestamp": "2026-03-07T16:20:31.952431",
+      "mode_used": 8,
+      "indicator_fingerprint": [
+        "RVI",
+        "MACD",
+        "ATR",
+        "Volume",
+        "ADX",
+        "GARCH_Vol",
+        "SMI"
+      ]
+    },
+    {
+      "id": 4071,
+      "name": "Strategy_Gen4071",
+      "idea": "### Strategy Name\nTQQQ_PPO_Aroon_GARCH\n\n### Kept vs Changed\n- **Kept**: Volume Breakout Strategy's focus on momentum and regime filtering.\n- **Changed**: Replaced RVI with PPO for entry, and incorporated Aroon Oscillator for regime confirmation and GARCH_Vol for risk control.\n\n### State Machine Logic\n- **States**: \n  - **Bear**: HMM_Regime = 0\n  - **Neutral**: HMM_Regime = 1\n  - **Bull**: HMM_Regime = 2\n- **Transitions**:\n  - **Entry**: PPO crosses above 0 with Aroon_Osc > 0 (uptrend confirmatio",
+      "sharpe": -0.4958487935504246,
+      "calmar": 0.2524426875808765,
+      "cagr": -0.250450931722749,
+      "max_dd": -0.9921100671316162,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: MaxDD=-99.2% worse than -50%",
+      "success": false,
+      "timestamp": "2026-03-07T16:21:46.720661",
+      "mode_used": 14,
+      "indicator_fingerprint": [
+        "RVI",
+        "ATR",
+        "Volume",
+        "Aroon",
+        "HMM_Regime",
+        "GARCH_Vol"
+      ]
+    },
+    {
+      "id": 4072,
+      "name": "Strategy_Gen4072",
+      "idea": "### Strategy Name\nStoch_D_CTI_HMM_Strategy\n\n### Kept vs Changed\n- **Kept**: Volume Breakout strategy's core concept of using a trend filter and volume confirmation but modified to fit new requirements.\n- **Changed**: Replaced RVI with Stoch_D for entry signals, incorporated CTI for regime filtering, and added HMM_Regime=0 for stop activation.\n\n### State Machine Logic\nThe strategy uses a state machine with the following states:\n- **Bullish Regime**: HMM_Regime = 2 or CTI > 0.8\n- **Bearish Regime*",
+      "sharpe": -0.01990889009216873,
+      "calmar": 0.10318557650779792,
+      "cagr": 0.01587750301986235,
+      "max_dd": -0.15387327916574134,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: Exposure=2.0% below 5%",
+      "success": false,
+      "timestamp": "2026-03-07T16:21:58.788710",
+      "mode_used": 7,
+      "indicator_fingerprint": [
+        "RVI",
+        "ATR",
+        "Volume",
+        "Stoch",
+        "HMM_Regime",
+        "CTI"
+      ]
+    },
+    {
+      "id": 4073,
+      "name": "Strategy_Gen4073",
+      "idea": "### Aroon_Up Thrust Strategy with Stoch_D Exit and GARCH_Volatility Stops\n\n#### 1. Strategy Name\nAroonThrust_StochExit_GARCHStops\n\n#### 2. Champion Module Changes\n- **Changed from**: Volume Breakout Strategy (Champion #2)\n- **New Approach**: Aroon_Up thrust-based entries with Stoch_D exit confirmation and dynamic ATR_Pct stops based on GARCH_Volatility\n\n#### 3. State Machine Logic\n- **States**: \n  - **Bear Regime**: HMM_Regime = 0 or GARCH_Vol > 30%\n  - **Neutral Regime**: HMM_Regime = 1\n  - **B",
+      "sharpe": 0.6424755176029124,
+      "calmar": 0.41848247678005307,
+      "cagr": 0.136549254201197,
+      "max_dd": -0.32629622929938085,
+      "composite": 0.2989,
+      "test_sharpe": 0.5357303278287592,
+      "test_cagr": 0.11204579551162497,
+      "test_max_dd": -0.17350542809540376,
+      "test_composite": 0.3344,
+      "failure_analysis": "LOW CALMAR: 0.23 (target: >1.0) | SEVERE: Max drawdown of -34.6% is too deep | LOW SHARPE: 0.40 indicates poor risk-adjusted returns | LOW EXPOSURE: Only 14.7% time in market | WORST MONTH: 2018-10 lost -21.6%",
+      "success": true,
+      "timestamp": "2026-03-07T16:23:11.403559",
+      "mode_used": 9,
+      "indicator_fingerprint": [
+        "ATR",
+        "Volume",
+        "Stoch",
+        "Aroon",
+        "HMM_Regime",
+        "GARCH_Vol"
+      ]
+    },
+    {
+      "id": 4074,
+      "name": "Strategy_Gen4074",
+      "idea": "### Strategy Name\nTQQQ_ZScore_Aroon_Strategy\n\n### Kept vs Changed\n- **Kept**: Regime filter logic similar to Volume Breakout (Champion #2), using a combination of trend and volatility filters.\n- **Changed**: \n  - **Entry Logic**: Replaced volume surge with ZScore for mean reversion and Aroon_Up for momentum confirmation.\n  - **Exit Logic**: Adaptive ATR-based stop loss.\n\n### State Machine Logic\nThe strategy uses a state machine with the following regimes:\n- **Bear Regime** (HMM_Regime = 0): No e",
+      "sharpe": -0.22332449311343355,
+      "calmar": 0.021372719370693523,
+      "cagr": 0.0048631580355351645,
+      "max_dd": -0.2275404430848221,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: Exposure=1.1% below 5%",
+      "success": false,
+      "timestamp": "2026-03-07T16:23:22.623130",
+      "mode_used": 9,
+      "indicator_fingerprint": [
+        "RSI",
+        "ATR",
+        "Volume",
+        "Aroon",
+        "HMM_Regime",
+        "ZScore"
+      ]
+    },
+    {
+      "id": 4075,
+      "name": "Strategy_Gen4075",
+      "idea": "### Strategy Name\nSMA200_MACD_Trend_Quality\n\n### Champion Module Changes\n- **Kept**: RVI state machine concept, regime filter\n- **Changed**: Replaced RVI with SMA200 for trend quality assessment, integrated MACD for entry/exit signals\n\n### State Machine Logic\n- **Regime Filter**: \n  - Bullish Regime: `SMA_200 > Close`\n  - Bearish Regime: `SMA_200 < Close`\n  - Neutral Regime: `SMA_200 == Close` (not used for trading)\n\n- **Entry/Exit States**:\n  - **Long Entry**: Transition from `SMA_200 < Close` ",
+      "sharpe": 0.2069086238077747,
+      "calmar": 0.07598461850376984,
+      "cagr": 0.04164214203400185,
+      "max_dd": -0.5480338370315809,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: MaxDD=-54.8% worse than -50%",
+      "success": false,
+      "timestamp": "2026-03-07T16:26:54.361080",
+      "mode_used": 1,
+      "indicator_fingerprint": [
+        "RVI",
+        "MACD",
+        "ATR",
+        "SMA",
+        "EMA",
+        "CTI"
+      ]
+    },
+    {
+      "id": 4076,
+      "name": "Strategy_Gen4076",
+      "idea": "### Strategy Name\nADX_Momentum_Shift\n\n### Champion Module Changes\n- **Kept**: RVI state transitions for regime filter and momentum assessment\n- **Changed**: Incorporated ADX and Stochastics for entry/exit logic, added Squeeze_Pro_Hist for risk management\n\n### State Machine Logic\n- **Regime States**:\n  - Bullish: ADX > 25 and RVI_Refined > 59\n  - Neutral: 42 \u2264 RVI_Refined \u2264 59\n  - Bearish: RVI_Refined < 42\n- **Transition Signals**: Enter long on transition from Neutral/Bearish to Bullish\n\n### Ent",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.198%). Signal stats: min=0.0000, max=1.0000, mean",
+      "success": false,
+      "timestamp": "2026-03-07T16:27:07.787211",
+      "mode_used": 5,
+      "indicator_fingerprint": [
+        "RVI",
+        "RVI_Refined",
+        "RVI_State",
+        "ATR",
+        "ADX",
+        "Stoch"
+      ]
+    },
+    {
+      "id": 4077,
+      "name": "Strategy_Gen4077",
+      "idea": "### Strategy Name\nStoch_Aroon_BB_Squeeze\n\n### Champion Module Changes\n- **Kept**: RVI State Machine Logic (modified for new indicators)\n- **Changed**: Replaced RVI with Stoch_K and Aroon indicators for entry/exit signals, added BB_Squeeze for risk management.\n\n### State Machine Logic\n- **Regime Filter States**:\n  - **High Volatility**: ADX \u2264 25\n  - **Low Volatility**: ADX > 25 and BB_Squeeze = 1\n- **Market States**:\n  - **Bullish**: Stoch_K < 20 and Aroon_Up > 70\n  - **Bearish**: Stoch_K > 80 or",
+      "sharpe": 0.003386723143446725,
+      "calmar": 0.09349315970734406,
+      "cagr": 0.01654978905073312,
+      "max_dd": -0.1770160416284776,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: Exposure=2.2% below 5%",
+      "success": false,
+      "timestamp": "2026-03-07T16:27:27.989949",
+      "mode_used": 3,
+      "indicator_fingerprint": [
+        "RVI",
+        "ATR",
+        "BB",
+        "ADX",
+        "Stoch",
+        "Aroon"
+      ]
+    },
+    {
+      "id": 4078,
+      "name": "Strategy_Gen4078",
+      "idea": "### Strategy Name\nKDJ_MFI_BB_Squeeze\n\n### Champion Module Changes\n- **Kept**: RVI State Machine Logic (transition-based entry)\n- **Changed**: \n  - Incorporated KDJ_J, MFI, and BB_Squeeze indicators.\n  - Added regime filter based on SMA_20 > SMA_50.\n\n### State Machine Logic\n- **States**: \n  - Bullish: KDJ_J < 20 and MFI < 50 (low MFI indicates potential buying pressure)\n  - Bearish: KDJ_J > 80 and MFI > 50 (high MFI indicates potential selling pressure)\n  - Neutral: Between bullish and bearish st",
+      "sharpe": -0.019402127535248732,
+      "calmar": 0.00829561856134085,
+      "cagr": 0.003895632657851422,
+      "max_dd": -0.469601227328099,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: Exposure=4.9% below 5%",
+      "success": false,
+      "timestamp": "2026-03-07T16:27:38.760190",
+      "mode_used": 0,
+      "indicator_fingerprint": [
+        "RVI",
+        "ATR",
+        "BB",
+        "SMA",
+        "Volume",
+        "Stoch",
+        "KDJ"
+      ]
+    },
+    {
+      "id": 4079,
+      "name": "Strategy_Gen4079",
+      "idea": "### Strategy Name\nMFI_Supertrend_BB_Squeeze\n\n### Champion Module Changes\n- **Kept**: RVI State Machine Logic (Champion RVI) for regime filter\n- **Changed**: \n  - **Entry Logic**: MFI < 20 and Supertrend > price\n  - **Exit Logic**: MFI > 80 or Supertrend < price\n  - **Risk Management**: Incorporated BB_Squeeze\n\n### State Machine Logic\n- **Regime Filter (RVI_State)**: \n  - Green (bullish): RVI_Refined > 59\n  - Orange (neutral): 42 \u2264 RVI_Refined \u2264 59\n  - Red (bearish): RVI_Refined < 42\n\n### Entry S",
+      "sharpe": 0.07240245082846085,
+      "calmar": 0.044613149672886085,
+      "cagr": 0.019998715083725083,
+      "max_dd": -0.4482695176278806,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: Sharpe=0.07 below 0.3",
+      "success": false,
+      "timestamp": "2026-03-07T16:27:49.838829",
+      "mode_used": 4,
+      "indicator_fingerprint": [
+        "RVI",
+        "RVI_Refined",
+        "RVI_State",
+        "ATR",
+        "BB",
+        "EMA"
+      ]
+    },
+    {
+      "id": 4080,
+      "name": "Strategy_Gen4080",
+      "idea": "### Strategy Name\nTQQQ_Aroon_HV_SMA20\n\n### Champion Module Changes\n- **Kept**: Using a regime filter similar to the Champion RVI strategy.\n- **Changed**: \n  - **Entry Logic**: Replaced RVI state transitions with Aroon_Up and HV_30 conditions.\n  - **Added**: Squeeze_Pro_Hist for enhanced risk management during volatile periods.\n\n### State Machine Logic\nThe strategy uses a state machine based on the regime filter (SMA_20) and volatility conditions:\n- **Bull Regime**: Close > SMA_20\n- **Volatility ",
+      "sharpe": -0.646949678143065,
+      "calmar": 0.03354980342818971,
+      "cagr": -0.003074658062596436,
+      "max_dd": -0.09164459246914698,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: Only 6 trades (min=10)",
+      "success": false,
+      "timestamp": "2026-03-07T16:28:08.210112",
+      "mode_used": 1,
+      "indicator_fingerprint": [
+        "RVI",
+        "ATR",
+        "SMA",
+        "Aroon"
+      ]
+    },
+    {
+      "id": 4081,
+      "name": "Strategy_Gen4081",
+      "idea": "### MACD Gap Strategy with Donchian Regime Filter and Squeeze Pro Histogram\n\n#### 1. Strategy Name\nMACD_Gap_Squeeze\n\n#### 2. Champion Module Changes\n- **Kept**: RVI State Machine Logic (for regime filter), Volume Breakout concepts\n- **Changed**: Incorporated MACD and Gap_Pct for entry/exit, Donchian_upper for regime filter, and Squeeze_Pro_Hist for risk management\n\n#### 3. State Machine Logic\n- **Regime States**:\n  - Bullish: Close > Donchian_upper\n  - Neutral: Close <= Donchian_upper and Close ",
+      "sharpe": -0.7478267455407307,
+      "calmar": 0.4006185484035421,
+      "cagr": -0.40053943766707845,
+      "max_dd": -0.9998025285230079,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: MaxDD=-100.0% worse than -50%",
+      "success": false,
+      "timestamp": "2026-03-07T16:29:20.980162",
+      "mode_used": 5,
+      "indicator_fingerprint": [
+        "RVI",
+        "MACD",
+        "Volume"
+      ]
+    },
+    {
+      "id": 4082,
+      "name": "Strategy_Gen4082",
+      "idea": "### Stochastic Volatility Stop Strategy\n\n#### 1. Strategy Name\nStochasticVolatilityStop_TQQQ\n\n#### 2. Champion Module Changes\n- **Kept**: RVI state transition logic for capturing momentum building.\n- **Changed**: Incorporated Stochastic Oscillator, Historical Volatility, and Squeeze Pro Histogram for enhanced risk management and entry/exit precision.\n\n#### 3. State Machine Logic\nThe strategy utilizes a state machine with the following states:\n- **Bullish State**: Stoch_K > Stoch_D and HV_10 < 15",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.965%). Signal stats: min=0.0000, max=1.0000, mean",
+      "success": false,
+      "timestamp": "2026-03-07T16:29:34.628821",
+      "mode_used": 2,
+      "indicator_fingerprint": [
+        "RVI",
+        "SMA",
+        "EMA",
+        "Stoch"
+      ]
+    },
+    {
+      "id": 4083,
+      "name": "Strategy_Gen4083",
+      "idea": "### Strategy Name\nMFI_BB_HMM_Strategy\n\n### Champion Module Changes\n- **Kept**: RVI_State (Champion #1) for regime filtering, inspired state transition logic\n- **Changed**: Replaced RVI with MFI for entry signal; added BB_Squeeze for volatility filter\n\n### State Machine Logic\n- **Regime Filter**: HMM_Regime (0=bear, 1=neutral, 2=bull)\n  - **Entry only in**: HMM_Regime == 2 (bullish regime)\n  - **Cash position**: HMM_Regime == 0 or 1 (bear/neutral)\n\n### Entry Signal Logic\n- **Long Entry**: MFI < 2",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.000%). Signal stats: min=0.0000, max=0.0000, mean",
+      "success": false,
+      "timestamp": "2026-03-07T16:29:53.126502",
+      "mode_used": 6,
+      "indicator_fingerprint": [
+        "RVI",
+        "RVI_State",
+        "ATR",
+        "BB",
+        "HMM_Regime"
+      ]
+    },
+    {
+      "id": 4084,
+      "name": "Strategy_Gen4084",
+      "idea": "### Strategy Name\nTQQQ_OBV_RSI_GARCH\n\n### Champion Module Changes\n- **Base**: RVI State Machine (modified to integrate OBV_SMA crossover and RSI exit)\n- **Added**: GARCH_Vol for regime-dependent cash allocation and Sim_VIX for dynamic position sizing\n- **Modified**: Exit logic to use ATR-based adaptive stop loss\n\n### State Machine Logic\n- **Regime States**: \n  - **Bear**: HMM_Regime == 0\n  - **Neutral**: HMM_Regime == 1\n  - **Bull**: HMM_Regime == 2\n- **Volatility States**: \n  - **Low Vol**: BB_",
+      "sharpe": 0.8559577551440449,
+      "calmar": 0.7587409887211662,
+      "cagr": 0.16561690564259712,
+      "max_dd": -0.21827858004842882,
+      "composite": 0.3553,
+      "test_sharpe": 0.9373486525200045,
+      "test_cagr": 0.23590750400618843,
+      "test_max_dd": -0.17927207712741378,
+      "test_composite": 0.4125,
+      "failure_analysis": "WARNING: Max drawdown of -26.9% needs improvement | LOW EXPOSURE: Only 17.9% time in market | WORST MONTH: 2010-08 lost -14.4%",
+      "success": true,
+      "timestamp": "2026-03-07T16:32:20.358413",
+      "mode_used": 3,
+      "indicator_fingerprint": [
+        "RVI",
+        "RSI",
+        "ATR",
+        "BB",
+        "SMA",
+        "OBV",
+        "HMM_Regime",
+        "GARCH_Vol"
+      ]
+    },
+    {
+      "id": 4085,
+      "name": "Strategy_Gen4085",
+      "idea": "### Strategy Name\nStoch_ADX_BB_Squeeze\n\n### Champion Module Changes\n- **Kept**: RVI_State transition logic for entries, regime filter\n- **Changed**: \n  - **Entry**: MFI and Stoch_D cross instead of RVI\n  - **Regime Filter**: HMM_Regime instead of RVI_State\n  - **Position Sizing**: ATR_Pct for adaptive sizing\n  - **Volatility Compression**: Incorporated BB_Squeeze\n\n### State Machine Logic\n- **Regime States**: HMM_Regime (0=bear, 1=neutral, 2=bull)\n- **Entry Transition**: \n  - Long: Stoch_D crosse",
+      "sharpe": -0.16553762259316412,
+      "calmar": 0.08691915620957895,
+      "cagr": 0.008794214621351548,
+      "max_dd": -0.10117694424169271,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: Exposure=1.9% below 5%",
+      "success": false,
+      "timestamp": "2026-03-07T16:32:35.425209",
+      "mode_used": 3,
+      "indicator_fingerprint": [
+        "RVI",
+        "RVI_State",
+        "ATR",
+        "BB",
+        "ADX",
+        "Stoch",
+        "HMM_Regime",
+        "CTI"
+      ]
+    },
+    {
+      "id": 4086,
+      "name": "Strategy_Gen4086",
+      "idea": "### Strategy Name\nTQQQ_BB_HMM_Strategy\n\n### Champion Module Changes\n- **Kept**: RVI_State for regime filtering and state transitions.\n- **Changed**: Incorporated BB_Squeeze for volatility compression and HMM_Regime for adaptive position sizing.\n\n### State Machine Logic\n- **Regime States**: \n  - **Bull** (HMM_Regime = 2)\n  - **Neutral** (HMM_Regime = 1)\n  - **Bear** (HMM_Regime = 0)\n- **Volatility States**: \n  - **Squeeze** (BB_Squeeze = 1)\n  - **No Squeeze** (BB_Squeeze = 0)\n\n### Entry Signal Lo",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.297%). Signal stats: min=0.0000, max=1.0000, mean",
+      "success": false,
+      "timestamp": "2026-03-07T16:32:46.799327",
+      "mode_used": 3,
+      "indicator_fingerprint": [
+        "RVI",
+        "RVI_State",
+        "ATR",
+        "BB",
+        "SMA",
+        "HMM_Regime"
+      ]
+    },
+    {
+      "id": 4087,
+      "name": "Strategy_Gen4087",
+      "idea": "### Strategy Name\nTQQQ_BB_HMM_Strategy\n\n### Champion Module Changes\n- **Kept**: RVI_State for regime filtering and state transitions for entries\n- **Changed**: Incorporated BB_Squeeze for volatility compression and HMM_Regime for adaptive position sizing\n\n### State Machine Logic\n- **Regime States**: \n  - **Bear**: HMM_Regime = 0\n  - **Neutral**: HMM_Regime = 1\n  - **Bull**: HMM_Regime = 2\n- **Volatility States**:\n  - **Low Volatility**: BB_Squeeze = 1\n  - **High Volatility**: BB_Squeeze = 0\n\n###",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.074%). Signal stats: min=0.0000, max=1.0000, mean",
+      "success": false,
+      "timestamp": "2026-03-07T16:32:58.066538",
+      "mode_used": 3,
+      "indicator_fingerprint": [
+        "RVI",
+        "RVI_Refined",
+        "RVI_State",
+        "ATR",
+        "BB",
+        "HMM_Regime"
+      ]
+    },
+    {
+      "id": 4088,
+      "name": "Strategy_Gen4088",
+      "idea": "### Strategy Name\nElder_Bull_MACD_BB_Strategy\n\n### Champion Module Changes\n- **Kept**: Focus on state transitions and regime filters from Champion RVI.\n- **Changed**: Replaced RVI with Elder_Bull for entry, MACD_hist for exit, and added BB_upper as a regime boundary.\n\n### State Machine Logic\n- **States**: \n  - **Bull**: Elder_Bull > 70\n  - **Neutral**: 30 \u2264 Elder_Bull \u2264 70\n  - **Bear**: Elder_Bull < 30\n- **Transitions**:\n  - **Entry**: Transition from Neutral/Bear \u2192 Bull.\n  - **Exit**: MACD_hist",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "KeyError: 'SL_price'\nTraceback (most recent call last):\n  File \"C:\\Users\\Jack Chang\\AppData\\Roaming\\",
+      "success": false,
+      "timestamp": "2026-03-07T16:33:18.027255",
+      "mode_used": 0,
+      "indicator_fingerprint": [
+        "RVI",
+        "MACD",
+        "ATR",
+        "BB",
+        "SMA",
+        "EMA",
+        "Elder_Bull",
+        "Elder_Bear"
+      ]
+    },
+    {
+      "id": 4089,
+      "name": "Strategy_Gen4089",
+      "idea": "### Strategy Name\nElder_Bull_BB_Trend_Filter\n\n### Champion Module Changes\n- **Kept**: Elder_Bull and Elder_Bear for momentum signals, regime filter concept\n- **Changed**: Incorporated BB_upper for dynamic regime filtering, ATR_Pct for trailing stops, and added a volatility management filter using BB_Squeeze\n\n### State Machine Logic\n- **States**: \n  - **Bullish**: Elder_Bull > 0 and BB_upper > Close\n  - **Neutral**: Elder_Bull <= 0 or BB_upper <= Close\n- **Transitions**:\n  - **Entry**: Transition",
+      "sharpe": 0.12832521899642957,
+      "calmar": 0.016757049078635743,
+      "cagr": -0.014340318143987174,
+      "max_dd": -0.8557782504958011,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: MaxDD=-85.6% worse than -50%",
+      "success": false,
+      "timestamp": "2026-03-07T16:34:32.677265",
+      "mode_used": 1,
+      "indicator_fingerprint": [
+        "ATR",
+        "BB",
+        "SMA",
+        "Elder_Bull",
+        "Elder_Bear"
+      ]
+    },
+    {
+      "id": 4090,
+      "name": "Strategy_Gen4090",
+      "idea": "### Strategy Name\nTQQQ Supertrend MACD Donchian\n\n### Champion Module Changes\n- **Kept**: RVI State transitions for capturing momentum build-up\n- **Changed**: \n  - **Entry**: Supertrend instead of RVI state transitions\n  - **Exit**: MACD_hist instead of RVI thresholds\n  - **Regime Filter**: Donchian_upper for dynamic volatility filtering\n  - **Added**: SMA_200 for trend quality assessment\n\n### State Machine Logic\n- **Trend States**: Defined by Supertrend (1=up, 0=down)\n- **Regime States**: \n  - *",
+      "sharpe": 0.14241226588889858,
+      "calmar": 0.04262825152536346,
+      "cagr": 0.028637479076248473,
+      "max_dd": -0.6717957704460247,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: MaxDD=-67.2% worse than -50%",
+      "success": false,
+      "timestamp": "2026-03-07T16:35:41.044766",
+      "mode_used": 5,
+      "indicator_fingerprint": [
+        "RVI",
+        "MACD",
+        "ATR",
+        "SMA",
+        "CTI"
+      ]
+    },
+    {
+      "id": 4091,
+      "name": "Strategy_Gen4091",
+      "idea": "### Strategy Name\nTQQQ_BB_Squeeze_ROC_SMA_Stoch\n\n### Kept vs Changed\n- **Kept**: \n  - BB_Squeeze for momentum signal\n  - ROC_5 for confirmation\n  - SMA_20 for regime filter\n  - Stoch_K for exit signal\n- **Changed**: \n  - Incorporated additional risk management using ATR_Pct and GARCH_Vol\n\n### State Machine Logic\n- **States**: \n  - **Bull**: BB_Squeeze = 1 and ROC_5 > 0\n  - **Neutral**: BB_Squeeze = 0 or ROC_5 = 0\n  - **Bear**: BB_Squeeze = 1 and ROC_5 < 0\n- **Transitions**:\n  - **Entry Long**: N",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "AttributeError: 'Strategy_Gen4091' object has no attribute 'entry_signal'\nTraceback (most recent cal",
+      "success": false,
+      "timestamp": "2026-03-07T16:35:55.267007",
+      "mode_used": 2,
+      "indicator_fingerprint": [
+        "ATR",
+        "BB",
+        "SMA",
+        "Stoch",
+        "GARCH_Vol"
+      ]
+    },
+    {
+      "id": 4092,
+      "name": "Strategy_Gen4092",
+      "idea": "### Strategy Name\nTSI_Mean_Reversion_Elder_Bull_BB\n\n### Champion Module Changes\n- **Kept**: RVI state transition logic for entries\n- **Changed**: \n  - **Entry Logic**: Replaced RVI with TSI mean reversion entries.\n  - **Regime Filter**: Incorporated Elder_Bull for bullish regime confirmation.\n  - **Exit Logic**: Implemented BB_pct for adaptive exits.\n\n### State Machine Logic\n- **Regime States**: \n  - **Bullish**: Elder_Bull > 0\n  - **Neutral**: Elder_Bull = 0\n  - **Bearish**: Elder_Bull < 0\n- **",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.025%). Signal stats: min=-1.0000, max=0.0000, mea",
+      "success": false,
+      "timestamp": "2026-03-07T16:36:16.004798",
+      "mode_used": 6,
+      "indicator_fingerprint": [
+        "RVI",
+        "RSI",
+        "ATR",
+        "BB",
+        "EMA",
+        "TSI",
+        "Elder_Bull",
+        "Elder_Bear",
+        "Drawdown"
       ]
     }
   ]
