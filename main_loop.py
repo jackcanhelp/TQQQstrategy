@@ -861,115 +861,123 @@ STRATEGY IDEA:
 {indicator_menu}
 
 ═══════════════════════════════════════════════════════════════
-🧬 REQUIRED CODE STRUCTURE — MUST FOLLOW EXACTLY
+🧬 REQUIRED CODE STRUCTURE — COPY THIS PATTERN EXACTLY
 ═══════════════════════════════════════════════════════════════
-```
+# This template already solves the two most common rejection causes:
+# (1) time_in_market=0  →  entry uses OR logic, fires on ~15% of days
+# (2) MaxDD < -50%      →  ATR stop-loss exits every losing trade
+#
+# ADAPT the indicators/thresholds to match YOUR strategy idea.
+# Keep the stop-loss + tp_mult structure — do NOT remove it.
+
+```python
 from strategy_base import BaseStrategy
 import pandas as pd
 import numpy as np
 
 class {class_name}(BaseStrategy):
-    # REQUIRED: __init__ with 3-5 KEY tunable parameters (thresholds, periods, multipliers)
-    # Choose parameters that most affect THIS strategy's entry/exit/regime logic
-    def __init__(self, bull_threshold=59.0, bear_threshold=42.0, atr_mult=1.5, rsi_period=14):
+    def __init__(self, entry_threshold=55.0, exit_threshold=70.0,
+                 atr_mult=1.5, tp_mult=2.5, regime_period=20):
         super().__init__()
-        self.bull_threshold = bull_threshold   # example: RVI bull level
-        self.bear_threshold = bear_threshold   # example: RVI bear level
-        self.atr_mult = atr_mult               # example: ATR stop multiplier
-        self.rsi_period = rsi_period           # example: RSI lookback period
+        self.entry_threshold = entry_threshold  # ADAPT: your entry signal level
+        self.exit_threshold  = exit_threshold   # ADAPT: your exit signal level
+        self.atr_mult        = atr_mult         # stop-loss = entry - ATR * atr_mult
+        self.tp_mult         = tp_mult          # take-profit = entry + ATR * tp_mult
+        self.regime_period   = regime_period    # ADAPT: lookback for regime filter
 
-    # REQUIRED: get_params() — enables automatic parameter sweep
     def get_params(self) -> dict:
         return {{
-            'bull_threshold': self.bull_threshold,
-            'bear_threshold': self.bear_threshold,
-            'atr_mult': self.atr_mult,
-            'rsi_period': self.rsi_period,
+            'entry_threshold': self.entry_threshold,
+            'exit_threshold':  self.exit_threshold,
+            'atr_mult':        self.atr_mult,
+            'tp_mult':         self.tp_mult,
+            'regime_period':   self.regime_period,
         }}
 
     def init(self, data: pd.DataFrame):
         self.data = data
-        # All indicators PRE-CALCULATED in self.data
-        # Use self.bull_threshold etc. instead of hardcoded numbers!
-
-    def _get_state(self) -> pd.Series:
-        state = pd.Series('neutral', index=self.data.index)
-        state[self.data['RVI_Refined'] > self.bull_threshold] = 'bull'  # use self.param!
-        state[self.data['RVI_Refined'] < self.bear_threshold] = 'bear'
-        return state
 
     def generate_signals(self) -> pd.Series:
-        state = self._get_state()
-        prev_state = state.shift(1).fillna('unknown')
+        close  = self.data['Close']
+        atr    = self.data['ATR'].fillna(method='bfill')
+        # ADAPT: replace RSI_14/MACD/SMA_20 with your strategy's indicators
+        rsi    = self.data['RSI_14'].fillna(50)
+        macd   = self.data['MACD'].fillna(0)
+        sma    = self.data['SMA_20'].fillna(close)
+
         signals = pd.Series(0.0, index=self.data.index)
-        position = 0
-        for i in range(len(self.data)):
-            curr = state.iloc[i]
-            prev = prev_state.iloc[i]
-            if prev in ('neutral', 'bear') and curr == 'bull':
-                position = 1
-            elif position == 1 and <exit_condition>:
-                position = 0
+        position   = 0
+        entry_price = 0.0
+        sl_price    = 0.0
+        tp_price    = 0.0
+
+        for i in range(1, len(self.data)):
+            c = close.iloc[i]
+
+            if position == 0:
+                # ── ENTRY: use OR between conditions so it fires on ≥10% of days ──
+                # ADAPT this block to your strategy idea — keep the OR structure
+                regime_ok = c > sma.iloc[i]                        # trend filter
+                signal_ok = (rsi.iloc[i] > self.entry_threshold or  # primary signal
+                             macd.iloc[i] > 0)                      # OR secondary
+                if regime_ok and signal_ok:
+                    position    = 1
+                    entry_price = c
+                    sl_price    = c - atr.iloc[i] * self.atr_mult  # REQUIRED stop
+                    tp_price    = c + atr.iloc[i] * self.tp_mult   # REQUIRED target
+
+            elif position == 1:
+                # ── EXIT: stop-loss OR take-profit OR signal reversal ──
+                stop_hit   = c < sl_price
+                target_hit = c > tp_price
+                # ADAPT: add your own exit signal here (keep stop_hit / target_hit)
+                sig_exit   = rsi.iloc[i] > self.exit_threshold
+                if stop_hit or target_hit or sig_exit:
+                    position    = 0
+                    entry_price = sl_price = tp_price = 0.0
+
             signals.iloc[i] = float(position)
+
         return signals.clip(-1, 1)
 
     def get_description(self) -> str:
-        return f"Description — thresholds: {{self.bull_threshold}}/{{self.bear_threshold}}"
+        return (f"{{self.__class__.__name__}}: entry>{self.entry_threshold}, "
+                f"SL={self.atr_mult}xATR, TP={self.tp_mult}xATR")
 ```
-⚠️ ADAPT the parameter names/defaults to YOUR strategy's actual logic.
-   Use self.your_param everywhere instead of hardcoded numbers.
+
+ADAPTATION GUIDE — replace the placeholder indicators with your strategy's logic:
+  • regime_ok: use ADX>25, DI_Plus>DI_Minus, HMM_Regime==2, SMA trend, etc.
+  • signal_ok: use your entry indicators with OR between groups (NOT 3+ ANDs)
+  • sig_exit:  use your exit indicator, or remove if stop/TP is sufficient
+  • Keep atr_mult and tp_mult as __init__ params — they are swept automatically
 
 ═══════════════════════════════════════════════════════════════
-⚡ KEY PATTERNS TO USE
+🚨 TWO HARD REJECTIONS — READ BEFORE WRITING CODE
 ═══════════════════════════════════════════════════════════════
 
-STATE TRANSITION ENTRY (better than threshold):
-  # BAD: signals[self.data['RSI'] > 50] = 1.0  (too many false signals)
-  # GOOD: buy on state transition neutral→bull (captures momentum shift)
+❌ REJECTION 1 — time_in_market=0 (strategy never enters):
+  CAUSE: too many AND conditions → entry fires 0 times over 5 years
+  BAD (fires <1%):  rsi>70 AND macd>0 AND vol>2.5x AND aroon>80 AND adx>30
+  GOOD (fires 10%): (rsi>55 AND macd>0) OR (vol>1.5x AND close>sma)
+  RULE: max 2 AND per group; always add an OR between groups
+  RULE: thresholds must be loose — RSI>55 not RSI>70, Vol>1.3x not Vol>2.5x
 
-ATR-BASED ADAPTIVE EXITS:
-  atr = self.data['ATR']
-  entry_price = ...
-  tp_price = entry_price + atr * 2.0  # take profit
-  sl_price = entry_price - atr * 1.5  # stop loss
+❌ REJECTION 2 — MaxDD worse than -50% (no stop-loss):
+  CAUSE: TQQQ can drop 30% in a week; without a stop the strategy holds through crashes
+  FIX: the stop-loss in the template above is MANDATORY — do not remove sl_price
+  FIX: atr_mult=1.5 means exit when price drops 1.5×ATR from entry (tight but survivable)
+  FIX: add regime gate: skip entry when ATR_Pct > 5.0 (extreme vol = crash risk)
 
-RVI STATE (pre-calculated):
-  self.data['RVI_State']  # 1=bull, 0=neutral, -1=bear
-  self.data['RVI_Refined']  # 0-100 continuous value
+⛔ COLUMNS THAT DO NOT EXIST (KeyError = immediate failure):
+  YC_Invert, YC2Y10Y, 2Y, 10Y, US_10Y, FedWatch, FedCutProb, VIX, SPY, QQQ
+  Use Sim_VIX or ATR_Pct as macro/vol proxies instead.
 
-CRITICAL RULES:
+RULES:
 - Class name MUST be: {class_name}
-- Inherit from BaseStrategy
-- __init__ MUST have named parameters with defaults (3-5 key params)
-- get_params() MUST return dict of all __init__ parameters
-- Use self.param_name throughout — NEVER hardcode threshold numbers
-- Indicators are ALREADY in self.data — do NOT recalculate them
-- NO look-ahead: no shift(-1), no iloc[i+1], no future data
-- Handle NaN with .fillna(0) or .bfill()
-- Return pd.Series of floats -1.0 to 1.0 (negative = short)
-- Use a for-loop to track position state (stateful logic)
-
-⛔ COLUMNS THAT DO NOT EXIST (using them = immediate KeyError crash):
-  YC_Invert, YC2Y10Y, 2Y, 10Y, US_10Y, curve_2y10y, FedWatch, FedCutProb,
-  CME_CutProb, CME_3mo_cut_prob, FedPiv, FedFunds, VIX, SPY, QQQ
-  If the strategy idea mentions macro/yield curve → use Sim_VIX or ATR_Pct as proxy instead.
-
-⚠️ ENTRY FREQUENCY — HARD REQUIREMENT (time_in_market=0 = IMMEDIATE REJECTION):
-  Your entry condition MUST fire on ≥ 5% of trading days (~60+ days over 5 years).
-  Each AND condition halves entry frequency — use at MOST 2 AND conditions per signal.
-  FORBIDDEN (fires <1% of days): RSI > 70 AND MACD > 0 AND Vol > 2.5x AND Aroon > 80
-  REQUIRED (fires regularly):    (RSI > 55 AND MACD > 0) OR (Vol > 1.5x AND Close > SMA_20)
-  Single strong condition + 1 regime filter is often best.
-
-⚠️ DRAWDOWN CONTROL — HARD REQUIREMENT (MaxDD < -50% = IMMEDIATE REJECTION):
-  Every strategy MUST include explicit stop-loss. REQUIRED structure:
-    self.atr_mult = atr_mult  # in __init__ params, default ≈ 1.5
-    # In generate_signals() loop:
-    sl_price = entry_price - self.data['ATR'].iloc[i] * self.atr_mult
-    if position == 1 and close < sl_price:
-        position = 0  # exit on stop
-  Without a stop loss, a leveraged TQQQ crash will cause MaxDD < -50% (rejected).
-  ATR_Pct, HV_10 can also gate entries during high-volatility regimes.
+- get_params() MUST return ALL __init__ parameters
+- Use self.param_name everywhere — NEVER hardcode numbers
+- NO look-ahead: no shift(-1), no iloc[i+1]
+- Handle NaN: .fillna(0) or .fillna(method='bfill')
 {helper_section}
 OUTPUT ONLY PYTHON CODE. No markdown, no explanations."""
 
