@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-07 21:28:53
+   2026-03-07 22:26:39
 =======================================================
 
 📈 Overall
-  Total iterations: 4281
-  Successful: 994 (23%)
+  Total iterations: 4294
+  Successful: 1007 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 8 strategies
 
-  This session: 225 iters, 22 ok
-  Duration: 5:46:47
-  LLM calls: 962 (Groq: 962 [Groq: 962/962 ok, 10 keys | pools: idea=135, code=225, fix=163, director=202, secretary=54, overflow=183 | models: llama-4-scout-17b-16e-instruct=323, kimi-k2-instruct=316, llama-4-maverick-17b-128e-instruct=204 | cooling: 13 keys], GitHub: 0, Gemini: 0)
+  This session: 250 iters, 29 ok
+  Duration: 6:50:53
+  LLM calls: 1050 (Groq: 1023 [Groq: 1023/1050 ok, 10 keys | pools: idea=136, code=220, fix=103, director=188, secretary=55, overflow=321 | models: kimi-k2-instruct=412, llama-4-scout-17b-16e-instruct=207, llama-4-maverick-17b-128e-instruct=183], GitHub: 27, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4272: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4273: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4274: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4275: REJECTED: Exposure=1.4% below 5%
-  ❌ Strategy_Gen4276: REJECTED: MaxDD=-53.6% worse than -50%
-  ❌ Strategy_Gen4277: REJECTED: Exposure=2.7% below 5%
-  ❌ Strategy_Gen4278: REJECTED: MaxDD=-93.1% worse than -50%
-  ❌ Strategy_Gen4279: REJECTED: MaxDD=-60.2% worse than -50%
-  ✅ Cross_RVI_State_PPO_Cross_RVI_Extreme: Comp=0.0000 Sharpe=1.05 CAGR=42.6% MaxDD=-45.3%
-  ❌ Strategy_Gen4280: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4285: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4286: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4287: TypeError: ufunc 'bitwise_and' not suppo
+  ❌ Strategy_Gen4288: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4289: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4290: KeyError: 'HV_10_SMA20'
+Traceback (most 
+  ❌ Strategy_Gen4291: Failed to load strategy: Can't instantia
+  ✅ Strategy_Gen4292: Comp=0.2500 Sharpe=0.51 CAGR=11.8% MaxDD=-49.8%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen4293: Strategy never enters the market (time_i
 
 =======================================================
