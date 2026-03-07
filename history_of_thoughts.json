@@ -1,13 +1,13 @@
 {
-  "total_iterations": 4094,
+  "total_iterations": 4098,
   "best_sharpe": 1.2312754360739595,
   "best_strategy": "Strategy_Gen995",
   "best_calmar": 1.1706648532193502,
   "best_composite": 0.6406664451649691,
   "mode_stats": {
     "2": {
-      "wins": 4,
-      "trials": 41
+      "wins": 2,
+      "trials": 40
     },
     "12": {
       "wins": 2,
@@ -15,19 +15,19 @@
     },
     "7": {
       "wins": 6,
-      "trials": 61
+      "trials": 60
     },
     "11": {
       "wins": 3,
       "trials": 51
     },
     "9": {
-      "wins": 7,
-      "trials": 62
+      "wins": 6,
+      "trials": 60
     },
     "0": {
       "wins": 5,
-      "trials": 44
+      "trials": 48
     },
     "10": {
       "wins": 2,
@@ -35,26 +35,26 @@
     },
     "14": {
       "wins": 8,
-      "trials": 67
+      "trials": 66
     },
     "1": {
-      "wins": 10,
+      "wins": 8,
       "trials": 56
     },
     "5": {
-      "wins": 9,
-      "trials": 54
+      "wins": 8,
+      "trials": 56
     },
     "8": {
       "wins": 8,
-      "trials": 67
+      "trials": 66
     },
     "6": {
-      "wins": 1,
-      "trials": 33
+      "wins": 2,
+      "trials": 40
     },
     "4": {
-      "wins": 1,
+      "wins": 0,
       "trials": 33
     },
     "13": {
@@ -63,7 +63,7 @@
     },
     "3": {
       "wins": 7,
-      "trials": 47
+      "trials": 53
     }
   },
   "strategies": [
@@ -70536,6 +70536,161 @@
         "Elder_Bull",
         "Elder_Bear",
         "Drawdown"
+      ]
+    },
+    {
+      "id": 4093,
+      "name": "Strategy_Gen4093",
+      "idea": "### Strategy Name\nDonchianAO_Squeeze\n\n### Champion Module Changes\n- **Changed**: Replaced RVI with Squeeze_Pro_On for regime filtering and integrated AO for momentum confirmation.\n- **Kept**: Concept of using Donchian channels for breakout entries and exits.\n\n### State Machine Logic\nStates:\n- **Bull**: DI_Diff > 0 and AO > 0\n- **Neutral**: DI_Diff == 0 and AO == 0\n- **Bear**: DI_Diff < 0 and AO < 0\n\nTransitions:\n- **Buy Signal**: Transition from Neutral or Bear to Bull, with Squeeze_Pro_On == 1 ",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.000%). Signal stats: min=0.0000, max=0.0000, mean",
+      "success": false,
+      "timestamp": "2026-03-07T16:57:07.366025",
+      "mode_used": 14,
+      "indicator_fingerprint": [
+        "RVI",
+        "ATR",
+        "SMA"
+      ]
+    },
+    {
+      "id": 4094,
+      "name": "Strategy_Gen4094",
+      "idea": "### UO Mean Reversion with MFI Momentum Confirmation and BB_Squeeze Regime Filtering\n\n#### 1. Strategy Name\nUO_MFI_BB_Squeeze\n\n#### 2. Champion Module Changes\n- **Kept**: Volume Breakout core logic\n- **Changed**: Replaced RVI with UO for mean reversion entries, added MFI for momentum confirmation, and incorporated BB_Squeeze for regime filtering.\n\n#### 3. State Machine Logic\n- **States**: \n  - **Bear Regime**: BB_Squeeze = 0 and UO > 70\n  - **Bull Regime**: BB_Squeeze = 1 and UO < 30\n  - **Neutr",
+      "sharpe": -0.5541910066919513,
+      "calmar": 0.0843869707593069,
+      "cagr": -0.04473453454615983,
+      "max_dd": -0.530111866128648,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: MaxDD=-53.0% worse than -50%",
+      "success": false,
+      "timestamp": "2026-03-07T16:58:16.062341",
+      "mode_used": 13,
+      "indicator_fingerprint": [
+        "RVI",
+        "RSI",
+        "ATR",
+        "BB",
+        "Volume",
+        "ZScore"
+      ]
+    },
+    {
+      "id": 4095,
+      "name": "Strategy_Gen4095",
+      "idea": "### Strategy Name\nMACD_Momentum_Shift_EMA200_Regime\n\n### Champion Module Changes\n- **Kept**: Volume Breakout Strategy's concept of using a regime filter and momentum confirmation.\n- **Changed**: Replaced ATR and RVI with new indicators to adhere to the diversity enforcement.\n\n### State Machine Logic\n- **Regime States**: \n  - Bullish: EMA200 > SMA50\n  - Bearish: EMA200 < SMA50\n  - Neutral: Otherwise\n- **Transition Triggers**: \n  - Long entry when regime transitions from Neutral/Bearish to Bullish",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "Strategy never enters the market (time_in_market=0.049%). Signal stats: min=0.0000, max=1.0000, mean",
+      "success": false,
+      "timestamp": "2026-03-07T16:58:29.748900",
+      "mode_used": 7,
+      "indicator_fingerprint": [
+        "RVI",
+        "RSI",
+        "MACD",
+        "ATR",
+        "SMA",
+        "EMA",
+        "Volume",
+        "Stoch",
+        "CTI"
+      ]
+    },
+    {
+      "id": 4096,
+      "name": "Strategy_Gen4096",
+      "idea": "### Strategy Name\nDonchian_BB_Squeeze_ADX_Strategy\n\n### Kept vs Changed\n- **Kept**: Volume Breakout concept (using Donchian Channels for breakout detection)\n- **Changed**: \n  - **Regime Filter**: ADX and BB_Squeeze\n  - **Entry Logic**: UO mean reversion with MFI momentum confirmation\n  - **Exit Logic**: Adaptive using ATR\n\n### State Machine Logic\n- **States**: \n  - **Bull**: ADX > 25 and DI_Plus > DI_Minus\n  - **Bear**: ADX > 25 and DI_Minus > DI_Plus\n  - **Neutral**: ADX < 20 or BB_Squeeze == 1",
+      "sharpe": 0,
+      "calmar": 0,
+      "cagr": 0,
+      "max_dd": 0,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "All signals are NaN",
+      "success": false,
+      "timestamp": "2026-03-07T16:58:45.305709",
+      "mode_used": 10,
+      "indicator_fingerprint": [
+        "RSI",
+        "ATR",
+        "BB",
+        "Volume",
+        "ADX",
+        "DI_Plus",
+        "DI_Minus",
+        "CTI"
+      ]
+    },
+    {
+      "id": 4097,
+      "name": "Strategy_Gen4097",
+      "idea": "### Strategy Name\nTQQQ_UO_EMA_HMM\n\n### Champion Module Changes\n- **Kept**: Volume Breakout core logic, Regime Filter concept\n- **Changed**: \n  - Replaced Volume Breakout entry with UO > 70 and EMA_20 > SMA_50\n  - Incorporated HMM_Regime for regime filter\n  - Used Squeeze_Pro_Hist for additional momentum confirmation\n\n### State Machine Logic\n- **States**: Defined by `HMM_Regime`\n  - 0: Bear\n  - 1: Neutral\n  - 2: Bull\n- **Transitions**:\n  - **Entry**: From Neutral or Bear to Bull (`HMM_Regime` > 0",
+      "sharpe": 0.16767772236012599,
+      "calmar": 0.0840902004184337,
+      "cagr": 0.034195496544960235,
+      "max_dd": -0.40665257514910297,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: Sharpe=0.17 below 0.3",
+      "success": false,
+      "timestamp": "2026-03-07T16:59:04.887852",
+      "mode_used": 12,
+      "indicator_fingerprint": [
+        "ATR",
+        "SMA",
+        "EMA",
+        "Volume",
+        "HMM_Regime"
+      ]
+    },
+    {
+      "id": 4098,
+      "name": "Strategy_Gen4098",
+      "idea": "### Strategy Name\nTQQQ_Squeeze_Momentum\n\n### Champion Module Changes\n- **Base Strategy**: Modified Strategy_Gen1381 to incorporate Squeeze_Pro_Hist for dynamic threshold adjustments.\n- **Regime Filter**: Replaced RVI with HMM_Regime for more robust state transitions.\n- **Momentum Indicator**: Integrated UO (Ultimate Oscillator) for entry confirmation.\n\n### State Machine Logic\n- **States**: \n  - **Bear**: HMM_Regime = 0\n  - **Neutral**: HMM_Regime = 1\n  - **Bull**: HMM_Regime = 2\n- **Transitions*",
+      "sharpe": 0.7480096776691538,
+      "calmar": 0.40676887086807245,
+      "cagr": 0.2050202255540745,
+      "max_dd": -0.5040214240498477,
+      "composite": 0.0,
+      "test_sharpe": 0.0,
+      "test_cagr": 0.0,
+      "test_max_dd": 0.0,
+      "test_composite": 0.0,
+      "failure_analysis": "REJECTED: MaxDD=-50.4% worse than -50%",
+      "success": false,
+      "timestamp": "2026-03-07T17:00:09.124751",
+      "mode_used": 11,
+      "indicator_fingerprint": [
+        "RVI",
+        "ATR",
+        "Volume",
+        "HMM_Regime"
       ]
     }
   ]
