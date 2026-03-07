@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-07 23:50:00
+   2026-03-07 23:56:40
 =======================================================
 
 📈 Overall
-  Total iterations: 4362
-  Successful: 1010 (23%)
+  Total iterations: 4348
+  Successful: 1021 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 9 strategies
 
-  This session: 300 iters, 32 ok
-  Duration: 8:07:54
-  LLM calls: 1290 (Groq: 1290 [Groq: 1290/1290 ok, 10 keys | pools: idea=155, code=300, fix=218, director=265, secretary=71, overflow=281 | models: llama-4-scout-17b-16e-instruct=479, kimi-k2-instruct=397, llama-4-maverick-17b-128e-instruct=279 | cooling: 1 keys], GitHub: 0, Gemini: 0)
+  This session: 300 iters, 39 ok
+  Duration: 8:20:55
+  LLM calls: 1231 (Groq: 1156 [Groq: 1156/1231 ok, 10 keys | pools: idea=138, code=270, fix=114, director=199, secretary=55, overflow=380 | models: kimi-k2-instruct=466, llama-4-maverick-17b-128e-instruct=224, llama-4-scout-17b-16e-instruct=207], GitHub: 75, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4353: REJECTED: MaxDD=-66.7% worse than -50%
-  ❌ Strategy_Gen4354: REJECTED: MaxDD=-76.9% worse than -50%
-  ❌ Strategy_Gen4355: REJECTED: Sharpe=0.23 below 0.3
-  ✅ Strategy_Gen4356: Comp=0.3167 Sharpe=0.82 CAGR=25.2% MaxDD=-42.8%
-  ❌ Strategy_Gen4357: REJECTED: MaxDD=-81.7% worse than -50%
-  ❌ Strategy_Gen4358: REJECTED: Sharpe=0.23 below 0.3
-  ✅ Strategy_Gen4359: Comp=0.3039 Sharpe=0.71 CAGR=22.6% MaxDD=-43.1%
-  ✅ Cross_RVI_State_BB_Squeeze_RSI_OB: Comp=0.0000 Sharpe=0.90 CAGR=32.2% MaxDD=-44.8%
+  ✅ Strategy_Gen4339: Comp=0.2722 Sharpe=0.53 CAGR=7.1% MaxDD=-34.1%
+  ❌ Strategy_Gen4340: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4341: REJECTED: MaxDD=-95.2% worse than -50%
+  ❌ Strategy_Gen4342: REJECTED: MaxDD=-75.7% worse than -50%
+  ✅ Strategy_Gen4343: Comp=0.3116 Sharpe=0.73 CAGR=22.8% MaxDD=-41.4%
+  ✅ Cross_RVI_State_RVI_Trans_RSI_OB: Comp=0.0000 Sharpe=1.21 CAGR=49.7% MaxDD=-39.2%
+  ✅ Cross_RVI_State_PPO_Cross_RSI_OB: Comp=0.0000 Sharpe=1.07 CAGR=44.0% MaxDD=-45.7%
+  ✅ Cross_RVI_State_Aroon_Cross_RVI_Extreme: Comp=0.0000 Sharpe=0.97 CAGR=30.8% MaxDD=-41.6%
   ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen4360: AttributeError: 'bool' object has no att
+  ❌ Strategy_Gen4344: REJECTED: MaxDD=-87.3% worse than -50%
 
 =======================================================
