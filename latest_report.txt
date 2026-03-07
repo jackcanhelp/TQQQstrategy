@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-07 19:24:52
+   2026-03-07 19:42:53
 =======================================================
 
 📈 Overall
-  Total iterations: 4187
-  Successful: 990 (24%)
+  Total iterations: 4203
+  Successful: 986 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 7 strategies
 
-  This session: 150 iters, 19 ok
-  Duration: 3:49:07
-  LLM calls: 611 (Groq: 611 [Groq: 611/611 ok, 10 keys | pools: idea=132, code=131, fix=84, director=153, secretary=44, overflow=67 | models: llama-4-scout-17b-16e-instruct=207, kimi-k2-instruct=173, llama-4-maverick-17b-128e-instruct=106], GitHub: 0, Gemini: 0)
+  This session: 150 iters, 17 ok
+  Duration: 4:00:47
+  LLM calls: 627 (Groq: 627 [Groq: 627/627 ok, 10 keys | pools: idea=115, code=150, fix=106, director=151, secretary=39, overflow=66 | models: llama-4-scout-17b-16e-instruct=220, kimi-k2-instruct=172, llama-4-maverick-17b-128e-instruct=129 | cooling: 9 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4178: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4179: REJECTED: Sharpe=-0.26 below 0.3
-  ❌ Strategy_Gen4180: REJECTED: Sharpe=-0.17 below 0.3
-  ❌ Strategy_Gen4181: REJECTED: Sharpe=0.16 below 0.3
-  ❌ Strategy_Gen4182: REJECTED: MaxDD=-64.2% worse than -50%
-  ❌ Strategy_Gen4183: REJECTED: Sharpe=-0.25 below 0.3
-  ✅ Cross_RVI_State_MACD_Cross_RVI_Extreme: Comp=0.0000 Sharpe=1.08 CAGR=44.5% MaxDD=-46.1%
-  ✅ Cross_RVI_State_MACD_Cross_ST_Down: Comp=0.0000 Sharpe=0.94 CAGR=38.1% MaxDD=-47.9%
+  ❌ Strategy_Gen4194: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4195: REJECTED: MaxDD=-99.4% worse than -50%
+  ✅ Strategy_Gen4196: Comp=0.2471 Sharpe=0.34 CAGR=7.6% MaxDD=-41.0%
+  ❌ Strategy_Gen4197: REJECTED: Exposure=3.2% below 5%
+  ❌ Strategy_Gen4198: AttributeError: 'numpy.bool' object has 
+  ❌ Strategy_Gen4199: REJECTED: MaxDD=-77.2% worse than -50%
+  ❌ Strategy_Gen4200: REJECTED: Exposure=1.1% below 5%
+  ❌ Strategy_Gen4201: REJECTED: MaxDD=-57.8% worse than -50%
   ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen4184: REJECTED: MaxDD=-78.9% worse than -50%
+  ❌ Strategy_Gen4202: Strategy never enters the market (time_i
 
 =======================================================
