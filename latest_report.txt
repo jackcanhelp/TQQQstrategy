@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-07 22:56:46
+   2026-03-07 22:56:56
 =======================================================
 
 📈 Overall
-  Total iterations: 4335
-  Successful: 1003 (23%)
+  Total iterations: 4319
+  Successful: 1011 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 8 strategies
 
-  This session: 275 iters, 27 ok
-  Duration: 7:14:40
-  LLM calls: 1184 (Groq: 1184 [Groq: 1184/1184 ok, 10 keys | pools: idea=149, code=275, fix=199, director=241, secretary=64, overflow=256 | models: llama-4-scout-17b-16e-instruct=429, kimi-k2-instruct=372, llama-4-maverick-17b-128e-instruct=254], GitHub: 0, Gemini: 0)
+  This session: 275 iters, 33 ok
+  Duration: 7:21:11
+  LLM calls: 1145 (Groq: 1096 [Groq: 1096/1145 ok, 10 keys | pools: idea=138, code=245, fix=110, director=188, secretary=55, overflow=360 | models: kimi-k2-instruct=442, llama-4-scout-17b-16e-instruct=207, llama-4-maverick-17b-128e-instruct=204 | cooling: 15 keys], GitHub: 49, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4326: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4327: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4328: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4329: REJECTED: MaxDD=-73.7% worse than -50%
-  ❌ Strategy_Gen4330: REJECTED: MaxDD=-55.0% worse than -50%
-  ❌ Strategy_Gen4331: REJECTED: MaxDD=-71.5% worse than -50%
-  ❌ Strategy_Gen4332: REJECTED: MaxDD=-52.8% worse than -50%
-  ✅ Cross_RVI_State_MACD_Cross_ST_Down: Comp=0.0000 Sharpe=0.94 CAGR=38.1% MaxDD=-47.9%
-  ✅ Cross_RVI_State_MACD_Cross_Aroon_Flip: Comp=0.0000 Sharpe=0.93 CAGR=36.7% MaxDD=-45.9%
-  ❌ Strategy_Gen4333: REJECTED: MaxDD=-70.9% worse than -50%
+  ❌ Strategy_Gen4310: AttributeError: 'numpy.bool' object has 
+  ❌ Strategy_Gen4311: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4312: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4313: REJECTED: MaxDD=-61.8% worse than -50%
+  ❌ Strategy_Gen4314: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4315: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4316: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4317: Strategy never enters the market (time_i
+  ✅ Strategy_Gen4318: Comp=0.2310 Sharpe=0.32 CAGR=7.3% MaxDD=-48.2%
+  ❌ Strategy_Gen4319: REJECTED: Sharpe=0.03 below 0.3
 
 =======================================================
