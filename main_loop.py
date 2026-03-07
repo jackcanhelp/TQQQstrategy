@@ -938,7 +938,8 @@ class {class_name}(BaseStrategy):
 
             signals.iloc[i] = float(position)
 
-        return signals.clip(-1, 1)
+        # Default: long-only (0 or 1). To add shorts, use clip(-1, 1) and add short logic carefully.
+        return signals.clip(0, 1)
 
     def get_description(self) -> str:
         return (f"{{self.__class__.__name__}}: entry>{{self.entry_threshold}}, "
@@ -962,11 +963,13 @@ ADAPTATION GUIDE — replace the placeholder indicators with your strategy's log
   RULE: max 2 AND per group; always add an OR between groups
   RULE: thresholds must be loose — RSI>55 not RSI>70, Vol>1.3x not Vol>2.5x
 
-❌ REJECTION 2 — MaxDD worse than -50% (no stop-loss):
-  CAUSE: TQQQ can drop 30% in a week; without a stop the strategy holds through crashes
-  FIX: the stop-loss in the template above is MANDATORY — do not remove sl_price
-  FIX: atr_mult=1.5 means exit when price drops 1.5×ATR from entry (tight but survivable)
-  FIX: add regime gate: skip entry when ATR_Pct > 5.0 (extreme vol = crash risk)
+❌ REJECTION 2 — MaxDD worse than -50% (no stop-loss OR wrong short logic):
+  CAUSE A: no stop-loss → TQQQ crashes 30%+ in a week, strategy holds the whole way down
+  FIX A:   keep sl_price in template — do NOT remove it. atr_mult=1.5 exits before losses compound.
+  CAUSE B: short selling TQQQ (-1 signal) when logic is wrong → MaxDD=-100% (total wipeout)
+  FIX B:   use signals.clip(0, 1) for long-only (SAFE DEFAULT)
+           only use clip(-1, 1) if your short logic is carefully tested with ATR stops on BOTH sides
+  FIX C:   add regime gate: skip entry when ATR_Pct > 5.0 (avoid crash periods entirely)
 
 ⛔ COLUMNS THAT DO NOT EXIST (KeyError = immediate failure):
   YC_Invert, YC2Y10Y, 2Y, 10Y, US_10Y, FedWatch, FedCutProb, VIX, SPY, QQQ
