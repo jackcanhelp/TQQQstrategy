@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-07 22:56:56
+   2026-03-07 23:50:00
 =======================================================
 
 📈 Overall
-  Total iterations: 4319
-  Successful: 1011 (23%)
+  Total iterations: 4362
+  Successful: 1010 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
-  Hall of Fame: 8 strategies
+  Hall of Fame: 9 strategies
 
-  This session: 275 iters, 33 ok
-  Duration: 7:21:11
-  LLM calls: 1145 (Groq: 1096 [Groq: 1096/1145 ok, 10 keys | pools: idea=138, code=245, fix=110, director=188, secretary=55, overflow=360 | models: kimi-k2-instruct=442, llama-4-scout-17b-16e-instruct=207, llama-4-maverick-17b-128e-instruct=204 | cooling: 15 keys], GitHub: 49, Gemini: 0)
+  This session: 300 iters, 32 ok
+  Duration: 8:07:54
+  LLM calls: 1290 (Groq: 1290 [Groq: 1290/1290 ok, 10 keys | pools: idea=155, code=300, fix=218, director=265, secretary=71, overflow=281 | models: llama-4-scout-17b-16e-instruct=479, kimi-k2-instruct=397, llama-4-maverick-17b-128e-instruct=279 | cooling: 1 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -22,7 +22,7 @@
   #4 Strategy_Gen2117: Comp=0.4163 Sharpe=1.28 CAGR=52.7% MaxDD=-40.3% | OOS Sharpe=1.44
   #5 Strategy_Gen521: Comp=0.0000 Sharpe=1.28 CAGR=52.4% MaxDD=-40.3%
 
-🥇 Hall of Fame (8)
+🥇 Hall of Fame (9)
 ───────────────────────────────────────────────────────
   ChampionRVI: Calmar=1.28 Sharpe=1.27 MaxDD=-40.3%
   ChampionRVI: Calmar=1.28 Sharpe=1.27 MaxDD=-40.3%
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4310: AttributeError: 'numpy.bool' object has 
-  ❌ Strategy_Gen4311: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4312: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4313: REJECTED: MaxDD=-61.8% worse than -50%
-  ❌ Strategy_Gen4314: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4315: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4316: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4317: Strategy never enters the market (time_i
-  ✅ Strategy_Gen4318: Comp=0.2310 Sharpe=0.32 CAGR=7.3% MaxDD=-48.2%
-  ❌ Strategy_Gen4319: REJECTED: Sharpe=0.03 below 0.3
+  ❌ Strategy_Gen4353: REJECTED: MaxDD=-66.7% worse than -50%
+  ❌ Strategy_Gen4354: REJECTED: MaxDD=-76.9% worse than -50%
+  ❌ Strategy_Gen4355: REJECTED: Sharpe=0.23 below 0.3
+  ✅ Strategy_Gen4356: Comp=0.3167 Sharpe=0.82 CAGR=25.2% MaxDD=-42.8%
+  ❌ Strategy_Gen4357: REJECTED: MaxDD=-81.7% worse than -50%
+  ❌ Strategy_Gen4358: REJECTED: Sharpe=0.23 below 0.3
+  ✅ Strategy_Gen4359: Comp=0.3039 Sharpe=0.71 CAGR=22.6% MaxDD=-43.1%
+  ✅ Cross_RVI_State_BB_Squeeze_RSI_OB: Comp=0.0000 Sharpe=0.90 CAGR=32.2% MaxDD=-44.8%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen4360: AttributeError: 'bool' object has no att
 
 =======================================================
