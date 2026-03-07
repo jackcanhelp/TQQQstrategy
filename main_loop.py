@@ -899,7 +899,7 @@ class {class_name}(BaseStrategy):
 
     def generate_signals(self) -> pd.Series:
         close  = self.data['Close']
-        atr    = self.data['ATR'].fillna(method='bfill')
+        atr    = self.data['ATR'].bfill().fillna(1.0)
         # ADAPT: replace RSI_14/MACD/SMA_20 with your strategy's indicators
         rsi    = self.data['RSI_14'].fillna(50)
         macd   = self.data['MACD'].fillna(0)
@@ -977,7 +977,7 @@ RULES:
 - get_params() MUST return ALL __init__ parameters
 - Use self.param_name everywhere — NEVER hardcode numbers
 - NO look-ahead: no shift(-1), no iloc[i+1]
-- Handle NaN: .fillna(0) or .fillna(method='bfill')
+- Handle NaN: use .fillna(0) or .bfill() directly — method= keyword is deprecated in pandas
 {helper_section}
 OUTPUT ONLY PYTHON CODE. No markdown, no explanations."""
 
