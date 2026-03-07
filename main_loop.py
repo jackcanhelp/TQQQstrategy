@@ -86,7 +86,7 @@ MUTATION_MODES = [
     "MUTATE the EXIT LOGIC: keep RVI regime + transition entry, but use a DIFFERENT exit method (e.g., trailing ATR stop, Chandelier exit, Donchian breakout instead of fixed RVI levels).",
     "COMBINE: use RVI_State for regime, add a MOMENTUM CONFIRMATION from a different category (RSI, MFI, CCI), and use ATR-based trailing stop for exits.",
     "HYBRID: create a strategy that blends RVI transitions with SMA trend direction and volume confirmation (OBV, CMF). Use state transitions for entry timing.",
-    "IMPROVE SHORT SELLING: keep long-side RVI logic, but design a BETTER short-selling module using ADX, Supertrend, or Bollinger Band breakdown with tighter ATR stops.",
+    "TIGHT RISK MANAGEMENT: design a LONG-ONLY strategy with multi-layer drawdown protection — ATR stop-loss + volatility regime filter (skip entry when ATR spikes > 2x avg) + partial exit on first warning signal. Signals must be 0 or 1 only (no shorts).",
     "VOLUME BREAKOUT HYBRID: use Volume Surge (Vol_Ratio > 2.0 + Close > SMA) for entry timing, combined with RVI regime filter. Use ATR-based TP/SL for exits.",
     "VOLUME + MOMENTUM COMBO: combine volume breakout signals (Vol_Ratio) with momentum indicators (RSI, MFI, CCI) for multi-confirmation entries. Exit with trailing ATR stop.",
     "VOLUME REGIME FILTER: use volume patterns as regime filter (Vol_Ratio > 1.0 for trending, < 0.5 for quiet), combined with traditional trend entry signals.",
