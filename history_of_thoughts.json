@@ -6,8 +6,8 @@
   "best_composite": 0.6406664451649691,
   "mode_stats": {
     "2": {
-      "wins": 2,
-      "trials": 37
+      "wins": 3,
+      "trials": 38
     },
     "12": {
       "wins": 2,
@@ -27,7 +27,7 @@
     },
     "0": {
       "wins": 5,
-      "trials": 45
+      "trials": 43
     },
     "10": {
       "wins": 2,
@@ -39,11 +39,11 @@
     },
     "1": {
       "wins": 8,
-      "trials": 53
+      "trials": 50
     },
     "5": {
       "wins": 8,
-      "trials": 53
+      "trials": 50
     },
     "8": {
       "wins": 8,
@@ -51,11 +51,11 @@
     },
     "6": {
       "wins": 1,
-      "trials": 34
+      "trials": 32
     },
     "4": {
       "wins": 0,
-      "trials": 31
+      "trials": 29
     },
     "13": {
       "wins": 7,
@@ -63,7 +63,7 @@
     },
     "3": {
       "wins": 6,
-      "trials": 48
+      "trials": 46
     }
   },
   "strategies": [
