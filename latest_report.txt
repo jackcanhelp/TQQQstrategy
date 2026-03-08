@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-08 12:59:39
+   2026-03-08 13:50:47
 =======================================================
 
 📈 Overall
-  Total iterations: 4736
-  Successful: 1076 (23%)
+  Total iterations: 4762
+  Successful: 1079 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 9 strategies
 
-  This session: 725 iters, 82 ok
-  Duration: 21:23:53
-  LLM calls: 3022 (Groq: 2845 [Groq: 2845/3022 ok, 10 keys | pools: idea=326, code=588, fix=211, director=670, secretary=203, overflow=847 | models: kimi-k2-instruct=803, llama-4-scout-17b-16e-instruct=581, llama-3.1-8b-instant=442 | cooling: 16 keys], GitHub: 108, Gemini: 0)
+  This session: 750 iters, 84 ok
+  Duration: 22:15:01
+  LLM calls: 3140 (Groq: 2956 [Groq: 2956/3140 ok, 10 keys | pools: idea=338, code=605, fix=216, director=710, secretary=216, overflow=871 | models: kimi-k2-instruct=811, llama-4-scout-17b-16e-instruct=616, llama-3.1-8b-instant=457 | cooling: 4 keys], GitHub: 108, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4727: REJECTED: MaxDD=-61.9% worse than -50%
-  ❌ Strategy_Gen4728: REJECTED: MaxDD=-51.8% worse than -50%
-  ❌ Strategy_Gen4729: Strategy never enters the market (time_i
-  ✅ Strategy_Gen4730: Comp=0.2421 Sharpe=0.46 CAGR=11.4% MaxDD=-50.8%
-  ❌ Strategy_Gen4731: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4732: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4733: REJECTED: Exposure=1.2% below 5%
-  ❌ Strategy_Gen4734: ValueError: The truth value of a Series 
-  ❌ Strategy_Gen4735: REJECTED: MaxDD=-92.9% worse than -50%
-  ❌ Strategy_Gen4736: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4753: AttributeError: 'numpy.float64' object h
+  ❌ Strategy_Gen4754: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4755: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4756: LLM failed to generate code
+  ❌ Strategy_Gen4757: LLM failed to generate code
+  ❌ Strategy_Gen4758: LLM failed to generate code
+  ❌ Strategy_Gen4759: REJECTED: Exposure=1.1% below 5%
+  ❌ Strategy_Gen4760: REJECTED: MaxDD=-73.1% worse than -50%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen4761: REJECTED: MaxDD=-82.9% worse than -50%
 
 =======================================================
