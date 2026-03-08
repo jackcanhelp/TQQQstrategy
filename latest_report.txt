@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-08 15:24:29
+   2026-03-08 15:27:24
 =======================================================
 
 📈 Overall
-  Total iterations: 4647
-  Successful: 1062 (23%)
+  Total iterations: 4838
+  Successful: 1088 (22%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 9 strategies
 
-  This session: 700 iters, 67 ok
-  Duration: 23:42:23
-  LLM calls: 2803 (Groq: 2598 [Groq: 2598/2803 ok, 10 keys | pools: idea=208, code=560, fix=345, director=537, secretary=147, overflow=801 | models: kimi-k2-instruct=947, llama-4-scout-17b-16e-instruct=835, llama-4-maverick-17b-128e-instruct=547 | cooling: 9 keys], GitHub: 20, Gemini: 0)
+  This session: 825 iters, 92 ok
+  Duration: 23:51:38
+  LLM calls: 3438 (Groq: 3249 [Groq: 3249/3438 ok, 10 keys | pools: idea=384, code=669, fix=229, director=786, secretary=241, overflow=940 | models: kimi-k2-instruct=842, llama-4-scout-17b-16e-instruct=676, qwen3-32b=550 | cooling: 22 keys], GitHub: 108, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4638: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4639: REJECTED: MaxDD=-81.7% worse than -50%
-  ❌ Strategy_Gen4640: REJECTED: Sharpe=-0.10 below 0.3
-  ❌ Strategy_Gen4641: REJECTED: Sharpe=0.09 below 0.3
-  ❌ Strategy_Gen4642: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4643: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4644: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4645: Strategy never enters the market (time_i
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen4646: REJECTED: Exposure=1.5% below 5%
+  ✅ Strategy_Gen4829: Comp=0.2500 Sharpe=0.39 CAGR=8.3% MaxDD=-42.8%
+  ❌ Strategy_Gen4830: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4831: Failed to load strategy: Strategy_Gen483
+  ❌ Strategy_Gen4832: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4833: LLM failed to generate code
+  ❌ Strategy_Gen4834: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4835: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4836: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4837: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4838: Strategy never enters the market (time_i
 
 =======================================================
