@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-08 13:50:47
+   2026-03-08 14:17:38
 =======================================================
 
 📈 Overall
-  Total iterations: 4762
-  Successful: 1079 (23%)
+  Total iterations: 4787
+  Successful: 1081 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 9 strategies
 
-  This session: 750 iters, 84 ok
-  Duration: 22:15:01
-  LLM calls: 3140 (Groq: 2956 [Groq: 2956/3140 ok, 10 keys | pools: idea=338, code=605, fix=216, director=710, secretary=216, overflow=871 | models: kimi-k2-instruct=811, llama-4-scout-17b-16e-instruct=616, llama-3.1-8b-instant=457 | cooling: 4 keys], GitHub: 108, Gemini: 0)
+  This session: 775 iters, 86 ok
+  Duration: 22:41:52
+  LLM calls: 3234 (Groq: 3047 [Groq: 3047/3234 ok, 10 keys | pools: idea=356, code=623, fix=219, director=734, secretary=224, overflow=891 | models: kimi-k2-instruct=823, llama-4-scout-17b-16e-instruct=638, llama-3.1-8b-instant=469 | cooling: 19 keys], GitHub: 108, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4753: AttributeError: 'numpy.float64' object h
-  ❌ Strategy_Gen4754: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4755: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4756: LLM failed to generate code
-  ❌ Strategy_Gen4757: LLM failed to generate code
-  ❌ Strategy_Gen4758: LLM failed to generate code
-  ❌ Strategy_Gen4759: REJECTED: Exposure=1.1% below 5%
-  ❌ Strategy_Gen4760: REJECTED: MaxDD=-73.1% worse than -50%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen4761: REJECTED: MaxDD=-82.9% worse than -50%
+  ❌ Strategy_Gen4778: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4779: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4780: LLM failed to generate code
+  ❌ Strategy_Gen4781: LLM failed to generate code
+  ❌ Strategy_Gen4782: REJECTED: MaxDD=-51.7% worse than -50%
+  ❌ Strategy_Gen4783: REJECTED: Sharpe=0.19 below 0.3
+  ❌ Strategy_Gen4784: REJECTED: MaxDD=-53.6% worse than -50%
+  ❌ Strategy_Gen4785: LLM failed to generate code
+  ❌ Strategy_Gen4786: Backtest error: 'Strategy_Gen4786' objec
+  ❌ Strategy_Gen4787: Strategy never enters the market (time_i
 
 =======================================================
