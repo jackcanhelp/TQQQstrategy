@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-08 11:20:18
+   2026-03-08 11:51:43
 =======================================================
 
 📈 Overall
-  Total iterations: 4660
-  Successful: 1064 (23%)
+  Total iterations: 4685
+  Successful: 1069 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 9 strategies
 
-  This session: 650 iters, 71 ok
-  Duration: 19:44:32
-  LLM calls: 2704 (Groq: 2527 [Groq: 2527/2704 ok, 10 keys | pools: idea=276, code=534, fix=192, director=582, secretary=175, overflow=768 | models: kimi-k2-instruct=753, llama-4-scout-17b-16e-instruct=510, llama-4-maverick-17b-128e-instruct=394], GitHub: 108, Gemini: 0)
+  This session: 675 iters, 76 ok
+  Duration: 20:15:57
+  LLM calls: 2807 (Groq: 2630 [Groq: 2630/2807 ok, 10 keys | pools: idea=298, code=549, fix=200, director=610, secretary=185, overflow=788 | models: kimi-k2-instruct=772, llama-4-scout-17b-16e-instruct=533, llama-3.1-8b-instant=405 | cooling: 5 keys], GitHub: 108, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4651: REJECTED: Exposure=1.3% below 5%
-  ❌ Strategy_Gen4652: REJECTED: MaxDD=-54.7% worse than -50%
-  ❌ Strategy_Gen4653: REJECTED: Sharpe=0.18 below 0.3
-  ❌ Strategy_Gen4654: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4655: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4656: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4657: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4658: Failed to load strategy: Can't instantia
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ✅ Strategy_Gen4659: Comp=0.3620 Sharpe=0.94 CAGR=32.9% MaxDD=-37.1%
+  ❌ Strategy_Gen4676: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4677: REJECTED: Sharpe=0.09 below 0.3
+  ❌ Strategy_Gen4678: Backtest error: 'Strategy_Gen4678' objec
+  ✅ Strategy_Gen4679: Comp=0.2921 Sharpe=0.46 CAGR=8.3% MaxDD=-27.0%
+  ❌ Strategy_Gen4680: REJECTED: MaxDD=-96.3% worse than -50%
+  ❌ Strategy_Gen4681: REJECTED: MaxDD=-99.6% worse than -50%
+  ❌ Strategy_Gen4682: REJECTED: MaxDD=-58.4% worse than -50%
+  ✅ Strategy_Gen4683: Comp=0.2578 Sharpe=0.49 CAGR=12.1% MaxDD=-46.4%
+  ✅ Strategy_Gen4684: Comp=0.2751 Sharpe=0.31 CAGR=5.5% MaxDD=-26.1%
+  ❌ Strategy_Gen4685: NameError: name 'rocpy' is not defined
+T
 
 =======================================================
