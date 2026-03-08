@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-08 20:04:50
+   2026-03-08 20:50:59
 =======================================================
 
 📈 Overall
-  Total iterations: 4992
-  Successful: 1100 (22%)
+  Total iterations: 5018
+  Successful: 1101 (22%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 9 strategies
 
-  This session: 975 iters, 100 ok
-  Duration: 1 day, 4:29:05
-  LLM calls: 4110 (Groq: 3903 [Groq: 3903/4110 ok, 10 keys | pools: idea=485, code=785, fix=257, director=998, secretary=309, overflow=1069 | models: kimi-k2-instruct=915, llama-4-scout-17b-16e-instruct=843, qwen3-32b=774 | cooling: 10 keys], GitHub: 108, Gemini: 0)
+  This session: 1000 iters, 100 ok
+  Duration: 1 day, 5:15:13
+  LLM calls: 4234 (Groq: 4023 [Groq: 4023/4234 ok, 10 keys | pools: idea=504, code=805, fix=260, director=1042, secretary=323, overflow=1089 | models: kimi-k2-instruct=928, llama-4-scout-17b-16e-instruct=872, qwen3-32b=827 | cooling: 5 keys], GitHub: 108, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4983: REJECTED: MaxDD=-100.0% worse than -50%
-  ❌ Strategy_Gen4984: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4985: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4986: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4987: REJECTED: MaxDD=-50.2% worse than -50%
-  ❌ Strategy_Gen4988: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4989: REJECTED: MaxDD=-58.1% worse than -50%
-  ❌ Strategy_Gen4990: REJECTED: MaxDD=-69.9% worse than -50%
-  ❌ Strategy_Gen4991: REJECTED: Sharpe=0.18 below 0.3
-  ❌ Strategy_Gen4992: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5009: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen5010: REJECTED: Exposure=2.0% below 5%
+  ❌ Strategy_Gen5011: REJECTED: Exposure=1.8% below 5%
+  ❌ Strategy_Gen5012: REJECTED: Exposure=2.4% below 5%
+  ❌ Strategy_Gen5013: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5014: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen5015: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen5016: LLM failed to generate code
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen5017: Strategy never enters the market (time_i
 
 =======================================================
