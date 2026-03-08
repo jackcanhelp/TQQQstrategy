@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-08 09:11:16
+   2026-03-08 09:32:13
 =======================================================
 
 📈 Overall
-  Total iterations: 4558
-  Successful: 1053 (23%)
+  Total iterations: 4583
+  Successful: 1056 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 9 strategies
 
-  This session: 550 iters, 62 ok
-  Duration: 17:35:30
-  LLM calls: 2253 (Groq: 2076 [Groq: 2076/2253 ok, 10 keys | pools: idea=227, code=454, fix=174, director=450, secretary=134, overflow=637 | models: kimi-k2-instruct=719, llama-4-scout-17b-16e-instruct=390, llama-4-maverick-17b-128e-instruct=365 | cooling: 4 keys], GitHub: 108, Gemini: 0)
+  This session: 575 iters, 65 ok
+  Duration: 17:56:27
+  LLM calls: 2346 (Groq: 2169 [Groq: 2169/2346 ok, 10 keys | pools: idea=245, code=470, fix=179, director=470, secretary=141, overflow=664 | models: kimi-k2-instruct=728, llama-4-scout-17b-16e-instruct=415, llama-4-maverick-17b-128e-instruct=373 | cooling: 5 keys], GitHub: 108, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4549: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4550: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4551: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4552: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4553: REJECTED: MaxDD=-51.6% worse than -50%
-  ❌ Strategy_Gen4554: REJECTED: Exposure=1.8% below 5%
-  ❌ Strategy_Gen4555: ValueError: Length of values (1) does no
-  ✅ Cross_SMA_Trend_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=0.89 CAGR=27.4% MaxDD=-39.2%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ✅ Strategy_Gen4556: Comp=0.3027 Sharpe=0.59 CAGR=10.7% MaxDD=-26.7%
+  ❌ Strategy_Gen4574: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4575: REJECTED: Only 8 trades (min=10)
+  ❌ Strategy_Gen4576: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4577: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4578: KeyError: 'HMM_State'
+Traceback (most re
+  ❌ Strategy_Gen4579: REJECTED: Exposure=2.6% below 5%
+  ✅ Strategy_Gen4580: Comp=0.2509 Sharpe=0.39 CAGR=8.9% MaxDD=-42.8%
+  ❌ Strategy_Gen4581: REJECTED: Sharpe=0.27 below 0.3
+  ❌ Strategy_Gen4582: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4583: REJECTED: MaxDD=-53.8% worse than -50%
 
 =======================================================
