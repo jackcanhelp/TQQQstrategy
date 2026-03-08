@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-08 10:42:37
+   2026-03-08 11:20:18
 =======================================================
 
 📈 Overall
-  Total iterations: 4634
-  Successful: 1061 (23%)
+  Total iterations: 4660
+  Successful: 1064 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 9 strategies
 
-  This session: 625 iters, 69 ok
-  Duration: 19:06:51
-  LLM calls: 2592 (Groq: 2415 [Groq: 2415/2592 ok, 10 keys | pools: idea=268, code=512, fix=189, director=550, secretary=165, overflow=731 | models: kimi-k2-instruct=752, llama-4-scout-17b-16e-instruct=480, llama-4-maverick-17b-128e-instruct=391 | cooling: 9 keys], GitHub: 108, Gemini: 0)
+  This session: 650 iters, 71 ok
+  Duration: 19:44:32
+  LLM calls: 2704 (Groq: 2527 [Groq: 2527/2704 ok, 10 keys | pools: idea=276, code=534, fix=192, director=582, secretary=175, overflow=768 | models: kimi-k2-instruct=753, llama-4-scout-17b-16e-instruct=510, llama-4-maverick-17b-128e-instruct=394], GitHub: 108, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4625: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4626: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4627: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4628: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4629: Strategy never enters the market (time_i
-  ✅ Strategy_Gen4630: Comp=0.2776 Sharpe=0.62 CAGR=19.8% MaxDD=-48.8%
-  ❌ Strategy_Gen4631: Failed to load strategy: name 'data' is 
-  ❌ Strategy_Gen4632: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4633: REJECTED: MaxDD=-50.9% worse than -50%
-  ❌ Strategy_Gen4634: REJECTED: Exposure=2.8% below 5%
+  ❌ Strategy_Gen4651: REJECTED: Exposure=1.3% below 5%
+  ❌ Strategy_Gen4652: REJECTED: MaxDD=-54.7% worse than -50%
+  ❌ Strategy_Gen4653: REJECTED: Sharpe=0.18 below 0.3
+  ❌ Strategy_Gen4654: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4655: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4656: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4657: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4658: Failed to load strategy: Can't instantia
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ✅ Strategy_Gen4659: Comp=0.3620 Sharpe=0.94 CAGR=32.9% MaxDD=-37.1%
 
 =======================================================
