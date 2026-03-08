@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-08 16:20:52
+   2026-03-08 16:27:32
 =======================================================
 
 📈 Overall
-  Total iterations: 4864
-  Successful: 1089 (22%)
+  Total iterations: 4656
+  Successful: 1063 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 9 strategies
 
-  This session: 850 iters, 92 ok
-  Duration: 1 day, 0:45:07
-  LLM calls: 3550 (Groq: 3351 [Groq: 3351/3550 ok, 10 keys | pools: idea=404, code=679, fix=235, director=826, secretary=254, overflow=953 | models: kimi-k2-instruct=863, llama-4-scout-17b-16e-instruct=712, qwen3-32b=572 | cooling: 5 keys], GitHub: 108, Gemini: 0)
+  This session: 725 iters, 68 ok
+  Duration: 1 day, 0:45:25
+  LLM calls: 2884 (Groq: 2653 [Groq: 2653/2884 ok, 10 keys | pools: idea=208, code=568, fix=352, director=546, secretary=150, overflow=829 | models: kimi-k2-instruct=986, llama-4-scout-17b-16e-instruct=837, llama-4-maverick-17b-128e-instruct=556], GitHub: 20, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,16 +32,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4855: REJECTED: Exposure=3.4% below 5%
-  ❌ Strategy_Gen4856: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4857: LLM failed to generate code
-  ❌ Strategy_Gen4858: REJECTED: MaxDD=-91.7% worse than -50%
-  ❌ Strategy_Gen4859: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4860: LLM failed to generate code
-  ❌ Strategy_Gen4861: KeyError: -1
-Traceback (most recent call
-  ❌ Strategy_Gen4862: LLM failed to generate code
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen4863: REJECTED: Sharpe=0.14 below 0.3
+  ❌ Strategy_Gen4646: REJECTED: Exposure=1.5% below 5%
+  ❌ Strategy_Gen4648: REJECTED: Sharpe=0.02 below 0.3
+  ❌ Strategy_Gen4649: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4650: KeyError: 'HV_3'
+Traceback (most recent 
+  ❌ Strategy_Gen4651: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4652: REJECTED: Sharpe=0.18 below 0.3
+  ❌ Strategy_Gen4653: REJECTED: Exposure=2.2% below 5%
+  ❌ Strategy_Gen4654: REJECTED: MaxDD=-73.6% worse than -50%
+  ✅ Strategy_Gen4655: Comp=0.3758 Sharpe=0.99 CAGR=29.6% MaxDD=-30.7%
+  ❌ Strategy_Gen4656: REJECTED: MaxDD=-78.0% worse than -50%
 
 =======================================================
