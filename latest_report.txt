@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-08 11:51:43
+   2026-03-08 12:28:03
 =======================================================
 
 📈 Overall
-  Total iterations: 4685
-  Successful: 1069 (23%)
+  Total iterations: 4711
+  Successful: 1073 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 9 strategies
 
-  This session: 675 iters, 76 ok
-  Duration: 20:15:57
-  LLM calls: 2807 (Groq: 2630 [Groq: 2630/2807 ok, 10 keys | pools: idea=298, code=549, fix=200, director=610, secretary=185, overflow=788 | models: kimi-k2-instruct=772, llama-4-scout-17b-16e-instruct=533, llama-3.1-8b-instant=405 | cooling: 5 keys], GitHub: 108, Gemini: 0)
+  This session: 700 iters, 79 ok
+  Duration: 20:52:17
+  LLM calls: 2919 (Groq: 2742 [Groq: 2742/2919 ok, 10 keys | pools: idea=311, code=568, fix=203, director=642, secretary=195, overflow=823 | models: kimi-k2-instruct=782, llama-4-scout-17b-16e-instruct=558, llama-3.1-8b-instant=425 | cooling: 4 keys], GitHub: 108, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,16 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4676: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen4677: REJECTED: Sharpe=0.09 below 0.3
-  ❌ Strategy_Gen4678: Backtest error: 'Strategy_Gen4678' objec
-  ✅ Strategy_Gen4679: Comp=0.2921 Sharpe=0.46 CAGR=8.3% MaxDD=-27.0%
-  ❌ Strategy_Gen4680: REJECTED: MaxDD=-96.3% worse than -50%
-  ❌ Strategy_Gen4681: REJECTED: MaxDD=-99.6% worse than -50%
-  ❌ Strategy_Gen4682: REJECTED: MaxDD=-58.4% worse than -50%
-  ✅ Strategy_Gen4683: Comp=0.2578 Sharpe=0.49 CAGR=12.1% MaxDD=-46.4%
-  ✅ Strategy_Gen4684: Comp=0.2751 Sharpe=0.31 CAGR=5.5% MaxDD=-26.1%
-  ❌ Strategy_Gen4685: NameError: name 'rocpy' is not defined
-T
+  ❌ Strategy_Gen4702: REJECTED: MaxDD=-54.9% worse than -50%
+  ✅ Strategy_Gen4703: Comp=0.2980 Sharpe=0.72 CAGR=19.0% MaxDD=-41.1%
+  ❌ Strategy_Gen4704: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4705: REJECTED: Exposure=2.2% below 5%
+  ❌ Strategy_Gen4706: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4707: REJECTED: Sharpe=-0.16 below 0.3
+  ❌ Strategy_Gen4708: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4709: Backtest error: 'Strategy_Gen4709' objec
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ✅ Strategy_Gen4710: Comp=0.2671 Sharpe=0.34 CAGR=6.3% MaxDD=-30.7%
 
 =======================================================
