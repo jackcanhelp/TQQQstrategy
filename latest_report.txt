@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-08 18:59:42
+   2026-03-08 19:45:05
 =======================================================
 
 📈 Overall
-  Total iterations: 4941
-  Successful: 1096 (22%)
+  Total iterations: 4967
+  Successful: 1098 (22%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 9 strategies
 
-  This session: 925 iters, 97 ok
-  Duration: 1 day, 3:23:57
-  LLM calls: 3877 (Groq: 3674 [Groq: 3674/3877 ok, 10 keys | pools: idea=461, code=743, fix=246, director=926, secretary=283, overflow=1015 | models: kimi-k2-instruct=887, llama-4-scout-17b-16e-instruct=802, qwen3-32b=683 | cooling: 17 keys], GitHub: 108, Gemini: 0)
+  This session: 950 iters, 98 ok
+  Duration: 1 day, 4:09:20
+  LLM calls: 3997 (Groq: 3790 [Groq: 3790/3997 ok, 10 keys | pools: idea=472, code=762, fix=249, director=966, secretary=296, overflow=1045 | models: kimi-k2-instruct=899, llama-4-scout-17b-16e-instruct=822, qwen3-32b=738 | cooling: 1 keys], GitHub: 108, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,17 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen4932: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4933: KeyError: -1
-Traceback (most recent call
-  ❌ Strategy_Gen4934: TypeError: Strategy_Gen4934.init() takes
-  ❌ Strategy_Gen4935: REJECTED: MaxDD=-63.6% worse than -50%
-  ❌ Strategy_Gen4936: KeyError: -1
-Traceback (most recent call
-  ❌ Strategy_Gen4937: LLM failed to generate code
-  ❌ Strategy_Gen4938: Strategy never enters the market (time_i
-  ❌ Strategy_Gen4939: Failed to load strategy: Can't instantia
-  ✅ Cross_RVI_State_MACD_Cross_ATR_Spike: Comp=0.0000 Sharpe=1.08 CAGR=43.1% MaxDD=-45.4%
-  ✅ Strategy_Gen4940: Comp=0.2764 Sharpe=0.64 CAGR=13.7% MaxDD=-42.0%
+  ❌ Strategy_Gen4958: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4959: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen4960: LLM failed to generate code
+  ❌ Strategy_Gen4961: LLM failed to generate code
+  ❌ Strategy_Gen4962: LLM failed to generate code
+  ❌ Strategy_Gen4963: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4964: REJECTED: Sharpe=-0.29 below 0.3
+  ❌ Strategy_Gen4965: REJECTED: MaxDD=-81.7% worse than -50%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen4966: REJECTED: MaxDD=-56.1% worse than -50%
 
 =======================================================
