@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-08 20:51:10
+   2026-03-08 22:16:13
 =======================================================
 
 📈 Overall
-  Total iterations: 5018
-  Successful: 1101 (22%)
+  Total iterations: 4719
+  Successful: 1072 (23%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 9 strategies
 
-  This session: 1000 iters, 100 ok
-  Duration: 1 day, 5:15:24
-  LLM calls: 4234 (Groq: 4023 [Groq: 4023/4234 ok, 10 keys | pools: idea=504, code=805, fix=260, director=1042, secretary=323, overflow=1089 | models: kimi-k2-instruct=928, llama-4-scout-17b-16e-instruct=872, qwen3-32b=827 | cooling: 5 keys], GitHub: 108, Gemini: 0)
+  This session: 850 iters, 74 ok
+  Duration: 1 day, 6:34:07
+  LLM calls: 3339 (Groq: 2996 [Groq: 2996/3339 ok, 10 keys | pools: idea=218, code=624, fix=395, director=629, secretary=182, overflow=948 | models: kimi-k2-instruct=1226, llama-4-scout-17b-16e-instruct=846, llama-4-maverick-17b-128e-instruct=616 | cooling: 3 keys], GitHub: 20, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen5009: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen5010: REJECTED: Exposure=2.0% below 5%
-  ❌ Strategy_Gen5011: REJECTED: Exposure=1.8% below 5%
-  ❌ Strategy_Gen5012: REJECTED: Exposure=2.4% below 5%
-  ❌ Strategy_Gen5013: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5014: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen5015: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen5016: LLM failed to generate code
+  ❌ Strategy_Gen4710: REJECTED: MaxDD=-57.5% worse than -50%
+  ❌ Strategy_Gen4711: REJECTED: MaxDD=-81.7% worse than -50%
+  ❌ Strategy_Gen4712: REJECTED: Only 4 trades (min=10)
+  ❌ Strategy_Gen4713: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4714: REJECTED: Only 8 trades (min=10)
+  ❌ Strategy_Gen4715: REJECTED: Exposure=2.7% below 5%
+  ❌ Strategy_Gen4716: REJECTED: Only 8 trades (min=10)
+  ❌ Strategy_Gen4717: REJECTED: Sharpe=-0.09 below 0.3
   ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen5017: Strategy never enters the market (time_i
+  ❌ Strategy_Gen4718: Strategy never enters the market (time_i
 
 =======================================================
