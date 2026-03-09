@@ -1615,6 +1615,10 @@ Based on the above data, provide a concise strategic directive (2-4 sentences) f
   ML Regime (Phase 3A): HMM_Regime (0=bear/1=neutral/2=bull), HMM_Prob_Bull (0-1 bull probability), GARCH_Vol (annualized conditional volatility %), CP_Distance (days since last structural break)
   New Momentum (Phase 3B): QQE, STC, KDJ_K, KDJ_D, KDJ_J, CTI, SMI, Squeeze_Pro_Hist, Squeeze_Pro_On
 DO NOT suggest: yield curve, Fed funds rate, VIX (external), SPY, QQQ, or any macro data.
+⚠️ CRITICAL — LONG-ONLY SYSTEM: This system trades TQQQ with signals 0 (cash) or 1 (long) ONLY.
+  - NEVER recommend short positions, short-selling, short-biased strategies, or short-swing hedges.
+  - "Risk reduction" means BETTER EXITS (ATR stops, trailing stops) and REGIME FILTERS (sit in cash), NOT shorts.
+  - If you see MaxDD > -40%, the fix is FASTER EXIT SIGNALS or STRICTER ENTRY CONDITIONS, not adding shorts.
 Be specific and actionable.
 DO NOT write code. ONLY provide strategic direction."""
 

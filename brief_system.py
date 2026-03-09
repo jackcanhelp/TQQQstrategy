@@ -365,6 +365,9 @@ class SolutionResearcher:
         indicator_sample = ", ".join(known_indicators[:40])
         prompt = f"""You are B, a Solution Researcher for quantitative trading strategy development.
 
+⚠️ LONG-ONLY CONSTRAINT: All strategies use TQQQ signals 0 (cash) or 1 (long) ONLY.
+NEVER propose short entries. "Protective" = go to cash (signal=0), not short (signal=-1).
+
 PROBLEM ANALYSIS from A:
 {a_narrative}
 
@@ -568,10 +571,15 @@ class Secretary:
             eq_rules = (
                 "\n- execution_queue: 3 specific strategy assignments derived from Solution Researcher "
                 "proposals. Each is a complete actionable sentence specifying entry/exit/regime indicators "
-                "and key logic patterns."
+                "and key logic patterns. CRITICAL: ALL assignments must be LONG-ONLY (signal=0 or 1). "
+                "Never include short entries. Use 'exit to cash' not 'enter short'."
             )
 
         prompt = f"""You are the Secretary (C2) of a quantitative research team. Your job is to synthesize research inputs into a structured strategy brief.
+
+⚠️ SYSTEM CONSTRAINT — LONG-ONLY: All strategies trade TQQQ with signals 0 (cash) or 1 (long) ONLY.
+NEVER include short entries, short-biased logic, or short-swing hedges in any assignment.
+Risk reduction = better exits (ATR stops, trailing stops) + regime filters (go to cash), NOT shorts.
 
 {director_section}
 
