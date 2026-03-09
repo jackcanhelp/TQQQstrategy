@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-09 16:32:09
+   2026-03-09 17:16:43
 =======================================================
 
 📈 Overall
-  Total iterations: 5106
-  Successful: 1072 (21%)
+  Total iterations: 5133
+  Successful: 1077 (21%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 10 strategies
 
-  This session: 75 iters, 3 ok
-  Duration: 1:29:16
-  LLM calls: 336 (Groq: 336 [Groq: 336/336 ok, 10 keys | pools: idea=75, code=75, fix=52, director=100, secretary=34 | models: kimi-k2-instruct=209, llama-3.3-70b-versatile=75, llama-3.1-8b-instant=52], GitHub: 0, Gemini: 0)
+  This session: 100 iters, 6 ok
+  Duration: 2:13:50
+  LLM calls: 437 (Groq: 437 [Groq: 437/437 ok, 10 keys | pools: idea=100, code=100, fix=68, director=128, secretary=41 | models: kimi-k2-instruct=236, llama-3.3-70b-versatile=88, llama-3.1-8b-instant=68], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen5097: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5098: REJECTED: Exposure=3.3% below 5%
-  ❌ Strategy_Gen5099: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5100: REJECTED: Exposure=1.4% below 5%
-  ❌ Strategy_Gen5101: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5102: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5103: REJECTED: Sharpe=0.05 below 0.3
-  ✅ Cross_RVI_State_Aroon_Cross_RVI_Extreme: Comp=0.0000 Sharpe=0.99 CAGR=31.2% MaxDD=-39.4%
-  ✅ Cross_RVI_State_BB_Squeeze_RVI_Extreme: Comp=0.0000 Sharpe=0.91 CAGR=32.8% MaxDD=-44.8%
-  ❌ Strategy_Gen5104: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5124: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5125: REJECTED: MaxDD=-56.4% worse than -50%
+  ❌ Strategy_Gen5126: KeyError: 'MACD_HIST'
+Traceback (most re
+  ❌ Strategy_Gen5127: AttributeError: 'Strategy_Gen5127' objec
+  ❌ Strategy_Gen5128: AttributeError: 'numpy.int64' object has
+  ❌ Strategy_Gen5129: REJECTED: MaxDD=-75.4% worse than -50%
+  ❌ Strategy_Gen5130: REJECTED: MaxDD=-69.1% worse than -50%
+  ✅ Cross_RVI_State_MACD_Cross_TSI_Neg: Comp=0.0000 Sharpe=0.88 CAGR=35.4% MaxDD=-49.3%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen5131: REJECTED: MaxDD=-68.7% worse than -50%
 
 =======================================================
