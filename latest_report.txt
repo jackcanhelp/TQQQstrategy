@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-10 05:39:27
+   2026-03-10 06:01:07
 =======================================================
 
 📈 Overall
-  Total iterations: 5773
+  Total iterations: 5798
   Successful: 1183 (20%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 13 strategies
 
-  This session: 550 iters, 79 ok
-  Duration: 11:32:48
-  LLM calls: 2232 (Groq: 2231 [Groq: 2231/2232 ok, 10 keys | pools: idea=388, code=536, fix=277, director=514, secretary=151, overflow=365 | models: llama-4-scout-17b-16e-instruct=957, llama-4-maverick-17b-128e-instruct=489, kimi-k2-instruct=288], GitHub: 1, Gemini: 0)
+  This session: 575 iters, 79 ok
+  Duration: 11:54:28
+  LLM calls: 2352 (Groq: 2351 [Groq: 2351/2352 ok, 10 keys | pools: idea=405, code=555, fix=285, director=554, secretary=163, overflow=389 | models: llama-4-scout-17b-16e-instruct=983, llama-4-maverick-17b-128e-instruct=505, kimi-k2-instruct=311 | cooling: 14 keys], GitHub: 1, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,16 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ✅ Strategy_Gen5764: Comp=0.3073 Sharpe=0.53 CAGR=11.4% MaxDD=-26.1%
-  ❌ Strategy_Gen5765: KeyError: 'Volatility'
-Traceback (most r
-  ❌ Strategy_Gen5766: REJECTED: MaxDD=-63.4% worse than -50%
-  ❌ Strategy_Gen5767: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5768: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5769: REJECTED: MaxDD=-66.7% worse than -50%
-  ❌ Strategy_Gen5770: REJECTED: Exposure=2.9% below 5%
-  ✅ Cross_Supertrend_MACD_Cross_RVI_Extreme: Comp=0.0000 Sharpe=1.03 CAGR=39.8% MaxDD=-47.9%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen5771: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5789: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5790: AttributeError: 'numpy.bool' object has 
+  ❌ Strategy_Gen5791: REJECTED: Exposure=2.4% below 5%
+  ❌ Strategy_Gen5792: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5793: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5794: REJECTED: Exposure=2.9% below 5%
+  ❌ Strategy_Gen5795: REJECTED: MaxDD=-70.7% worse than -50%
+  ❌ Strategy_Gen5796: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5797: ValueError: max() iterable argument is e
+  ❌ Strategy_Gen5798: Syntax error in generated code: invalid 
 
 =======================================================
