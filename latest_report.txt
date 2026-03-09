@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-09 15:20:03
+   2026-03-09 16:07:19
 =======================================================
 
 📈 Overall
-  Total iterations: 5050
-  Successful: 1063 (21%)
+  Total iterations: 5079
+  Successful: 1069 (21%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 10 strategies
 
-  This session: 25 iters, 0 ok
-  Duration: 0:17:10
-  LLM calls: 109 (Groq: 109 [Groq: 109/109 ok, 10 keys | pools: idea=25, code=25, fix=16, director=32, secretary=11 | models: kimi-k2-instruct=68, llama-3.3-70b-versatile=25, llama-3.1-8b-instant=16], GitHub: 0, Gemini: 0)
+  This session: 50 iters, 2 ok
+  Duration: 1:04:26
+  LLM calls: 229 (Groq: 229 [Groq: 229/229 ok, 10 keys | pools: idea=50, code=50, fix=34, director=72, secretary=23 | models: kimi-k2-instruct=145, llama-3.3-70b-versatile=50, llama-3.1-8b-instant=34], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen5041: REJECTED: Exposure=1.6% below 5%
-  ❌ Strategy_Gen5042: REJECTED: Exposure=2.4% below 5%
-  ❌ Strategy_Gen5043: REJECTED: Exposure=3.9% below 5%
-  ❌ Strategy_Gen5044: TypeError: positive() got an unexpected 
-  ❌ Strategy_Gen5045: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5046: REJECTED: Sharpe=-0.01 below 0.3
-  ✅ Cross_RVI_State_MACD_Cross_RVI_Extreme: Comp=0.0000 Sharpe=1.09 CAGR=44.9% MaxDD=-46.1%
-  ✅ Cross_RVI_State_MACD_Cross_ATR_Spike: Comp=0.0000 Sharpe=1.00 CAGR=44.2% MaxDD=-49.3%
-  ✅ Cross_RVI_State_RVI_Trans_MACD_Bear: Comp=0.0000 Sharpe=0.92 CAGR=30.3% MaxDD=-42.7%
-  ❌ Strategy_Gen5047: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5070: REJECTED: MaxDD=-72.9% worse than -50%
+  ❌ Strategy_Gen5071: KeyError: 'SL_Price'
+Traceback (most rec
+  ❌ Strategy_Gen5072: REJECTED: MaxDD=-66.3% worse than -50%
+  ❌ Strategy_Gen5073: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5074: REJECTED: Exposure=1.9% below 5%
+  ✅ Cross_RVI_State_MACD_Cross_RSI_OB: Comp=0.0000 Sharpe=1.13 CAGR=47.4% MaxDD=-46.1%
+  ✅ Cross_RVI_State_MACD_Cross_Consec_Down: Comp=0.0000 Sharpe=0.97 CAGR=39.6% MaxDD=-50.0%
+  ✅ Cross_RVI_State_MACD_Cross_ST_Down: Comp=0.0000 Sharpe=0.96 CAGR=39.1% MaxDD=-47.9%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen5075: Strategy never enters the market (time_i
 
 =======================================================
