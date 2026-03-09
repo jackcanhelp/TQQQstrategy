@@ -18,6 +18,15 @@
     "inducted": "2026-03-09T18:06:35.096702"
   },
   {
+    "name": "Cross_RVI_State_RVI_Trans_RVI_Extreme",
+    "sharpe": 1.2716274898119044,
+    "max_dd": -0.4033544278280277,
+    "cagr": 0.5209589134162174,
+    "calmar": 1.2915661202021833,
+    "idea": "Crossover: RVI_State\u00d7RVI_Trans\u00d7RVI_Extreme",
+    "inducted": "2026-03-09T23:44:47.963121"
+  },
+  {
     "name": "ChampionRVI",
     "sharpe": 1.2650277112497557,
     "max_dd": -0.40335454613731087,
