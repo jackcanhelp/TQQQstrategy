@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-09 20:23:05
+   2026-03-09 20:54:15
 =======================================================
 
 📈 Overall
-  Total iterations: 5323
-  Successful: 1101 (21%)
+  Total iterations: 5350
+  Successful: 1106 (21%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 12 strategies
 
-  This session: 125 iters, 22 ok
-  Duration: 2:16:26
-  LLM calls: 508 (Groq: 508 [Groq: 508/508 ok, 10 keys | pools: idea=125, code=125, fix=93, director=128, secretary=37 | models: llama-4-scout-17b-16e-instruct=240, llama-4-maverick-17b-128e-instruct=118, llama-3.1-8b-instant=93], GitHub: 0, Gemini: 0)
+  This session: 150 iters, 25 ok
+  Duration: 2:47:36
+  LLM calls: 608 (Groq: 608 [Groq: 608/608 ok, 10 keys | pools: idea=150, code=150, fix=108, director=156, secretary=44 | models: llama-4-scout-17b-16e-instruct=304, llama-4-maverick-17b-128e-instruct=143, llama-3.1-8b-instant=97], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,17 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen5314: REJECTED: MaxDD=-80.5% worse than -50%
-  ❌ Strategy_Gen5315: REJECTED: MaxDD=-77.6% worse than -50%
-  ❌ Strategy_Gen5316: TypeError: unsupported operand type(s) f
-  ❌ Strategy_Gen5317: REJECTED: MaxDD=-67.4% worse than -50%
-  ✅ Strategy_Gen5318: Comp=0.2658 Sharpe=0.52 CAGR=11.6% MaxDD=-41.6%
-  ❌ Strategy_Gen5319: REJECTED: MaxDD=-64.3% worse than -50%
-  ❌ Strategy_Gen5320: REJECTED: MaxDD=-78.2% worse than -50%
-  ✅ Strategy_Gen5321: Comp=0.3208 Sharpe=0.82 CAGR=20.6% MaxDD=-37.6%
-  ✅ Cross_Supertrend_Aroon_Cross_RVI_Extreme: Comp=0.0000 Sharpe=0.93 CAGR=26.7% MaxDD=-34.7%
-  ❌ Strategy_Gen5322: REJECTED: MaxDD=-58.8% worse than -50%
+  ❌ Strategy_Gen5341: KeyError: 'HV_30_Pct'
+Traceback (most re
+  ✅ Strategy_Gen5342: Comp=0.2996 Sharpe=0.53 CAGR=9.1% MaxDD=-25.0%
+  ❌ Strategy_Gen5343: REJECTED: Exposure=1.9% below 5%
+  ❌ Strategy_Gen5344: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5345: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5346: REJECTED: Exposure=1.5% below 5%
+  ❌ Strategy_Gen5347: Strategy never enters the market (time_i
+  ✅ Cross_Supertrend_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=0.84 CAGR=31.2% MaxDD=-49.9%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen5348: KeyError: 'Laguerre_RSI'
+Traceback (most
 
 =======================================================
