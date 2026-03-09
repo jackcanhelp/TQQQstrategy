@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-10 06:01:07
+   2026-03-10 06:40:40
 =======================================================
 
 📈 Overall
-  Total iterations: 5798
-  Successful: 1183 (20%)
+  Total iterations: 5824
+  Successful: 1186 (20%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 13 strategies
 
-  This session: 575 iters, 79 ok
-  Duration: 11:54:28
-  LLM calls: 2352 (Groq: 2351 [Groq: 2351/2352 ok, 10 keys | pools: idea=405, code=555, fix=285, director=554, secretary=163, overflow=389 | models: llama-4-scout-17b-16e-instruct=983, llama-4-maverick-17b-128e-instruct=505, kimi-k2-instruct=311 | cooling: 14 keys], GitHub: 1, Gemini: 0)
+  This session: 600 iters, 81 ok
+  Duration: 12:34:01
+  LLM calls: 2467 (Groq: 2466 [Groq: 2466/2467 ok, 10 keys | pools: idea=418, code=576, fix=292, director=590, secretary=173, overflow=417 | models: llama-4-scout-17b-16e-instruct=993, llama-4-maverick-17b-128e-instruct=524, kimi-k2-instruct=338 | cooling: 3 keys], GitHub: 1, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen5789: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5790: AttributeError: 'numpy.bool' object has 
-  ❌ Strategy_Gen5791: REJECTED: Exposure=2.4% below 5%
-  ❌ Strategy_Gen5792: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5793: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5794: REJECTED: Exposure=2.9% below 5%
-  ❌ Strategy_Gen5795: REJECTED: MaxDD=-70.7% worse than -50%
-  ❌ Strategy_Gen5796: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5797: ValueError: max() iterable argument is e
-  ❌ Strategy_Gen5798: Syntax error in generated code: invalid 
+  ❌ Strategy_Gen5815: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5816: REJECTED: MaxDD=-74.2% worse than -50%
+  ❌ Strategy_Gen5817: REJECTED: MaxDD=-81.7% worse than -50%
+  ❌ Strategy_Gen5818: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5819: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5820: REJECTED: Only 0 trades (min=10)
+  ✅ Strategy_Gen5821: Comp=0.2655 Sharpe=0.51 CAGR=13.1% MaxDD=-44.3%
+  ❌ Strategy_Gen5822: Strategy never enters the market (time_i
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen5823: Failed to load strategy: name 'entry_mas
 
 =======================================================
