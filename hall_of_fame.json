@@ -27,6 +27,15 @@
     "inducted": "2026-03-09T23:44:47.963121"
   },
   {
+    "name": "Strategy_Gen5831",
+    "sharpe": 1.2745757525100896,
+    "max_dd": -0.4033544278280277,
+    "cagr": 0.5187176368682549,
+    "calmar": 1.286009526811028,
+    "idea": "Strategy_Gen5831\n\nKEPT: RVI 3-state machine core (Green/Orange/Red)  \nCHANGED: Added Elder_Bull confirmation, ATR_Pct trailing stop, BB_Squeeze pre-filter\n\nState Machine Logic  \n- Green: RVI_Refined > 59  \n- Orange: 42 \u2264 RVI_Refined \u2264 59  \n- Red: RVI_Refined < 42  \n\nEntry Signal Logic  \nLong: Orange\u2192Green transition AND Elder_Bull > 0 AND (BB_Squeeze == 1 OR Orange state)\n\nExit & Risk Logic  \n- Trail stop: 1.5 \u00d7 ATR_Pct below highest close since entry  \n- Hard exit: RVI_Refined < 42 (breakdown) ",
+    "inducted": "2026-03-10T06:44:32.840089"
+  },
+  {
     "name": "ChampionRVI",
     "sharpe": 1.2650277112497557,
     "max_dd": -0.40335454613731087,
