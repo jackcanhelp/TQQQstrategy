@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-10 05:00:13
+   2026-03-10 05:39:27
 =======================================================
 
 📈 Overall
-  Total iterations: 5746
-  Successful: 1180 (21%)
+  Total iterations: 5773
+  Successful: 1183 (20%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 13 strategies
 
-  This session: 525 iters, 78 ok
-  Duration: 10:53:34
-  LLM calls: 2117 (Groq: 2116 [Groq: 2116/2117 ok, 10 keys | pools: idea=373, code=512, fix=270, director=478, secretary=139, overflow=344 | models: llama-4-scout-17b-16e-instruct=942, llama-4-maverick-17b-128e-instruct=467, llama-3.1-8b-instant=270 | cooling: 6 keys], GitHub: 1, Gemini: 0)
+  This session: 550 iters, 79 ok
+  Duration: 11:32:48
+  LLM calls: 2232 (Groq: 2231 [Groq: 2231/2232 ok, 10 keys | pools: idea=388, code=536, fix=277, director=514, secretary=151, overflow=365 | models: llama-4-scout-17b-16e-instruct=957, llama-4-maverick-17b-128e-instruct=489, kimi-k2-instruct=288], GitHub: 1, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,16 +32,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen5737: REJECTED: MaxDD=-58.4% worse than -50%
-  ❌ Strategy_Gen5738: ValueError: The truth value of a Series 
-  ❌ Strategy_Gen5739: KeyError: 'hv_expansion_lookback'
-Traceb
-  ❌ Strategy_Gen5740: REJECTED: MaxDD=-81.7% worse than -50%
-  ❌ Strategy_Gen5741: REJECTED: MaxDD=-63.7% worse than -50%
-  ❌ Strategy_Gen5742: REJECTED: MaxDD=-75.3% worse than -50%
-  ❌ Strategy_Gen5743: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5744: REJECTED: MaxDD=-74.0% worse than -50%
-  ✅ Cross_SMA_Trend_Elder_Bull_RSI_OB: Comp=0.0000 Sharpe=0.78 CAGR=26.0% MaxDD=-42.0%
-  ❌ Strategy_Gen5745: Strategy never enters the market (time_i
+  ✅ Strategy_Gen5764: Comp=0.3073 Sharpe=0.53 CAGR=11.4% MaxDD=-26.1%
+  ❌ Strategy_Gen5765: KeyError: 'Volatility'
+Traceback (most r
+  ❌ Strategy_Gen5766: REJECTED: MaxDD=-63.4% worse than -50%
+  ❌ Strategy_Gen5767: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5768: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5769: REJECTED: MaxDD=-66.7% worse than -50%
+  ❌ Strategy_Gen5770: REJECTED: Exposure=2.9% below 5%
+  ✅ Cross_Supertrend_MACD_Cross_RVI_Extreme: Comp=0.0000 Sharpe=1.03 CAGR=39.8% MaxDD=-47.9%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen5771: Strategy never enters the market (time_i
 
 =======================================================
