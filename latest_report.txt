@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-09 19:27:43
+   2026-03-09 19:57:05
 =======================================================
 
 📈 Overall
-  Total iterations: 5270
-  Successful: 1091 (21%)
+  Total iterations: 5297
+  Successful: 1093 (21%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 12 strategies
 
-  This session: 75 iters, 15 ok
-  Duration: 1:21:04
-  LLM calls: 290 (Groq: 290 [Groq: 290/290 ok, 10 keys | pools: idea=75, code=75, fix=57, director=64, secretary=19 | models: llama-4-scout-17b-16e-instruct=130, llama-4-maverick-17b-128e-instruct=68, llama-3.1-8b-instant=57 | cooling: 8 keys], GitHub: 0, Gemini: 0)
+  This session: 100 iters, 15 ok
+  Duration: 1:50:26
+  LLM calls: 418 (Groq: 418 [Groq: 418/418 ok, 10 keys | pools: idea=100, code=100, fix=78, director=108, secretary=32 | models: llama-4-scout-17b-16e-instruct=202, llama-4-maverick-17b-128e-instruct=93, llama-3.1-8b-instant=78], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen5261: REJECTED: MaxDD=-59.3% worse than -50%
-  ❌ Strategy_Gen5262: REJECTED: Exposure=4.3% below 5%
-  ❌ Strategy_Gen5263: REJECTED: Only 4 trades (min=10)
-  ❌ Strategy_Gen5264: REJECTED: MaxDD=-55.5% worse than -50%
-  ✅ Strategy_Gen5265: Comp=0.3521 Sharpe=0.95 CAGR=30.1% MaxDD=-38.5%
-  ❌ Strategy_Gen5266: REJECTED: MaxDD=-53.7% worse than -50%
-  ❌ Strategy_Gen5267: TypeError: 'NoneType' object is not subs
-  ✅ Cross_SMA_Trend_OBV_Break_RVI_Extreme: Comp=0.0000 Sharpe=0.82 CAGR=24.6% MaxDD=-36.7%
-  ✅ Cross_SMA_Trend_RVI_Trans_RSI_OB: Comp=0.0000 Sharpe=0.79 CAGR=26.5% MaxDD=-49.9%
-  ❌ Strategy_Gen5268: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen5288: REJECTED: Only 8 trades (min=10)
+  ❌ Strategy_Gen5289: REJECTED: MaxDD=-81.7% worse than -50%
+  ❌ Strategy_Gen5290: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen5291: REJECTED: Sharpe=0.14 below 0.3
+  ❌ Strategy_Gen5292: REJECTED: Sharpe=-0.05 below 0.3
+  ❌ Strategy_Gen5293: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5294: Backtest error: 'Strategy_Gen5294' objec
+  ✅ Cross_Supertrend_BB_Squeeze_RVI_Extreme: Comp=0.0000 Sharpe=0.79 CAGR=25.3% MaxDD=-40.9%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen5295: REJECTED: MaxDD=-98.7% worse than -50%
 
 =======================================================
