@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-09 19:08:06
+   2026-03-09 19:27:43
 =======================================================
 
 📈 Overall
-  Total iterations: 5243
-  Successful: 1084 (21%)
+  Total iterations: 5270
+  Successful: 1091 (21%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 12 strategies
 
-  This session: 50 iters, 10 ok
-  Duration: 1:01:27
-  LLM calls: 202 (Groq: 202 [Groq: 202/202 ok, 10 keys | pools: idea=50, code=50, fix=40, director=48, secretary=14 | models: llama-4-scout-17b-16e-instruct=87, llama-4-maverick-17b-128e-instruct=46, llama-3.1-8b-instant=40], GitHub: 0, Gemini: 0)
+  This session: 75 iters, 15 ok
+  Duration: 1:21:04
+  LLM calls: 290 (Groq: 290 [Groq: 290/290 ok, 10 keys | pools: idea=75, code=75, fix=57, director=64, secretary=19 | models: llama-4-scout-17b-16e-instruct=130, llama-4-maverick-17b-128e-instruct=68, llama-3.1-8b-instant=57 | cooling: 8 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen5234: REJECTED: MaxDD=-60.2% worse than -50%
-  ❌ Strategy_Gen5235: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen5236: Failed to load strategy: Strategy_Gen523
-  ❌ Strategy_Gen5237: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5238: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5239: TypeError: 'NoneType' object is not subs
-  ✅ Strategy_Gen5240: Comp=0.3246 Sharpe=0.74 CAGR=13.4% MaxDD=-24.8%
-  ✅ Cross_SMA_Trend_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=0.79 CAGR=24.2% MaxDD=-42.0%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ✅ Strategy_Gen5241: Comp=0.3055 Sharpe=0.55 CAGR=11.0% MaxDD=-27.8%
+  ❌ Strategy_Gen5261: REJECTED: MaxDD=-59.3% worse than -50%
+  ❌ Strategy_Gen5262: REJECTED: Exposure=4.3% below 5%
+  ❌ Strategy_Gen5263: REJECTED: Only 4 trades (min=10)
+  ❌ Strategy_Gen5264: REJECTED: MaxDD=-55.5% worse than -50%
+  ✅ Strategy_Gen5265: Comp=0.3521 Sharpe=0.95 CAGR=30.1% MaxDD=-38.5%
+  ❌ Strategy_Gen5266: REJECTED: MaxDD=-53.7% worse than -50%
+  ❌ Strategy_Gen5267: TypeError: 'NoneType' object is not subs
+  ✅ Cross_SMA_Trend_OBV_Break_RVI_Extreme: Comp=0.0000 Sharpe=0.82 CAGR=24.6% MaxDD=-36.7%
+  ✅ Cross_SMA_Trend_RVI_Trans_RSI_OB: Comp=0.0000 Sharpe=0.79 CAGR=26.5% MaxDD=-49.9%
+  ❌ Strategy_Gen5268: Failed to load strategy: Can't instantia
 
 =======================================================
