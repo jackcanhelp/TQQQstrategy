@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-09 17:16:43
+   2026-03-09 17:32:48
 =======================================================
 
 📈 Overall
-  Total iterations: 5133
-  Successful: 1077 (21%)
+  Total iterations: 5159
+  Successful: 1080 (21%)
   Best: Strategy_Gen995 (Composite: 0.6407)
-  Hall of Fame: 10 strategies
+  Hall of Fame: 11 strategies
 
-  This session: 100 iters, 6 ok
-  Duration: 2:13:50
-  LLM calls: 437 (Groq: 437 [Groq: 437/437 ok, 10 keys | pools: idea=100, code=100, fix=68, director=128, secretary=41 | models: kimi-k2-instruct=236, llama-3.3-70b-versatile=88, llama-3.1-8b-instant=68], GitHub: 0, Gemini: 0)
+  This session: 125 iters, 8 ok
+  Duration: 2:29:55
+  LLM calls: 542 (Groq: 542 [Groq: 542/542 ok, 10 keys | pools: idea=125, code=125, fix=87, director=156, secretary=49 | models: kimi-k2-instruct=248, llama-3.3-70b-versatile=89, llama-3.1-8b-instant=87 | cooling: 9 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -22,7 +22,7 @@
   #4 Strategy_Gen2117: Comp=0.4163 Sharpe=1.28 CAGR=52.7% MaxDD=-40.3% | OOS Sharpe=1.44
   #5 Strategy_Gen521: Comp=0.0000 Sharpe=1.28 CAGR=52.4% MaxDD=-40.3%
 
-🥇 Hall of Fame (10)
+🥇 Hall of Fame (11)
 ───────────────────────────────────────────────────────
   ChampionRVI: Calmar=1.29 Sharpe=1.27 MaxDD=-40.3%
   ChampionRVI: Calmar=1.28 Sharpe=1.27 MaxDD=-40.3%
@@ -32,16 +32,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen5124: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5125: REJECTED: MaxDD=-56.4% worse than -50%
-  ❌ Strategy_Gen5126: KeyError: 'MACD_HIST'
-Traceback (most re
-  ❌ Strategy_Gen5127: AttributeError: 'Strategy_Gen5127' objec
-  ❌ Strategy_Gen5128: AttributeError: 'numpy.int64' object has
-  ❌ Strategy_Gen5129: REJECTED: MaxDD=-75.4% worse than -50%
-  ❌ Strategy_Gen5130: REJECTED: MaxDD=-69.1% worse than -50%
-  ✅ Cross_RVI_State_MACD_Cross_TSI_Neg: Comp=0.0000 Sharpe=0.88 CAGR=35.4% MaxDD=-49.3%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen5131: REJECTED: MaxDD=-68.7% worse than -50%
+  ❌ Strategy_Gen5150: REJECTED: MaxDD=-55.9% worse than -50%
+  ❌ Strategy_Gen5151: REJECTED: Exposure=2.3% below 5%
+  ❌ Strategy_Gen5152: KeyError: 'Squeeze_Pro'
+Traceback (most 
+  ✅ Strategy_Gen5153: Comp=0.2883 Sharpe=0.62 CAGR=16.8% MaxDD=-42.2%
+  ❌ Strategy_Gen5154: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5155: REJECTED: MaxDD=-85.1% worse than -50%
+  ❌ Strategy_Gen5156: Backtest error: 'Strategy_Gen5156' objec
+  ❌ Strategy_Gen5157: REJECTED: MaxDD=-58.0% worse than -50%
+  ✅ Cross_RVI_State_RVI_Trans_RSI_OB: Comp=0.0000 Sharpe=1.20 CAGR=49.4% MaxDD=-39.2%
+  ❌ Strategy_Gen5158: REJECTED: Sharpe=0.10 below 0.3
 
 =======================================================

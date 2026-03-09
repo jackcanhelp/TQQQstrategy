@@ -72,6 +72,15 @@
     "inducted": "2026-03-07T23:36:12.069511"
   },
   {
+    "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
+    "sharpe": 1.2032573230370114,
+    "max_dd": -0.3918888842242691,
+    "cagr": 0.49399377999859406,
+    "calmar": 1.2605455267669512,
+    "idea": "Crossover: RVI_State\u00d7RVI_Trans\u00d7RSI_OB",
+    "inducted": "2026-03-09T17:32:39.368946"
+  },
+  {
     "name": "Strategy_Gen3671",
     "sharpe": 1.2312754360739595,
     "max_dd": -0.219798689575605,
