@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-10 04:20:04
+   2026-03-10 05:00:13
 =======================================================
 
 📈 Overall
-  Total iterations: 5720
-  Successful: 1177 (21%)
+  Total iterations: 5746
+  Successful: 1180 (21%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 13 strategies
 
-  This session: 500 iters, 76 ok
-  Duration: 10:13:25
-  LLM calls: 2013 (Groq: 2012 [Groq: 2012/2013 ok, 10 keys | pools: idea=352, code=493, fix=259, director=450, secretary=131, overflow=327 | models: llama-4-scout-17b-16e-instruct=920, llama-4-maverick-17b-128e-instruct=452, llama-3.1-8b-instant=252], GitHub: 1, Gemini: 0)
+  This session: 525 iters, 78 ok
+  Duration: 10:53:34
+  LLM calls: 2117 (Groq: 2116 [Groq: 2116/2117 ok, 10 keys | pools: idea=373, code=512, fix=270, director=478, secretary=139, overflow=344 | models: llama-4-scout-17b-16e-instruct=942, llama-4-maverick-17b-128e-instruct=467, llama-3.1-8b-instant=270 | cooling: 6 keys], GitHub: 1, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,16 +32,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen5711: REJECTED: Sharpe=0.02 below 0.3
-  ❌ Strategy_Gen5712: KeyError: 'RSI_14'
-Traceback (most recen
-  ❌ Strategy_Gen5713: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5714: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5715: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5716: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5717: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5718: Strategy never enters the market (time_i
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen5719: REJECTED: MaxDD=-57.2% worse than -50%
+  ❌ Strategy_Gen5737: REJECTED: MaxDD=-58.4% worse than -50%
+  ❌ Strategy_Gen5738: ValueError: The truth value of a Series 
+  ❌ Strategy_Gen5739: KeyError: 'hv_expansion_lookback'
+Traceb
+  ❌ Strategy_Gen5740: REJECTED: MaxDD=-81.7% worse than -50%
+  ❌ Strategy_Gen5741: REJECTED: MaxDD=-63.7% worse than -50%
+  ❌ Strategy_Gen5742: REJECTED: MaxDD=-75.3% worse than -50%
+  ❌ Strategy_Gen5743: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5744: REJECTED: MaxDD=-74.0% worse than -50%
+  ✅ Cross_SMA_Trend_Elder_Bull_RSI_OB: Comp=0.0000 Sharpe=0.78 CAGR=26.0% MaxDD=-42.0%
+  ❌ Strategy_Gen5745: Strategy never enters the market (time_i
 
 =======================================================
