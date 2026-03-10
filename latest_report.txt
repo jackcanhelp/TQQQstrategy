@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-11 00:37:14
+   2026-03-11 02:04:58
 =======================================================
 
 📈 Overall
-  Total iterations: 6430
-  Successful: 1209 (19%)
+  Total iterations: 6457
+  Successful: 1220 (19%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 17 strategies
 
-  This session: 175 iters, 10 ok
-  Duration: 4:15:59
-  LLM calls: 791 (Groq: 748 [Groq: 748/791 ok, 10 keys | pools: idea=106, code=100, fix=113, director=191, secretary=50, overflow=188 | models: kimi-k2-instruct=310, llama-4-scout-17b-16e-instruct=218, llama-3.1-8b-instant=80], GitHub: 43, Gemini: 0)
+  This session: 200 iters, 19 ok
+  Duration: 5:43:43
+  LLM calls: 892 (Groq: 824 [Groq: 824/892 ok, 10 keys | pools: idea=111, code=100, fix=129, director=206, secretary=53, overflow=225 | models: kimi-k2-instruct=365, llama-4-scout-17b-16e-instruct=218, llama-3.1-8b-instant=101], GitHub: 68, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,17 +32,20 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen6421: REJECTED: Sharpe=-0.08 below 0.3
-  ❌ Strategy_Gen6422: REJECTED: Sharpe=0.11 below 0.3
-  ❌ Strategy_Gen6423: REJECTED: Sharpe=0.00 below 0.3
-  ❌ Strategy_Gen6424: REJECTED: MaxDD=-53.6% worse than -50%
-  ❌ Strategy_Gen6425: KeyError: 'Williams_R_14'
-Traceback (mos
-  ❌ Strategy_Gen6426: KeyError: 'Williams_R_14'
-Traceback (mos
-  ❌ Strategy_Gen6427: REJECTED: Exposure=1.4% below 5%
-  ✅ Cross_RVI_State_RVI_Trans_ATR_Spike: Comp=0.0000 Sharpe=0.98 CAGR=40.5% MaxDD=-43.7%
-  ✅ Cross_RVI_State_PPO_Cross_ATR_Spike: Comp=0.0000 Sharpe=0.96 CAGR=41.7% MaxDD=-49.1%
-  ❌ Strategy_Gen6428: REJECTED: Only 0 trades (min=10)
+  ❌ Strategy_Gen6448: KeyError: 'TEMA'
+Traceback (most recent 
+  ❌ Strategy_Gen6449: KeyError: 'Tema'
+Traceback (most recent 
+  ✅ Strategy_Gen6450: Comp=0.2708 Sharpe=0.66 CAGR=18.8% MaxDD=-50.3%
+  ❌ Strategy_Gen6451: KeyError: 'KC_lower_20'
+Traceback (most 
+  ✅ Strategy_Gen6452: Comp=0.2684 Sharpe=0.41 CAGR=7.8% MaxDD=-34.2%
+  ❌ Strategy_Gen6453: KeyError: 'MACD_diff'
+Traceback (most re
+  ❌ Strategy_Gen6454: Strategy never enters the market (time_i
+  ✅ Cross_RVI_State_MACD_Cross_Aroon_Flip: Comp=0.0000 Sharpe=0.92 CAGR=36.4% MaxDD=-45.9%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen6455: KeyError: 'Regime'
+Traceback (most recen
 
 =======================================================
