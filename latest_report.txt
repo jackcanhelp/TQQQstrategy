@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-10 14:10:18
+   2026-03-10 14:39:06
 =======================================================
 
 📈 Overall
-  Total iterations: 6135
-  Successful: 1224 (20%)
+  Total iterations: 6160
+  Successful: 1225 (20%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 14 strategies
 
-  This session: 900 iters, 108 ok
-  Duration: 20:03:39
-  LLM calls: 3778 (Groq: 3776 [Groq: 3776/3778 ok, 10 keys | pools: idea=621, code=821, fix=387, director=982, secretary=288, overflow=677 | models: llama-4-scout-17b-16e-instruct=1223, llama-4-maverick-17b-128e-instruct=724, kimi-k2-instruct=625], GitHub: 2, Gemini: 0)
+  This session: 925 iters, 109 ok
+  Duration: 20:32:27
+  LLM calls: 3893 (Groq: 3891 [Groq: 3891/3893 ok, 10 keys | pools: idea=631, code=845, fix=396, director=1014, secretary=298, overflow=707 | models: llama-4-scout-17b-16e-instruct=1235, llama-4-maverick-17b-128e-instruct=744, kimi-k2-instruct=661 | cooling: 13 keys], GitHub: 2, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen6126: AttributeError: 'Strategy_Gen6126' objec
-  ❌ Strategy_Gen6127: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6128: Strategy never enters the market (time_i
-  ❌ Strategy_Gen6129: Strategy never enters the market (time_i
-  ✅ Strategy_Gen6130: Comp=0.2887 Sharpe=0.66 CAGR=16.6% MaxDD=-42.4%
-  ❌ Strategy_Gen6131: REJECTED: Sharpe=0.14 below 0.3
-  ❌ Strategy_Gen6132: Strategy never enters the market (time_i
-  ✅ Strategy_Gen6133: Comp=0.3118 Sharpe=0.67 CAGR=16.5% MaxDD=-31.8%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ✅ Strategy_Gen6134: Comp=0.2818 Sharpe=0.42 CAGR=7.7% MaxDD=-28.6%
+  ❌ Strategy_Gen6151: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6152: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6153: AttributeError: 'numpy.float64' object h
+  ❌ Strategy_Gen6154: REJECTED: MaxDD=-74.4% worse than -50%
+  ❌ Strategy_Gen6155: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6156: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6157: REJECTED: MaxDD=-57.2% worse than -50%
+  ❌ Strategy_Gen6158: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6159: REJECTED: Exposure=1.1% below 5%
+  ❌ Strategy_Gen6160: REJECTED: MaxDD=-65.1% worse than -50%
 
 =======================================================
