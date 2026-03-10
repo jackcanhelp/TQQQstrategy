@@ -90,6 +90,15 @@
     "inducted": "2026-03-10T20:21:10.894030"
   },
   {
+    "name": "Cross_RVI_State_RVI_Trans_RVI_Extreme",
+    "sharpe": 1.2666683471133082,
+    "max_dd": -0.403354418143538,
+    "cagr": 0.5159457968877275,
+    "calmar": 1.2791375863995684,
+    "idea": "Crossover: RVI_State\u00d7RVI_Trans\u00d7RVI_Extreme",
+    "inducted": "2026-03-10T21:04:31.054491"
+  },
+  {
     "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
     "sharpe": 1.2094020158734924,
     "max_dd": -0.3918887733093607,
@@ -106,6 +115,15 @@
     "calmar": 1.2685713806079029,
     "idea": "Crossover: RVI_State\u00d7RVI_Trans\u00d7RSI_OB",
     "inducted": "2026-03-07T23:36:12.069511"
+  },
+  {
+    "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
+    "sharpe": 1.2107374337975754,
+    "max_dd": -0.39188881620516114,
+    "cagr": 0.496307818853188,
+    "calmar": 1.2664505807008322,
+    "idea": "Crossover: RVI_State\u00d7RVI_Trans\u00d7RSI_OB",
+    "inducted": "2026-03-10T21:04:31.700523"
   },
   {
     "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
