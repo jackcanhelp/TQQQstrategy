@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-10 23:53:33
+   2026-03-11 00:37:14
 =======================================================
 
 📈 Overall
-  Total iterations: 6403
-  Successful: 1207 (19%)
+  Total iterations: 6430
+  Successful: 1209 (19%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 17 strategies
 
-  This session: 150 iters, 10 ok
-  Duration: 3:32:18
-  LLM calls: 674 (Groq: 656 [Groq: 656/674 ok, 10 keys | pools: idea=104, code=100, fix=103, director=170, secretary=48, overflow=131 | models: kimi-k2-instruct=234, llama-4-scout-17b-16e-instruct=218, qwen3-32b=74], GitHub: 18, Gemini: 0)
+  This session: 175 iters, 10 ok
+  Duration: 4:15:59
+  LLM calls: 791 (Groq: 748 [Groq: 748/791 ok, 10 keys | pools: idea=106, code=100, fix=113, director=191, secretary=50, overflow=188 | models: kimi-k2-instruct=310, llama-4-scout-17b-16e-instruct=218, llama-3.1-8b-instant=80], GitHub: 43, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,16 +32,17 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen6394: REJECTED: Sharpe=0.01 below 0.3
-  ❌ Strategy_Gen6395: REJECTED: Sharpe=-0.44 below 0.3
-  ❌ Strategy_Gen6396: Strategy never enters the market (time_i
-  ❌ Strategy_Gen6397: KeyError: 'VWAP'
-Traceback (most recent 
-  ❌ Strategy_Gen6398: REJECTED: Sharpe=0.09 below 0.3
-  ✅ Cross_RVI_State_RVI_Trans_TSI_Neg: Comp=0.0000 Sharpe=0.98 CAGR=40.9% MaxDD=-43.7%
-  ✅ Cross_RVI_State_MACD_Cross_Consec_Down: Comp=0.0000 Sharpe=0.95 CAGR=38.4% MaxDD=-50.0%
-  ✅ Cross_Supertrend_Aroon_Cross_RVI_Extreme: Comp=0.0000 Sharpe=0.90 CAGR=25.7% MaxDD=-39.9%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen6399: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6421: REJECTED: Sharpe=-0.08 below 0.3
+  ❌ Strategy_Gen6422: REJECTED: Sharpe=0.11 below 0.3
+  ❌ Strategy_Gen6423: REJECTED: Sharpe=0.00 below 0.3
+  ❌ Strategy_Gen6424: REJECTED: MaxDD=-53.6% worse than -50%
+  ❌ Strategy_Gen6425: KeyError: 'Williams_R_14'
+Traceback (mos
+  ❌ Strategy_Gen6426: KeyError: 'Williams_R_14'
+Traceback (mos
+  ❌ Strategy_Gen6427: REJECTED: Exposure=1.4% below 5%
+  ✅ Cross_RVI_State_RVI_Trans_ATR_Spike: Comp=0.0000 Sharpe=0.98 CAGR=40.5% MaxDD=-43.7%
+  ✅ Cross_RVI_State_PPO_Cross_ATR_Spike: Comp=0.0000 Sharpe=0.96 CAGR=41.7% MaxDD=-49.1%
+  ❌ Strategy_Gen6428: REJECTED: Only 0 trades (min=10)
 
 =======================================================
