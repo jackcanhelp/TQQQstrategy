@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-10 09:36:54
+   2026-03-10 10:01:18
 =======================================================
 
 📈 Overall
-  Total iterations: 5929
-  Successful: 1205 (20%)
+  Total iterations: 5954
+  Successful: 1206 (20%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 14 strategies
 
-  This session: 700 iters, 95 ok
-  Duration: 15:30:15
-  LLM calls: 2869 (Groq: 2868 [Groq: 2868/2869 ok, 10 keys | pools: idea=494, code=660, fix=327, director=702, secretary=203, overflow=482 | models: llama-4-scout-17b-16e-instruct=1078, llama-4-maverick-17b-128e-instruct=594, kimi-k2-instruct=434 | cooling: 7 keys], GitHub: 1, Gemini: 0)
+  This session: 725 iters, 96 ok
+  Duration: 15:54:39
+  LLM calls: 2981 (Groq: 2980 [Groq: 2980/2981 ok, 10 keys | pools: idea=513, code=677, fix=336, director=734, secretary=212, overflow=508 | models: llama-4-scout-17b-16e-instruct=1099, llama-4-maverick-17b-128e-instruct=609, kimi-k2-instruct=457 | cooling: 4 keys], GitHub: 1, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen5920: REJECTED: Exposure=0.7% below 5%
-  ❌ Strategy_Gen5921: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5922: REJECTED: Sharpe=0.22 below 0.3
-  ❌ Strategy_Gen5923: REJECTED: Exposure=3.0% below 5%
-  ❌ Strategy_Gen5924: REJECTED: MaxDD=-72.4% worse than -50%
-  ✅ Strategy_Gen5925: Comp=0.2521 Sharpe=0.51 CAGR=11.1% MaxDD=-48.7%
-  ✅ Cross_SMA_Trend_Elder_Bull_RVI_Extreme: Comp=0.0000 Sharpe=0.77 CAGR=22.9% MaxDD=-40.9%
-  ✅ Cross_SMA_Trend_MACD_Cross_ATR_Spike: Comp=0.0000 Sharpe=0.74 CAGR=26.3% MaxDD=-46.0%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen5926: REJECTED: MaxDD=-56.5% worse than -50%
+  ❌ Strategy_Gen5945: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5946: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5947: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5948: REJECTED: Exposure=3.7% below 5%
+  ❌ Strategy_Gen5949: REJECTED: Sharpe=0.29 below 0.3
+  ❌ Strategy_Gen5950: Backtest error: 'Strategy_Gen5950' objec
+  ❌ Strategy_Gen5951: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5952: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5953: ValueError: The truth value of a Series 
+  ❌ Strategy_Gen5954: REJECTED: Exposure=2.2% below 5%
 
 =======================================================
