@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-10 15:49:37
+   2026-03-10 16:35:47
 =======================================================
 
 📈 Overall
-  Total iterations: 6211
-  Successful: 1231 (20%)
+  Total iterations: 6237
+  Successful: 1234 (20%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 14 strategies
 
-  This session: 975 iters, 114 ok
-  Duration: 21:42:58
-  LLM calls: 4119 (Groq: 4106 [Groq: 4106/4119 ok, 10 keys | pools: idea=668, code=880, fix=407, director=1082, secretary=316, overflow=753 | models: llama-4-scout-17b-16e-instruct=1272, llama-4-maverick-17b-128e-instruct=751, kimi-k2-instruct=702 | cooling: 11 keys], GitHub: 13, Gemini: 0)
+  This session: 1000 iters, 116 ok
+  Duration: 22:29:08
+  LLM calls: 4226 (Groq: 4204 [Groq: 4204/4226 ok, 10 keys | pools: idea=688, code=894, fix=412, director=1114, secretary=324, overflow=772 | models: llama-4-scout-17b-16e-instruct=1283, llama-4-maverick-17b-128e-instruct=751, kimi-k2-instruct=727], GitHub: 22, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen6202: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6203: Strategy never enters the market (time_i
-  ❌ Strategy_Gen6204: Failed to load strategy: name 'strategy'
-  ❌ Strategy_Gen6205: Strategy never enters the market (time_i
-  ❌ Strategy_Gen6206: REJECTED: MaxDD=-51.0% worse than -50%
-  ❌ Strategy_Gen6207: Strategy never enters the market (time_i
-  ❌ Strategy_Gen6208: Strategy never enters the market (time_i
-  ❌ Strategy_Gen6209: AttributeError: 'Strategy_Gen6209' objec
-  ❌ Strategy_Gen6210: Failed to load strategy: Strategy_Gen621
-  ❌ Strategy_Gen6211: Syntax error in generated code: invalid 
+  ✅ Strategy_Gen6228: Comp=0.2890 Sharpe=0.46 CAGR=9.7% MaxDD=-28.8%
+  ❌ Strategy_Gen6229: REJECTED: MaxDD=-65.5% worse than -50%
+  ❌ Strategy_Gen6230: KeyError: 'RVI_7'
+Traceback (most recent
+  ❌ Strategy_Gen6231: Strategy never enters the market (time_i
+  ✅ Strategy_Gen6232: Comp=0.2441 Sharpe=0.81 CAGR=37.3% MaxDD=-80.6%
+  ❌ Strategy_Gen6233: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6234: REJECTED: Sharpe=0.22 below 0.3
+  ❌ Strategy_Gen6235: REJECTED: MaxDD=-58.6% worse than -50%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen6236: REJECTED: MaxDD=-59.8% worse than -50%
 
 =======================================================
