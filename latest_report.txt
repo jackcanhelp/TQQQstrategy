@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-10 10:01:18
+   2026-03-10 10:39:25
 =======================================================
 
 📈 Overall
-  Total iterations: 5954
-  Successful: 1206 (20%)
+  Total iterations: 5980
+  Successful: 1207 (20%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 14 strategies
 
-  This session: 725 iters, 96 ok
-  Duration: 15:54:39
-  LLM calls: 2981 (Groq: 2980 [Groq: 2980/2981 ok, 10 keys | pools: idea=513, code=677, fix=336, director=734, secretary=212, overflow=508 | models: llama-4-scout-17b-16e-instruct=1099, llama-4-maverick-17b-128e-instruct=609, kimi-k2-instruct=457 | cooling: 4 keys], GitHub: 1, Gemini: 0)
+  This session: 750 iters, 96 ok
+  Duration: 16:32:46
+  LLM calls: 3104 (Groq: 3103 [Groq: 3103/3104 ok, 10 keys | pools: idea=526, code=695, fix=341, director=774, secretary=225, overflow=542 | models: llama-4-scout-17b-16e-instruct=1117, llama-4-maverick-17b-128e-instruct=624, kimi-k2-instruct=486 | cooling: 8 keys], GitHub: 1, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen5945: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5946: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5947: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5948: REJECTED: Exposure=3.7% below 5%
-  ❌ Strategy_Gen5949: REJECTED: Sharpe=0.29 below 0.3
-  ❌ Strategy_Gen5950: Backtest error: 'Strategy_Gen5950' objec
-  ❌ Strategy_Gen5951: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5952: Strategy never enters the market (time_i
-  ❌ Strategy_Gen5953: ValueError: The truth value of a Series 
-  ❌ Strategy_Gen5954: REJECTED: Exposure=2.2% below 5%
+  ❌ Strategy_Gen5971: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5972: REJECTED: MaxDD=-81.7% worse than -50%
+  ❌ Strategy_Gen5973: REJECTED: Sharpe=0.24 below 0.3
+  ❌ Strategy_Gen5974: REJECTED: MaxDD=-74.9% worse than -50%
+  ❌ Strategy_Gen5975: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5976: REJECTED: Sharpe=-0.10 below 0.3
+  ❌ Strategy_Gen5977: Strategy never enters the market (time_i
+  ❌ Strategy_Gen5978: Strategy never enters the market (time_i
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen5979: AttributeError: 'numpy.bool' object has 
 
 =======================================================
