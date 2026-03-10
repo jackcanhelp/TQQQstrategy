@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-10 15:24:57
+   2026-03-10 15:49:37
 =======================================================
 
 📈 Overall
-  Total iterations: 6186
-  Successful: 1230 (20%)
+  Total iterations: 6211
+  Successful: 1231 (20%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 14 strategies
 
-  This session: 950 iters, 113 ok
-  Duration: 21:18:18
-  LLM calls: 4006 (Groq: 3998 [Groq: 3998/4006 ok, 10 keys | pools: idea=650, code=863, fix=403, director=1050, secretary=308, overflow=724 | models: llama-4-scout-17b-16e-instruct=1252, llama-4-maverick-17b-128e-instruct=751, kimi-k2-instruct=686], GitHub: 8, Gemini: 0)
+  This session: 975 iters, 114 ok
+  Duration: 21:42:58
+  LLM calls: 4119 (Groq: 4106 [Groq: 4106/4119 ok, 10 keys | pools: idea=668, code=880, fix=407, director=1082, secretary=316, overflow=753 | models: llama-4-scout-17b-16e-instruct=1272, llama-4-maverick-17b-128e-instruct=751, kimi-k2-instruct=702 | cooling: 11 keys], GitHub: 13, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,16 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen6177: REJECTED: Sharpe=-0.14 below 0.3
-  ❌ Strategy_Gen6178: KeyError: 'BB_Width'
-Traceback (most rec
-  ❌ Strategy_Gen6179: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6180: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6181: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6182: Failed to load strategy: Can't instantia
-  ✅ Strategy_Gen6183: Comp=0.3408 Sharpe=0.88 CAGR=24.0% MaxDD=-34.6%
-  ❌ Strategy_Gen6184: REJECTED: MaxDD=-56.6% worse than -50%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ✅ Strategy_Gen6185: Comp=0.2510 Sharpe=0.63 CAGR=18.9% MaxDD=-58.7%
+  ❌ Strategy_Gen6202: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen6203: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6204: Failed to load strategy: name 'strategy'
+  ❌ Strategy_Gen6205: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6206: REJECTED: MaxDD=-51.0% worse than -50%
+  ❌ Strategy_Gen6207: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6208: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6209: AttributeError: 'Strategy_Gen6209' objec
+  ❌ Strategy_Gen6210: Failed to load strategy: Strategy_Gen621
+  ❌ Strategy_Gen6211: Syntax error in generated code: invalid 
 
 =======================================================
