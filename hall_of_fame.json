@@ -81,6 +81,15 @@
     "inducted": "2026-03-07T18:09:24.038375"
   },
   {
+    "name": "ChampionRVI",
+    "sharpe": 1.2666683471133082,
+    "max_dd": -0.403354418143538,
+    "cagr": 0.5159457968877275,
+    "calmar": 1.2791375863995684,
+    "idea": "Champion RVI baseline",
+    "inducted": "2026-03-10T20:21:10.894030"
+  },
+  {
     "name": "Cross_RVI_State_RVI_Trans_RSI_OB",
     "sharpe": 1.2094020158734924,
     "max_dd": -0.3918887733093607,
