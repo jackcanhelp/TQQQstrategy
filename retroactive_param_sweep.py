@@ -23,6 +23,7 @@ Usage:
 import re
 import ast
 import json
+import time
 import argparse
 import itertools
 from pathlib import Path
@@ -39,6 +40,38 @@ from main_loop import calculate_composite_score, hard_filter, is_duplicate_resul
 GENERATED_DIR  = Path("generated_strategies")
 HISTORY_FILE   = Path("history_of_thoughts.json")
 RETRO_LOG_FILE = Path("retroactive_sweep_log.json")
+
+
+def save_history_merge(in_memory: dict):
+    """
+    Merge-safe save: reads disk first, applies our swept updates on top,
+    then atomically writes back. Safe to run concurrently with main_loop.py.
+    """
+    # Build a map of in-memory changes (only strategies we actually updated)
+    mem_updates = {s["name"]: s for s in in_memory.get("strategies", [])
+                   if s.get("swept_at")}
+
+    for attempt in range(5):
+        try:
+            tmp = HISTORY_FILE.with_suffix('.tmp')
+            # Read fresh from disk to pick up any new strategies added by main_loop
+            with open(HISTORY_FILE, encoding='utf-8') as f:
+                disk = json.load(f)
+            # Apply our swept updates onto the disk copy
+            updated = []
+            for s in disk.get("strategies", []):
+                name = s.get("name", "")
+                updated.append(mem_updates.get(name, s))
+            disk["strategies"] = updated
+            with open(tmp, 'w', encoding='utf-8') as f:
+                json.dump(disk, f, indent=2, default=str)
+            tmp.replace(HISTORY_FILE)
+            return
+        except OSError as e:
+            if attempt < 4:
+                time.sleep(1 + attempt)
+            else:
+                print(f"⚠️  save_history_merge failed: {e}")
 
 
 # ─────────────────────────────────────────────────────────────
@@ -498,6 +531,8 @@ def main():
                 update_py_file_defaults(fpath, best["params"])
             entry.update({"status": "improved", "best": best})
             improved += 1
+            # Incremental save after each improvement (crash-safe)
+            save_history_merge(history)
         else:
             entry["status"] = "no_improvement"
             print(f"   — No improvement over base Sharpe={s.get('sharpe',0):.2f}")
@@ -505,10 +540,9 @@ def main():
         log_entries.append(entry)
         print()
 
-    # Save updated history
-    with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
-        json.dump(history, f, indent=2, default=str)
-    print(f"💾 History saved.")
+    # Save updated history (merge-safe: won't lose strategies added by main_loop)
+    save_history_merge(history)
+    print(f"💾 History saved (merge-safe).")
 
     # Save sweep log
     existing_log = []
