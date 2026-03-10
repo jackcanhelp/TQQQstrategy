@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-10 12:15:57
+   2026-03-10 12:58:55
 =======================================================
 
 📈 Overall
-  Total iterations: 6056
-  Successful: 1211 (20%)
+  Total iterations: 6084
+  Successful: 1218 (20%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 14 strategies
 
-  This session: 825 iters, 99 ok
-  Duration: 18:09:18
-  LLM calls: 3450 (Groq: 3449 [Groq: 3449/3450 ok, 10 keys | pools: idea=575, code=756, fix=366, director=886, secretary=260, overflow=606 | models: llama-4-scout-17b-16e-instruct=1172, llama-4-maverick-17b-128e-instruct=676, kimi-k2-instruct=552 | cooling: 10 keys], GitHub: 1, Gemini: 0)
+  This session: 850 iters, 103 ok
+  Duration: 18:52:16
+  LLM calls: 3551 (Groq: 3550 [Groq: 3550/3551 ok, 10 keys | pools: idea=593, code=780, fix=372, director=914, secretary=267, overflow=624 | models: llama-4-scout-17b-16e-instruct=1183, llama-4-maverick-17b-128e-instruct=699, kimi-k2-instruct=568 | cooling: 2 keys], GitHub: 1, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,16 +32,17 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen6047: Strategy never enters the market (time_i
-  ❌ Strategy_Gen6048: REJECTED: Sharpe=-12.43 below 0.3
-  ❌ Strategy_Gen6049: REJECTED: MaxDD=-59.1% worse than -50%
-  ❌ Strategy_Gen6050: KeyError: 'Gen6050'
-Traceback (most rece
-  ❌ Strategy_Gen6051: REJECTED: MaxDD=-69.9% worse than -50%
-  ❌ Strategy_Gen6052: Strategy never enters the market (time_i
-  ❌ Strategy_Gen6053: REJECTED: MaxDD=-81.7% worse than -50%
-  ❌ Strategy_Gen6054: Strategy never enters the market (time_i
-  ❌ Strategy_Gen6055: REJECTED: MaxDD=-64.7% worse than -50%
-  ❌ Strategy_Gen6056: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6075: KeyError: 'TEMA'
+Traceback (most recent 
+  ❌ Strategy_Gen6076: KeyError: 'tema'
+Traceback (most recent 
+  ❌ Strategy_Gen6077: REJECTED: MaxDD=-78.8% worse than -50%
+  ❌ Strategy_Gen6078: REJECTED: MaxDD=-58.1% worse than -50%
+  ❌ Strategy_Gen6079: Syntax error in generated code: invalid 
+  ❌ Strategy_Gen6080: REJECTED: Sharpe=0.07 below 0.3
+  ✅ Cross_RVI_PPO_Cross_Consec_Down: Comp=0.0000 Sharpe=0.71 CAGR=21.8% MaxDD=-43.1%
+  ✅ Cross_SMA_Trend_OBV_Break_RSI_OB: Comp=0.0000 Sharpe=0.71 CAGR=23.1% MaxDD=-42.0%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen6081: Strategy never enters the market (time_i
 
 =======================================================
