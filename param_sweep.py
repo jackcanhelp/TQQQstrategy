@@ -73,6 +73,32 @@ def _auto_sweep_config(base_params: Dict) -> Dict:
     return config
 
 
+def _run_one_combo(args):
+    """Worker function for parallel sweep — must be module-level for pickle."""
+    strategy_class, params, data_values, data_index, data_columns = args
+    try:
+        data = pd.DataFrame(data_values, index=data_index, columns=data_columns)
+        engine = BacktestEngine(data)
+        strategy = strategy_class(**params)
+        strategy.init(data)
+        signals = strategy.generate_signals()
+        if signals.isna().all() or (signals == 0).all():
+            return None
+        bt = engine.run(strategy)
+        return {
+            "params": params,
+            "sharpe": bt.sharpe_ratio,
+            "cagr": bt.cagr,
+            "max_dd": bt.max_drawdown,
+            "calmar": bt.calmar_ratio,
+            "sortino": bt.sortino_ratio,
+            "trades": bt.total_trades,
+            "time_in_market": bt.time_in_market,
+        }
+    except Exception:
+        return None
+
+
 def run_sweep(
     strategy_class,
     data: pd.DataFrame,
@@ -81,6 +107,7 @@ def run_sweep(
     metric: str = "sharpe_ratio",
     top_n: int = 10,
     max_combos: int = 500,
+    n_jobs: int = 0,
 ) -> List[Dict]:
     """
     Run parameter sweep on a strategy class.
@@ -93,58 +120,85 @@ def run_sweep(
         metric: Optimization metric ('sharpe_ratio', 'calmar_ratio', 'cagr')
         top_n: Number of top results to return
         max_combos: Maximum combinations to test (random sample if exceeded)
+        n_jobs: Worker processes (0=auto: min(8, cpu_count//2), 1=serial)
 
     Returns:
         List of top results sorted by metric, each containing params and metrics
     """
+    import os
+    from concurrent.futures import ProcessPoolExecutor, as_completed
+
     param_grid = generate_param_grid(base_params, sweep_config)
 
     # Cap combinations
     if len(param_grid) > max_combos:
         import random
-        # Always include the base params
         param_grid = [base_params] + random.sample(
             [p for p in param_grid if p != base_params],
             max_combos - 1
         )
 
-    engine = BacktestEngine(data)
-    results = []
     total = len(param_grid)
 
-    print(f"   🔍 Parameter sweep: testing {total} combinations...")
+    # Decide worker count — use serial for small grids or when n_jobs=1
+    if n_jobs == 0:
+        workers = min(8, max(1, os.cpu_count() // 2))
+    else:
+        workers = n_jobs
 
-    for idx, params in enumerate(param_grid):
-        try:
-            strategy = strategy_class(**params)
-            strategy.init(data)
-            signals = strategy.generate_signals()
-
-            # Quick sanity check
-            if signals.isna().all() or (signals == 0).all():
+    # Serial path: small grids or explicitly requested
+    if total <= 8 or workers == 1:
+        print(f"   🔍 Parameter sweep: testing {total} combinations (serial)...")
+        engine = BacktestEngine(data)
+        results = []
+        for idx, params in enumerate(param_grid):
+            try:
+                strategy = strategy_class(**params)
+                strategy.init(data)
+                signals = strategy.generate_signals()
+                if signals.isna().all() or (signals == 0).all():
+                    continue
+                bt = engine.run(strategy)
+                results.append({
+                    "params": params,
+                    "sharpe": bt.sharpe_ratio,
+                    "cagr": bt.cagr,
+                    "max_dd": bt.max_drawdown,
+                    "calmar": bt.calmar_ratio,
+                    "sortino": bt.sortino_ratio,
+                    "trades": bt.total_trades,
+                    "time_in_market": bt.time_in_market,
+                })
+                if (idx + 1) % 50 == 0:
+                    best_so_far = max(results, key=lambda r: r.get(metric.replace('_ratio', ''), r.get('sharpe', 0)))
+                    print(f"      [{idx+1}/{total}] Best so far: "
+                          f"Sharpe={best_so_far['sharpe']:.2f}, "
+                          f"MaxDD={best_so_far['max_dd']:.1%}")
+            except Exception:
                 continue
-
-            bt = engine.run(strategy)
-
-            results.append({
-                "params": params,
-                "sharpe": bt.sharpe_ratio,
-                "cagr": bt.cagr,
-                "max_dd": bt.max_drawdown,
-                "calmar": bt.calmar_ratio,
-                "sortino": bt.sortino_ratio,
-                "trades": bt.total_trades,
-                "time_in_market": bt.time_in_market,
-            })
-
-            if (idx + 1) % 50 == 0:
-                best_so_far = max(results, key=lambda r: r.get(metric.replace('_ratio', ''), r.get('sharpe', 0)))
-                print(f"      [{idx+1}/{total}] Best so far: "
-                      f"Sharpe={best_so_far['sharpe']:.2f}, "
-                      f"MaxDD={best_so_far['max_dd']:.1%}")
-
-        except Exception as e:
-            continue
+    else:
+        # Parallel path
+        print(f"   🔍 Parameter sweep: testing {total} combinations ({workers} workers)...")
+        # Pre-serialise DataFrame as numpy to avoid pickle overhead
+        data_values  = data.values
+        data_index   = data.index
+        data_columns = data.columns
+        combo_args = [(strategy_class, p, data_values, data_index, data_columns)
+                      for p in param_grid]
+        results = []
+        done = 0
+        with ProcessPoolExecutor(max_workers=workers) as pool:
+            futures = {pool.submit(_run_one_combo, a): a for a in combo_args}
+            for fut in as_completed(futures):
+                done += 1
+                r = fut.result()
+                if r is not None:
+                    results.append(r)
+                if done % 50 == 0 and results:
+                    best_so_far = max(results, key=lambda r: r.get(metric.replace('_ratio', ''), r.get('sharpe', 0)))
+                    print(f"      [{done}/{total}] Best so far: "
+                          f"Sharpe={best_so_far['sharpe']:.2f}, "
+                          f"MaxDD={best_so_far['max_dd']:.1%}")
 
     if not results:
         print("   ❌ No valid results from sweep")
@@ -263,6 +317,7 @@ def sweep_generated_strategy(
         strategy_class, data, base_params,
         metric="sharpe_ratio",
         max_combos=60,   # keep inline-sweep fast (≤60 combos per iteration)
+        n_jobs=1,        # serial — called from within main_loop, avoid nested multiprocessing
     )
 
     _save_sweep_results(strategy_class.__name__, results)
