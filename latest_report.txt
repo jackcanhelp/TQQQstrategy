@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-12 00:03:01
+   2026-03-12 01:01:28
 =======================================================
 
 📈 Overall
-  Total iterations: 6960
-  Successful: 1282 (18%)
+  Total iterations: 6987
+  Successful: 1285 (18%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 7 strategies
 
-  This session: 375 iters, 38 ok
-  Duration: 6:16:55
-  LLM calls: 1689 (Groq: 1689 [Groq: 1689/1689 ok, 10 keys | pools: idea=300, code=284, fix=259, director=448, secretary=131, overflow=267 | models: llama-4-scout-17b-16e-instruct=821, kimi-k2-instruct=339, llama-3.3-70b-versatile=195 | cooling: 4 keys], GitHub: 0, Gemini: 0)
+  This session: 400 iters, 39 ok
+  Duration: 7:15:22
+  LLM calls: 1802 (Groq: 1777 [Groq: 1777/1802 ok, 10 keys | pools: idea=312, code=284, fix=277, director=480, secretary=139, overflow=285 | models: llama-4-scout-17b-16e-instruct=851, kimi-k2-instruct=386, llama-3.3-70b-versatile=195], GitHub: 23, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,17 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ✅ Strategy_Gen6951: Comp=0.3259 Sharpe=0.75 CAGR=11.3% MaxDD=-23.4%
-  ❌ Strategy_Gen6952: Syntax error in generated code: '(' was 
-  ❌ Strategy_Gen6953: REJECTED: Exposure=1.5% below 5%
-  ✅ Strategy_Gen6954: Comp=0.3006 Sharpe=0.52 CAGR=7.3% MaxDD=-21.6%
-  ❌ Strategy_Gen6955: Strategy never enters the market (time_i
-  ❌ Strategy_Gen6956: REJECTED: Exposure=2.8% below 5%
-  ✅ Strategy_Gen6957: Comp=0.2670 Sharpe=0.54 CAGR=14.0% MaxDD=-44.0%
-  ❌ Strategy_Gen6958: REJECTED: Only 4 trades (min=10)
-  ❌ Strategy_Gen6959: REJECTED: Exposure=2.6% below 5%
-  ❌ Strategy_Gen6960: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6978: REJECTED: MaxDD=-73.8% worse than -50%
+  ❌ Strategy_Gen6979: REJECTED: MaxDD=-81.1% worse than -50%
+  ❌ Strategy_Gen6980: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6981: REJECTED: MaxDD=-79.4% worse than -50%
+  ❌ Strategy_Gen6982: KeyError: 'BB_middle_20'
+Traceback (most
+  ❌ Strategy_Gen6983: KeyError: 'Donchian_Lower'
+Traceback (mo
+  ❌ Strategy_Gen6984: Strategy never enters the market (time_i
+  ✅ Cross_RVI_State_MACD_Cross_Consec_Down: Comp=0.0000 Sharpe=0.95 CAGR=38.4% MaxDD=-50.0%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen6985: REJECTED: MaxDD=-68.1% worse than -50%
 
 =======================================================
