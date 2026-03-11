@@ -1,0 +1,412 @@
+[
+  {
+    "run_at": "2026-03-11T12:53:57.298781",
+    "baselines": [
+      {
+        "label": "ChampionRVI (baseline)",
+        "sharpe": 1.2666683471133082,
+        "cagr": 0.5159457968877275,
+        "max_dd": -0.403354418143538,
+        "calmar": 1.2791375863995684,
+        "time_in_market": 0.5640771895101435
+      },
+      {
+        "label": "Gen3671 (individual)",
+        "sharpe": 1.2126713944599619,
+        "cagr": 0.25216662635897635,
+        "max_dd": -0.2197985930759918,
+        "calmar": 1.1472622405357882,
+        "time_in_market": 0.5640771895101435
+      },
+      {
+        "label": "Gen4415 (individual)",
+        "sharpe": 1.1036038227927034,
+        "cagr": 0.27393968540262215,
+        "max_dd": -0.2978646929477551,
+        "calmar": 0.9196782696587361,
+        "time_in_market": 0.3619495299356754
+      },
+      {
+        "label": "Gen1381 (individual)",
+        "sharpe": 1.2666683471133082,
+        "cagr": 0.5159457968877275,
+        "max_dd": -0.403354418143538,
+        "calmar": 1.2791375863995684,
+        "time_in_market": 0.5640771895101435
+      }
+    ],
+    "ensembles": [
+      {
+        "label": "Ensemble(Gen3671+Gen4415+Gen1381, v>=1)",
+        "strategies": [
+          "Gen3671",
+          "Gen4415",
+          "Gen1381"
+        ],
+        "min_votes": 1,
+        "n_strategies": 3,
+        "sharpe": 1.3511483533198163,
+        "cagr": 0.5962350582451836,
+        "max_dd": -0.4033544181435381,
+        "calmar": 1.4781914649389234,
+        "sortino": 1.5391501322478927,
+        "trades": 490,
+        "time_in_market": 0.6806036615536863,
+        "exposure": 0.6806036615536863
+      },
+      {
+        "label": "Ensemble(Gen3671+Gen4415+Gen1381, v>=2)",
+        "strategies": [
+          "Gen3671",
+          "Gen4415",
+          "Gen1381"
+        ],
+        "min_votes": 2,
+        "n_strategies": 3,
+        "sharpe": 1.0168912244457728,
+        "cagr": 0.2098616062835157,
+        "max_dd": -0.29550284507699465,
+        "calmar": 0.7101847233614123,
+        "sortino": 0.6808563448247505,
+        "trades": 710,
+        "time_in_market": 0.24542305789213262,
+        "exposure": 0.24542305789213262
+      }
+    ],
+    "args": {
+      "strategies": [
+        "3671",
+        "4415",
+        "1381"
+      ],
+      "top": 12,
+      "combo_size": 3,
+      "min_votes": 2,
+      "include_champion": false,
+      "min_sharpe": 1.0
+    }
+  },
+  {
+    "run_at": "2026-03-11T13:12:48.915846",
+    "baselines": [
+      {
+        "label": "ChampionRVI (baseline)",
+        "sharpe": 1.2666683471133082,
+        "cagr": 0.5159457968877275,
+        "max_dd": -0.403354418143538,
+        "calmar": 1.2791375863995684,
+        "time_in_market": 0.5640771895101435
+      },
+      {
+        "label": "Gen1381 (individual)",
+        "sharpe": 1.2666683471133082,
+        "cagr": 0.5159457968877275,
+        "max_dd": -0.403354418143538,
+        "calmar": 1.2791375863995684,
+        "time_in_market": 0.5640771895101435
+      },
+      {
+        "label": "Gen1920 (individual)",
+        "sharpe": 1.2666683471133082,
+        "cagr": 0.5159457968877275,
+        "max_dd": -0.403354418143538,
+        "calmar": 1.2791375863995684,
+        "time_in_market": 0.5640771895101435
+      },
+      {
+        "label": "Gen2117 (individual)",
+        "sharpe": 1.2666683471133082,
+        "cagr": 0.5159457968877275,
+        "max_dd": -0.403354418143538,
+        "calmar": 1.2791375863995684,
+        "time_in_market": 0.5640771895101435
+      },
+      {
+        "label": "Gen5831 (individual)",
+        "sharpe": 1.269634302079004,
+        "cagr": 0.5137127026706281,
+        "max_dd": -0.403354418143538,
+        "calmar": 1.273601278585271,
+        "time_in_market": 0.5578921326076199
+      },
+      {
+        "label": "Gen1131 (individual)",
+        "sharpe": 1.269634302079004,
+        "cagr": 0.5137127026706281,
+        "max_dd": -0.403354418143538,
+        "calmar": 1.273601278585271,
+        "time_in_market": 0.5578921326076199
+      },
+      {
+        "label": "Gen3671 (individual)",
+        "sharpe": 1.2126713944599619,
+        "cagr": 0.25216662635897635,
+        "max_dd": -0.2197985930759918,
+        "calmar": 1.1472622405357882,
+        "time_in_market": 0.5640771895101435
+      },
+      {
+        "label": "Gen3171 (individual)",
+        "sharpe": 0.9901631493359435,
+        "cagr": 0.3329632912461018,
+        "max_dd": -0.3918888162051611,
+        "calmar": 0.8496371355282293,
+        "time_in_market": 0.3871845620979713
+      },
+      {
+        "label": "Gen3174 (individual)",
+        "sharpe": 1.07348605907289,
+        "cagr": 0.3639385696488129,
+        "max_dd": -0.3918888162051611,
+        "calmar": 0.9286781214452526,
+        "time_in_market": 0.37753587333003463
+      },
+      {
+        "label": "Gen3518 (individual)",
+        "sharpe": 1.184737603626488,
+        "cagr": 0.46275343224856513,
+        "max_dd": -0.4184509983635885,
+        "calmar": 1.1058724535446862,
+        "time_in_market": 0.537357743691242
+      },
+      {
+        "label": "Gen2113 (individual)",
+        "sharpe": 1.1760495084325975,
+        "cagr": 0.45627550189804267,
+        "max_dd": -0.36166374950710745,
+        "calmar": 1.2616014254120758,
+        "time_in_market": 0.5430479960415636
+      },
+      {
+        "label": "Gen2083 (individual)",
+        "sharpe": 1.0617871605230256,
+        "cagr": 0.3886619945599814,
+        "max_dd": -0.44790276596623557,
+        "calmar": 0.8677374289518901,
+        "time_in_market": 0.5428005937654626
+      },
+      {
+        "label": "Gen2300 (individual)",
+        "sharpe": 1.126529251193728,
+        "cagr": 0.33106184741010125,
+        "max_dd": -0.26925003006719184,
+        "calmar": 1.2295703266123468,
+        "time_in_market": 0.42701632855022265
+      },
+      {
+        "label": "Gen4415 (individual)",
+        "sharpe": 1.1036038227927034,
+        "cagr": 0.27393968540262215,
+        "max_dd": -0.2978646929477551,
+        "calmar": 0.9196782696587361,
+        "time_in_market": 0.3619495299356754
+      },
+      {
+        "label": "Gen4201 (individual)",
+        "sharpe": 1.0999358080014343,
+        "cagr": 0.34050164229495095,
+        "max_dd": -0.45325962913434925,
+        "calmar": 0.7512287007454262,
+        "time_in_market": 0.44408708560118754
+      },
+      {
+        "label": "Gen6096 (individual)",
+        "sharpe": 0.5851772423404858,
+        "cagr": 0.13256118923650662,
+        "max_dd": -0.42434150554600925,
+        "calmar": 0.31239270140670616,
+        "time_in_market": 0.24270163285502228
+      }
+    ],
+    "ensembles": [
+      {
+        "label": "Ensemble(Gen5831+Gen3174+Gen4415, v>=2)",
+        "strategies": [
+          "Gen5831",
+          "Gen3174",
+          "Gen4415"
+        ],
+        "min_votes": 2,
+        "n_strategies": 3,
+        "sharpe": 1.347517541315163,
+        "cagr": 0.5109346698733439,
+        "max_dd": -0.40335441814353795,
+        "calmar": 1.2667139540083638,
+        "sortino": 1.2955958991709424,
+        "trades": 468,
+        "time_in_market": 0.4717961405244928,
+        "exposure": 0.4717961405244928
+      },
+      {
+        "label": "Ensemble(Gen1131+Gen3174+Gen4415, v>=2)",
+        "strategies": [
+          "Gen1131",
+          "Gen3174",
+          "Gen4415"
+        ],
+        "min_votes": 2,
+        "n_strategies": 3,
+        "sharpe": 1.347517541315163,
+        "cagr": 0.5109346698733439,
+        "max_dd": -0.40335441814353795,
+        "calmar": 1.2667139540083638,
+        "sortino": 1.2955958991709424,
+        "trades": 468,
+        "time_in_market": 0.4717961405244928,
+        "exposure": 0.4717961405244928
+      },
+      {
+        "label": "Ensemble(Gen1381+Gen3174+Gen4415, v>=2)",
+        "strategies": [
+          "Gen1381",
+          "Gen3174",
+          "Gen4415"
+        ],
+        "min_votes": 2,
+        "n_strategies": 3,
+        "sharpe": 1.3364393950049067,
+        "cagr": 0.5099565949017244,
+        "max_dd": -0.40335441814353795,
+        "calmar": 1.2642891015024185,
+        "sortino": 1.2953294940784414,
+        "trades": 468,
+        "time_in_market": 0.4772389905987135,
+        "exposure": 0.4772389905987135
+      },
+      {
+        "label": "Ensemble(Gen1920+Gen3174+Gen4415, v>=2)",
+        "strategies": [
+          "Gen1920",
+          "Gen3174",
+          "Gen4415"
+        ],
+        "min_votes": 2,
+        "n_strategies": 3,
+        "sharpe": 1.3364393950049067,
+        "cagr": 0.5099565949017244,
+        "max_dd": -0.40335441814353795,
+        "calmar": 1.2642891015024185,
+        "sortino": 1.2953294940784414,
+        "trades": 468,
+        "time_in_market": 0.4772389905987135,
+        "exposure": 0.4772389905987135
+      },
+      {
+        "label": "Ensemble(Gen2117+Gen3174+Gen4415, v>=2)",
+        "strategies": [
+          "Gen2117",
+          "Gen3174",
+          "Gen4415"
+        ],
+        "min_votes": 2,
+        "n_strategies": 3,
+        "sharpe": 1.3364393950049067,
+        "cagr": 0.5099565949017244,
+        "max_dd": -0.40335441814353795,
+        "calmar": 1.2642891015024185,
+        "sortino": 1.2953294940784414,
+        "trades": 468,
+        "time_in_market": 0.4772389905987135,
+        "exposure": 0.4772389905987135
+      },
+      {
+        "label": "Ensemble(Gen5831+Gen3171+Gen4415, v>=2)",
+        "strategies": [
+          "Gen5831",
+          "Gen3171",
+          "Gen4415"
+        ],
+        "min_votes": 2,
+        "n_strategies": 3,
+        "sharpe": 1.3343600354766147,
+        "cagr": 0.50585205026343,
+        "max_dd": -0.40335441814353795,
+        "calmar": 1.2541130765138098,
+        "sortino": 1.2861907183802082,
+        "trades": 480,
+        "time_in_market": 0.47550717466600695,
+        "exposure": 0.47550717466600695
+      },
+      {
+        "label": "Ensemble(Gen1131+Gen3171+Gen4415, v>=2)",
+        "strategies": [
+          "Gen1131",
+          "Gen3171",
+          "Gen4415"
+        ],
+        "min_votes": 2,
+        "n_strategies": 3,
+        "sharpe": 1.3343600354766147,
+        "cagr": 0.50585205026343,
+        "max_dd": -0.40335441814353795,
+        "calmar": 1.2541130765138098,
+        "sortino": 1.2861907183802082,
+        "trades": 480,
+        "time_in_market": 0.47550717466600695,
+        "exposure": 0.47550717466600695
+      },
+      {
+        "label": "Ensemble(Gen1381+Gen3171+Gen4415, v>=2)",
+        "strategies": [
+          "Gen1381",
+          "Gen3171",
+          "Gen4415"
+        ],
+        "min_votes": 2,
+        "n_strategies": 3,
+        "sharpe": 1.3234695054736132,
+        "cagr": 0.5048772654294513,
+        "max_dd": -0.40335441814353795,
+        "calmar": 1.2516963809475006,
+        "sortino": 1.2859508659638998,
+        "trades": 480,
+        "time_in_market": 0.48095002474022763,
+        "exposure": 0.48095002474022763
+      },
+      {
+        "label": "Ensemble(Gen1920+Gen3171+Gen4415, v>=2)",
+        "strategies": [
+          "Gen1920",
+          "Gen3171",
+          "Gen4415"
+        ],
+        "min_votes": 2,
+        "n_strategies": 3,
+        "sharpe": 1.3234695054736132,
+        "cagr": 0.5048772654294513,
+        "max_dd": -0.40335441814353795,
+        "calmar": 1.2516963809475006,
+        "sortino": 1.2859508659638998,
+        "trades": 480,
+        "time_in_market": 0.48095002474022763,
+        "exposure": 0.48095002474022763
+      },
+      {
+        "label": "Ensemble(Gen2117+Gen3171+Gen4415, v>=2)",
+        "strategies": [
+          "Gen2117",
+          "Gen3171",
+          "Gen4415"
+        ],
+        "min_votes": 2,
+        "n_strategies": 3,
+        "sharpe": 1.3234695054736132,
+        "cagr": 0.5048772654294513,
+        "max_dd": -0.40335441814353795,
+        "calmar": 1.2516963809475006,
+        "sortino": 1.2859508659638998,
+        "trades": 480,
+        "time_in_market": 0.48095002474022763,
+        "exposure": 0.48095002474022763
+      }
+    ],
+    "args": {
+      "strategies": null,
+      "top": 15,
+      "combo_size": 3,
+      "min_votes": 2,
+      "include_champion": false,
+      "min_sharpe": 0.9
+    }
+  }
+]
