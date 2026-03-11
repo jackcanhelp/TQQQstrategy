@@ -380,9 +380,13 @@ def save_hall_of_fame(hof: List[Dict]):
         json.dump(hof, f, indent=2, default=str)
 
 
+HOF_MAX_SIZE = 50  # cap to prevent unbounded growth
+
 def check_hall_of_fame(name: str, sharpe: float, max_dd: float,
                        cagr: float, calmar: float, idea: str) -> bool:
-    """Check if strategy qualifies for hall of fame. Returns True if added."""
+    """Check if strategy qualifies for hall of fame. Returns True if added/updated.
+    Deduplicates by name — keeps best Calmar per strategy. Caps at HOF_MAX_SIZE.
+    """
     if sharpe >= HOF_SHARPE_MIN and max_dd > HOF_MAX_DD_MIN:
         hof = load_hall_of_fame()
         entry = {
@@ -394,10 +398,20 @@ def check_hall_of_fame(name: str, sharpe: float, max_dd: float,
             "idea": idea[:500],
             "inducted": datetime.now().isoformat(),
         }
-        hof.append(entry)
+        # Deduplication: update if same name has better Calmar, else skip
+        existing_idx = next((i for i, h in enumerate(hof) if h.get("name") == name), None)
+        if existing_idx is not None:
+            if calmar > hof[existing_idx].get("calmar", 0):
+                hof[existing_idx] = entry
+            else:
+                return False  # already recorded, not an improvement
+        else:
+            hof.append(entry)
         hof.sort(key=lambda x: x.get("calmar", 0), reverse=True)
+        hof[:] = hof[:HOF_MAX_SIZE]  # cap size
         save_hall_of_fame(hof)
-        print(f"   🏆 HALL OF FAME! {name} inducted (Sharpe={sharpe:.2f}, MaxDD={max_dd:.1%})")
+        print(f"   🏆 HALL OF FAME! {name} inducted "
+              f"(Sharpe={sharpe:.2f}, MaxDD={max_dd:.1%}, Calmar={calmar:.2f})")
         return True
     return False
 
@@ -1764,6 +1778,31 @@ def run_champion_baseline(engine: BacktestEngine, data: pd.DataFrame, history: D
 
     except Exception as e:
         print(f"   ⚠️ Volume Breakout baseline failed: {e}")
+
+    # Champion Ensemble baseline
+    print("\n🎯 Running Champion Ensemble baseline...")
+    try:
+        from champion_ensemble import ChampionEnsemble
+        has_ens = any(s.get("name") == "ChampionEnsemble"
+                      for s in history.get("strategies", []))
+        if not has_ens:
+            ens = ChampionEnsemble()
+            ens.init(data)
+            bt_ens = engine.run(ens)
+            record_result(history, 0, "ChampionEnsemble", ens.get_description(),
+                          bt_ens.sharpe_ratio, bt_ens.cagr, bt_ens.max_drawdown,
+                          bt_ens.calmar_ratio,
+                          "BASELINE: OR-vote ensemble Gen3671+Gen2300+Gen4415", True)
+            check_hall_of_fame("ChampionEnsemble", bt_ens.sharpe_ratio,
+                               bt_ens.max_drawdown, bt_ens.cagr, bt_ens.calmar_ratio,
+                               "Champion OR-vote ensemble (Gen3671+Gen2300+Gen4415)")
+            print(f"   📌 ChampionEnsemble: Sharpe={bt_ens.sharpe_ratio:.2f}, "
+                  f"CAGR={bt_ens.cagr:.1%}, MaxDD={bt_ens.max_drawdown:.1%}, "
+                  f"Calmar={bt_ens.calmar_ratio:.2f}")
+        else:
+            print("   📌 ChampionEnsemble baseline already recorded")
+    except Exception as e:
+        print(f"   ⚠️ ChampionEnsemble baseline failed: {e}")
 
 
 def run_crossover_round(data: pd.DataFrame, history: Dict):
