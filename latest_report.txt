@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-11 21:53:33
+   2026-03-11 22:14:24
 =======================================================
 
 📈 Overall
-  Total iterations: 6830
-  Successful: 1263 (18%)
+  Total iterations: 6856
+  Successful: 1264 (18%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 7 strategies
 
-  This session: 250 iters, 24 ok
-  Duration: 4:07:26
-  LLM calls: 1148 (Groq: 1148 [Groq: 1148/1148 ok, 10 keys | pools: idea=250, code=250, fix=200, director=348, secretary=100 | models: llama-4-scout-17b-16e-instruct=671, qwen3-32b=156, kimi-k2-instruct=131 | cooling: 11 keys], GitHub: 0, Gemini: 0)
+  This session: 275 iters, 24 ok
+  Duration: 4:28:18
+  LLM calls: 1274 (Groq: 1274 [Groq: 1274/1274 ok, 10 keys | pools: idea=275, code=275, fix=213, director=388, secretary=113, overflow=10 | models: llama-4-scout-17b-16e-instruct=745, qwen3-32b=179, kimi-k2-instruct=147 | cooling: 12 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,16 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen6821: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6822: TypeError: 'NoneType' object is not subs
-  ❌ Strategy_Gen6823: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6824: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6825: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6826: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6827: Failed to load strategy: Can't instantia
-  ✅ Cross_RVI_State_RVI_Trans_RSI_OB: Comp=0.0000 Sharpe=1.21 CAGR=49.6% MaxDD=-39.2%
-  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen6828: REJECTED: Exposure=2.9% below 5%
+  ❌ Strategy_Gen6847: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen6848: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen6849: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen6850: REJECTED: Exposure=1.3% below 5%
+  ❌ Strategy_Gen6851: KeyError: 'Regime'
+Traceback (most recen
+  ❌ Strategy_Gen6852: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen6853: TypeError: Addition/subtraction of integ
+  ❌ Strategy_Gen6854: REJECTED: Exposure=2.4% below 5%
+  ✅ Cross_RVI_State_RVI_Trans_ST_Down: Comp=0.0000 Sharpe=0.95 CAGR=36.9% MaxDD=-43.4%
+  ❌ Strategy_Gen6855: Failed to load strategy: Can't instantia
 
 =======================================================
