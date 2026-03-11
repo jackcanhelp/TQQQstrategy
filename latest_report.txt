@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-11 20:03:50
+   2026-03-11 20:25:47
 =======================================================
 
 📈 Overall
-  Total iterations: 6696
-  Successful: 1250 (19%)
+  Total iterations: 6723
+  Successful: 1252 (19%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 7 strategies
 
-  This session: 125 iters, 20 ok
-  Duration: 2:17:44
-  LLM calls: 513 (Groq: 513 [Groq: 513/513 ok, 10 keys | pools: idea=125, code=125, fix=81, director=144, secretary=38 | models: llama-4-scout-17b-16e-instruct=231, llama-3.3-70b-versatile=85, llama-3.1-8b-instant=81], GitHub: 0, Gemini: 0)
+  This session: 150 iters, 20 ok
+  Duration: 2:39:40
+  LLM calls: 639 (Groq: 639 [Groq: 639/639 ok, 10 keys | pools: idea=150, code=150, fix=105, director=184, secretary=50 | models: llama-4-scout-17b-16e-instruct=321, llama-3.3-70b-versatile=87, llama-3.1-8b-instant=86 | cooling: 1 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,15 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen6687: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6688: Failed to load strategy: Strategy_Gen668
-  ❌ Strategy_Gen6689: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6690: REJECTED: MaxDD=-80.8% worse than -50%
-  ❌ Strategy_Gen6691: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6692: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6693: Syntax error in generated code: invalid 
-  ✅ Cross_RVI_State_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=1.27 CAGR=51.6% MaxDD=-40.3%
-  ✅ Cross_RVI_State_MACD_Cross_RSI_OB: Comp=0.0000 Sharpe=1.12 CAGR=46.6% MaxDD=-46.1%
-  ❌ Strategy_Gen6694: REJECTED: MaxDD=-79.5% worse than -50%
+  ❌ Strategy_Gen6714: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen6715: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6716: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen6717: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen6718: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen6719: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen6720: Failed to load strategy: Can't instantia
+  ✅ Cross_Supertrend_RVI_Trans_RVI_Extreme: Comp=0.0000 Sharpe=1.09 CAGR=41.1% MaxDD=-43.4%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen6721: Strategy never enters the market (time_i
 
 =======================================================
