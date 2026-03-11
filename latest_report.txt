@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-11 02:04:58
+   2026-03-11 14:37:16
 =======================================================
 
 📈 Overall
-  Total iterations: 6457
-  Successful: 1220 (19%)
+  Total iterations: 6509
+  Successful: 1227 (19%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 17 strategies
 
-  This session: 200 iters, 19 ok
-  Duration: 5:43:43
-  LLM calls: 892 (Groq: 824 [Groq: 824/892 ok, 10 keys | pools: idea=111, code=100, fix=129, director=206, secretary=53, overflow=225 | models: kimi-k2-instruct=365, llama-4-scout-17b-16e-instruct=218, llama-3.1-8b-instant=101], GitHub: 68, Gemini: 0)
+  This session: 250 iters, 24 ok
+  Duration: 18:16:01
+  LLM calls: 1093 (Groq: 975 [Groq: 975/1093 ok, 10 keys | pools: idea=153, code=100, fix=148, director=266, secretary=70, overflow=238 | models: kimi-k2-instruct=497, llama-4-scout-17b-16e-instruct=218, llama-3.1-8b-instant=120], GitHub: 92, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,20 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen6448: KeyError: 'TEMA'
-Traceback (most recent 
-  ❌ Strategy_Gen6449: KeyError: 'Tema'
-Traceback (most recent 
-  ✅ Strategy_Gen6450: Comp=0.2708 Sharpe=0.66 CAGR=18.8% MaxDD=-50.3%
-  ❌ Strategy_Gen6451: KeyError: 'KC_lower_20'
-Traceback (most 
-  ✅ Strategy_Gen6452: Comp=0.2684 Sharpe=0.41 CAGR=7.8% MaxDD=-34.2%
-  ❌ Strategy_Gen6453: KeyError: 'MACD_diff'
-Traceback (most re
-  ❌ Strategy_Gen6454: Strategy never enters the market (time_i
-  ✅ Cross_RVI_State_MACD_Cross_Aroon_Flip: Comp=0.0000 Sharpe=0.92 CAGR=36.4% MaxDD=-45.9%
+  ❌ Strategy_Gen6500: REJECTED: Sharpe=0.16 below 0.3
+  ❌ Strategy_Gen6501: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6502: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6503: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6504: Strategy never enters the market (time_i
+  ✅ Strategy_Gen6505: Comp=0.3109 Sharpe=0.62 CAGR=11.9% MaxDD=-25.3%
+  ✅ Strategy_Gen6506: Comp=0.3259 Sharpe=0.91 CAGR=30.7% MaxDD=-46.7%
+  ✅ Strategy_Gen6507: Comp=0.3061 Sharpe=0.74 CAGR=15.3% MaxDD=-35.7%
   ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
-  ❌ Strategy_Gen6455: KeyError: 'Regime'
-Traceback (most recen
+  ✅ Strategy_Gen6508: Comp=0.2723 Sharpe=0.41 CAGR=7.4% MaxDD=-32.1%
 
 =======================================================
