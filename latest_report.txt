@@ -1,18 +1,18 @@
 
 =======================================================
 📊 TQQQ Strategy Discovery Report
-   2026-03-11 22:14:24
+   2026-03-11 22:42:37
 =======================================================
 
 📈 Overall
-  Total iterations: 6856
-  Successful: 1264 (18%)
+  Total iterations: 6883
+  Successful: 1269 (18%)
   Best: Strategy_Gen995 (Composite: 0.6407)
   Hall of Fame: 7 strategies
 
-  This session: 275 iters, 24 ok
-  Duration: 4:28:18
-  LLM calls: 1274 (Groq: 1274 [Groq: 1274/1274 ok, 10 keys | pools: idea=275, code=275, fix=213, director=388, secretary=113, overflow=10 | models: llama-4-scout-17b-16e-instruct=745, qwen3-32b=179, kimi-k2-instruct=147 | cooling: 12 keys], GitHub: 0, Gemini: 0)
+  This session: 300 iters, 27 ok
+  Duration: 4:56:31
+  LLM calls: 1386 (Groq: 1386 [Groq: 1386/1386 ok, 10 keys | pools: idea=280, code=278, fix=225, director=412, secretary=120, overflow=71 | models: llama-4-scout-17b-16e-instruct=770, kimi-k2-instruct=197, qwen3-32b=181 | cooling: 12 keys], GitHub: 0, Gemini: 0)
 
 🏆 Top 5 Strategies (by Sharpe ratio)
 ───────────────────────────────────────────────────────
@@ -32,16 +32,15 @@
 
 📝 Last 10 Iterations
 ───────────────────────────────────────────────────────
-  ❌ Strategy_Gen6847: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6848: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6849: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6850: REJECTED: Exposure=1.3% below 5%
-  ❌ Strategy_Gen6851: KeyError: 'Regime'
-Traceback (most recen
-  ❌ Strategy_Gen6852: Failed to load strategy: Can't instantia
-  ❌ Strategy_Gen6853: TypeError: Addition/subtraction of integ
-  ❌ Strategy_Gen6854: REJECTED: Exposure=2.4% below 5%
-  ✅ Cross_RVI_State_RVI_Trans_ST_Down: Comp=0.0000 Sharpe=0.95 CAGR=36.9% MaxDD=-43.4%
-  ❌ Strategy_Gen6855: Failed to load strategy: Can't instantia
+  ❌ Strategy_Gen6874: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6875: REJECTED: MaxDD=-59.3% worse than -50%
+  ❌ Strategy_Gen6876: REJECTED: Sharpe=0.22 below 0.3
+  ❌ Strategy_Gen6877: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6878: Strategy never enters the market (time_i
+  ❌ Strategy_Gen6879: REJECTED: Exposure=2.0% below 5%
+  ✅ Strategy_Gen6880: Comp=0.3047 Sharpe=0.83 CAGR=22.7% MaxDD=-45.5%
+  ✅ Cross_RVI_State_MACD_Cross_ST_Down: Comp=0.0000 Sharpe=0.93 CAGR=37.4% MaxDD=-47.9%
+  ✅ VolumeBreakout_Optimized: Comp=0.0000 Sharpe=0.21 CAGR=3.9% MaxDD=-32.3%
+  ❌ Strategy_Gen6881: Strategy never enters the market (time_i
 
 =======================================================
