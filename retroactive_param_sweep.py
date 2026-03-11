@@ -241,6 +241,7 @@ def _sweep_with_get_params(
     results = run_sweep(
         cls, data, base_params=base_params,
         metric="sharpe_ratio", max_combos=max_combos,
+        strategy_source=(code, strategy_name),  # allow parallel workers to re-exec
     )
     if not results:
         return None

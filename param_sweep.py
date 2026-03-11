@@ -74,9 +74,25 @@ def _auto_sweep_config(base_params: Dict) -> Dict:
 
 
 def _run_one_combo(args):
-    """Worker function for parallel sweep — must be module-level for pickle."""
-    strategy_class, params, data_values, data_index, data_columns = args
+    """
+    Worker function for parallel sweep — module-level for pickle.
+    cls_or_src: either the strategy class (if picklable) or
+                (source_code_str, class_name) tuple for exec'd classes.
+    """
+    cls_or_src, params, data_values, data_index, data_columns = args
     try:
+        import pandas as pd
+        from backtest import BacktestEngine
+        # Reconstruct dynamically-exec'd class inside the worker
+        if isinstance(cls_or_src, tuple):
+            code, class_name = cls_or_src
+            ns: dict = {}
+            exec(code, ns)  # nosec — controlled internal use
+            strategy_class = ns.get(class_name)
+            if strategy_class is None:
+                return None
+        else:
+            strategy_class = cls_or_src
         data = pd.DataFrame(data_values, index=data_index, columns=data_columns)
         engine = BacktestEngine(data)
         strategy = strategy_class(**params)
@@ -108,6 +124,7 @@ def run_sweep(
     top_n: int = 10,
     max_combos: int = 500,
     n_jobs: int = 0,
+    strategy_source: Optional[Tuple[str, str]] = None,
 ) -> List[Dict]:
     """
     Run parameter sweep on a strategy class.
@@ -121,6 +138,8 @@ def run_sweep(
         top_n: Number of top results to return
         max_combos: Maximum combinations to test (random sample if exceeded)
         n_jobs: Worker processes (0=auto: min(8, cpu_count//2), 1=serial)
+        strategy_source: Optional (code_str, class_name) for exec'd classes that
+                         can't be pickled — workers will re-exec the source.
 
     Returns:
         List of top results sorted by metric, each containing params and metrics
@@ -179,11 +198,13 @@ def run_sweep(
     else:
         # Parallel path
         print(f"   🔍 Parameter sweep: testing {total} combinations ({workers} workers)...")
-        # Pre-serialise DataFrame as numpy to avoid pickle overhead
+        # Pre-serialise DataFrame as numpy to avoid pickle overhead.
+        # Use strategy_source (code, name) tuple if class can't be pickled.
         data_values  = data.values
         data_index   = data.index
         data_columns = data.columns
-        combo_args = [(strategy_class, p, data_values, data_index, data_columns)
+        cls_or_src = strategy_source if strategy_source is not None else strategy_class
+        combo_args = [(cls_or_src, p, data_values, data_index, data_columns)
                       for p in param_grid]
         results = []
         done = 0
